@@ -10,7 +10,10 @@ export type Project = {
   video?: string;
   github: string;
   demo: string;
+  /** Shown in the pinned "Featured work" section. */
   featured?: boolean;
+  /** Hue (0–360) for the generated cover when there's no image/video yet. */
+  hue?: number;
 };
 
 export type Testimonial = {
