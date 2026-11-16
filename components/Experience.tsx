@@ -37,7 +37,7 @@ export default function Experience() {
           gsap
             .timeline({ scrollTrigger: { trigger: item, start: "top 82%", once: true } })
             .from(item.querySelector("[data-dot]"), { scale: 0, duration: 0.5, ease: "back.out(3)" })
-            .from(item.querySelector("[data-body]"), { x: 30, autoAlpha: 0, duration: 0.8, ease: "expo.out" }, 0.05);
+            .from(item.querySelector("[data-body]"), { y: 24, autoAlpha: 0, duration: 0.8, ease: "expo.out" }, 0.05);
         });
       });
     },

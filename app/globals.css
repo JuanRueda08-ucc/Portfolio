@@ -55,6 +55,8 @@ body {
   background: var(--color-ink);
   color: var(--color-cream);
   font-family: var(--font-sans);
+  /* Safety net against horizontal scroll from animated elements; `clip` keeps sticky working. */
+  overflow-x: clip;
 }
 
 ::selection {
