@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { useLenis } from "lenis/react";
+import PixelField from "@/components/ui/PixelField";
 import { navLinks, profile, socials } from "@/data/profile";
 
 // Live clock: null on the server, ticks every second in the browser.
@@ -23,13 +24,12 @@ function useClock(timeZone: string) {
   };
 }
 
-// Phase 3: WebGL pixel background.
 export default function Footer() {
   const lenis = useLenis();
   const { time, date, year } = useClock(profile.timezone);
 
   return (
-    <footer className="border-t border-ink-3 px-4 pt-20 pb-8 md:px-10">
+    <footer className="border-t border-ink-3 px-4 pt-20 md:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-12 md:grid-cols-2">
           <ul className="space-y-1">
@@ -75,6 +75,9 @@ export default function Footer() {
           </p>
         </div>
       </div>
+
+      {/* WebGL pixel terrain that reacts to the cursor (inspired by elicubillos.com) */}
+      <PixelField className="-mx-4 mt-10 h-[38vh] min-h-56 w-[calc(100%+2rem)] md:-mx-10 md:w-[calc(100%+5rem)]" />
     </footer>
   );
 }
