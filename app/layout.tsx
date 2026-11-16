@@ -28,6 +28,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${figtree.variable} ${newsreader.variable} ${geistMono.variable} scroll-smooth antialiased`}
     >
       <body className="min-h-screen">
+        {/* Keyboard users can jump straight past the navbar */}
+        <a
+          href="#main-content"
+          className="btn-text fixed top-3 left-3 z-[110] -translate-y-20 rounded-full bg-violet-bright px-4 py-2 text-ink transition-transform focus:translate-y-0"
+        >
+          Skip to content
+        </a>
         <SmoothScroll>
           <Loader />
           <Cursor />

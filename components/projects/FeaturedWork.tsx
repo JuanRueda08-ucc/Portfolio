@@ -119,7 +119,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
                   onClick={() => goTo(i)}
                   aria-current={i === active}
                   className={`font-display text-5xl font-bold tracking-tight transition-colors duration-500 ${
-                    i === active ? "text-cream" : "text-stone/30 hover:text-stone"
+                    i === active ? "text-cream" : "text-stone/45 hover:text-stone"
                   }`}
                 >
                   {p.title}

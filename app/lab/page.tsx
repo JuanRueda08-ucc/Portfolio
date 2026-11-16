@@ -13,7 +13,7 @@ export default function LabPage() {
   return (
     <PageTransition>
       {/* h-svh so the page has a real box for the view-transition snapshot (children are fixed) */}
-      <main className="h-svh overflow-hidden">
+      <main id="main-content" className="h-svh overflow-hidden">
         <h1 className="sr-only">Lab — experiments by {profile.displayName}</h1>
         <LabCanvas />
 

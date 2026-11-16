@@ -14,7 +14,7 @@ export default function Home() {
     <PageTransition>
       <div>
         <Navbar />
-        <main>
+        <main id="main-content">
           <Hero />
           <About />
           <Projects />
