@@ -57,6 +57,7 @@ Next.js 16 (App Router, `cacheComponents`) · React 19.3 (built-in `<ViewTransit
 Gotchas found so far:
 - Next 16 + `cacheComponents` forbids `new Date()` during prerender, even in client components → use `useSyncExternalStore` with a `null` server snapshot (see `components/Footer.tsx`).
 - ESLint `react-hooks/set-state-in-effect` is on: don't `setState` synchronously inside `useEffect`.
+- React Compiler lint (`react-hooks/immutability`) forbids mutating values returned by hooks (e.g. a `useMemo` material's uniforms) inside `useFrame`; mutate through a mesh ref instead (see `GridBackground`).
 - Turbopack may instantiate a module once per chunk (layout vs page). Don't rely on module-level singletons for cross-component state; `lib/ready.ts` stores it on `<html data-app-ready>`.
 - An animated `transform` on a parent breaks `position: fixed` children; the navbar's mobile menu works because Motion resets the header transform to `none` once it lands.
 
@@ -66,6 +67,13 @@ Gotchas found so far:
 - **`onReady(cb)`** (`lib/ready.ts`) — run intro animations after the loader.
 - **`<Cursor />`** — custom cursor. Add `data-cursor="Label"` to any element to show a pill label on hover (e.g. `"View project"`, `"Hi!"`, `"Download"`).
 - **`btn-text`** / **`label`** CSS utilities for button and meta text.
+- **Hero 3D** (`components/hero/`) — `HeroScene.tsx` (R3F canvas: grid plane + glass `Text3D`), `gridMaterial.ts` (GLSL grid shader). The DOM writes pointer/scroll/intro into a shared `HeroState` ref; the scene reads it every frame. Loaded with `next/dynamic` (`ssr: false`); static fallback without WebGL or with reduced motion.
+- **`data-depth="N"`** inside the hero — mouse parallax offset in px (negative = opposite direction). **`data-split`** — SplitText line reveal. **`data-fade`** — intro fade. **`data-scroll-out`** — fades up on scroll.
+- **3D fonts** — `npm run typeface` converts a font to `public/fonts/*.typeface.json` (script: `scripts/build-typeface.mjs`). Current: Pacifico (OFL).
+
+## Verifying in the Claude browser pane
+
+A hidden browser pane pauses `requestAnimationFrame`, so GSAP/the loader freeze and screenshots come out black. Show the pane before checking animations. Dev mode compiles three.js slowly; use the `portfolio-prod` launch config (`npm run build` first, port 3001) to judge real load timing.
 
 ## Code layout
 
@@ -83,7 +91,7 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 
 - [x] **Phase 0** — scaffold, tokens, base sections, GitHub + Vercel
 - [x] **Phase 1** — fonts from references, loader, custom cursor, navbar motion
-- [ ] **Phase 2** — hero: 3D glass "hello" + cursor-lit grid shader + parallax
+- [x] **Phase 2** — hero: 3D glass "hello" + cursor-lit grid shader + parallax
 - [ ] **Phase 3** — About (scramble text, line-drawn photo), Experience, Testimonials, Skills, Contact, Footer pixel background
 - [ ] **Phase 4** — Projects: pinned featured section with videos + arc carousel
 - [ ] **Phase 5** — `/lab` (infinite canvas, Terminal, Pixel Paint) + page transitions
