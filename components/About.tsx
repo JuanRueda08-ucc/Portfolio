@@ -16,7 +16,7 @@ export default function About() {
       <div className="mx-auto max-w-6xl">
         <SectionHeading title="About me" kicker="(02)" />
         <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
-          <div className="aspect-[4/5] rounded-3xl border border-ink-3 bg-ink-2" aria-label="Photo (coming soon)" />
+          <div data-cursor="Hi!" className="aspect-[4/5] rounded-3xl border border-ink-3 bg-ink-2" aria-label="Photo (coming soon)" />
           <div>
             <p className="text-xl leading-relaxed md:text-2xl">{profile.about}</p>
 

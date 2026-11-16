@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree, Geist_Mono, Newsreader, Outfit } from "next/font/google";
+import Cursor from "@/components/Cursor";
 import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { profile } from "@/data/profile";
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-screen">
         <SmoothScroll>
           <Loader />
+          <Cursor />
           {children}
         </SmoothScroll>
       </body>

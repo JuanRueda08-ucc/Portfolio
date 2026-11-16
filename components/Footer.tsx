@@ -42,7 +42,7 @@ export default function Footer() {
             ))}
           </ul>
           <div className="space-y-4 md:text-right">
-            <a href={`mailto:${profile.email}`} className="block underline decoration-violet underline-offset-4">
+            <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="block underline decoration-violet underline-offset-4">
               {profile.email}
             </a>
             <ul className="flex gap-4 md:justify-end">

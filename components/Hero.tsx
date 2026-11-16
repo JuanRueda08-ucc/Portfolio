@@ -24,6 +24,7 @@ export default function Hero() {
 
       <p
         aria-hidden
+        data-cursor="Hi!"
         className="relative self-center font-serif text-[28vw] leading-none text-violet-soft/20 italic select-none md:text-[18vw]"
       >
         hello
@@ -38,6 +39,7 @@ export default function Hero() {
         <div className="flex shrink-0 gap-3">
           <a
             href={profile.cv}
+            data-cursor="Download"
             download
             className="rounded-full bg-violet px-6 py-3 btn-text whitespace-nowrap text-ink transition-transform hover:scale-105"
           >

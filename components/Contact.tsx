@@ -44,7 +44,7 @@ export default function Contact() {
           <h2 className="font-display text-6xl font-bold tracking-tight md:text-8xl">
             Let&apos;s talk<span className="text-violet">.</span>
           </h2>
-          <a href={`mailto:${profile.email}`} className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
+          <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
             {profile.email}
           </a>
           <ul className="mt-6 flex gap-4">

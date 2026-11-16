@@ -82,6 +82,15 @@ html.lenis body {
   text-transform: uppercase;
 }
 
+/* Custom cursor (components/Cursor.tsx) hides the native one, except for text fields */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+html.has-custom-cursor :is(input, textarea, [contenteditable="true"]) {
+  cursor: text !important;
+}
+
 /* Offset the fixed navbar when jumping to a section */
 section[id] {
   scroll-margin-top: 6rem;

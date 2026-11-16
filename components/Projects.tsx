@@ -13,7 +13,7 @@ export default function Projects() {
         />
         <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
-            <li key={p.slug} className="group flex flex-col overflow-hidden rounded-3xl border border-ink-3 bg-ink-2">
+            <li key={p.slug} data-cursor="View project" className="group flex flex-col overflow-hidden rounded-3xl border border-ink-3 bg-ink-2">
               <div className="aspect-video bg-gradient-to-br from-violet-deep to-ink" />
               <div className="flex flex-1 flex-col p-6">
                 <p className="font-mono text-xs text-stone">{p.year}</p>
@@ -29,6 +29,7 @@ export default function Projects() {
                 <div className="mt-6 flex gap-2">
                   <a
                     href={p.github}
+                    data-cursor="Code"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded-full border border-ink-3 px-4 py-2 btn-text hover:border-violet"
@@ -37,6 +38,7 @@ export default function Projects() {
                   </a>
                   <a
                     href={p.demo}
+                    data-cursor="Live"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded-full bg-violet px-4 py-2 btn-text text-ink"

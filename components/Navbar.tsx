@@ -12,7 +12,7 @@ export default function Navbar() {
         aria-label="Main"
         className="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-ink-3 bg-ink/70 py-2 pr-2 pl-5 backdrop-blur-md"
       >
-        <a href="#home" className="font-display text-lg font-bold tracking-tight">
+        <a href="#home" data-cursor="Home" className="font-display text-lg font-bold tracking-tight">
           {profile.displayName.split(" ")[0]}
           <span className="text-violet">.</span>
         </a>
@@ -34,6 +34,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <a
             href={profile.cv}
+            data-cursor="Download"
             download
             className="rounded-full bg-violet px-4 py-2 btn-text text-ink transition-transform hover:scale-105"
           >
