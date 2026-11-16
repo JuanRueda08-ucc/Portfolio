@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree, Geist_Mono, Newsreader, Outfit } from "next/font/google";
+import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { profile } from "@/data/profile";
 import "./globals.css";
@@ -26,7 +27,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${figtree.variable} ${newsreader.variable} ${geistMono.variable} scroll-smooth antialiased`}
     >
       <body className="min-h-screen">
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          <Loader />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
