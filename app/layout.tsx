@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Figtree, Geist_Mono, Newsreader, Outfit } from "next/font/google";
 import Cursor from "@/components/Cursor";
 import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { profile } from "@/data/profile";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 // Main text uses the system "Helvetica Neue" → Arial stack (see globals.css).
@@ -16,9 +17,31 @@ const newsreader = Newsreader({
 });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
+const description = `${profile.displayName} — ${profile.role} from ${profile.city}, Colombia. ${profile.tagline}`;
+
 export const metadata: Metadata = {
-  title: `${profile.displayName} — ${profile.role}`,
-  description: profile.tagline,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${profile.displayName} — ${profile.role}`,
+    template: `%s — ${profile.displayName}`,
+  },
+  description,
+  authors: [{ name: profile.displayName }],
+  keywords: ["portfolio", "software engineering", "frontend", "Next.js", "TypeScript", profile.displayName],
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: profile.displayName,
+    title: `${profile.displayName} — ${profile.role}`,
+    description,
+    locale: "en_US",
+  },
+  twitter: { card: "summary_large_image", title: profile.displayName, description },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0a09",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
