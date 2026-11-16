@@ -1,53 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { experience } from "@/data/experience";
 import type { ExperienceItem } from "@/data/types";
 
-const tabs: { id: ExperienceItem["type"]; label: string }[] = [
-  { id: "education", label: "Education" },
-  { id: "work", label: "Work" },
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const columns: { type: ExperienceItem["type"]; label: string; icon: string }[] = [
+  { type: "education", label: "Education", icon: "🎓" },
+  { type: "work", label: "Work", icon: "💼" },
 ];
 
+/** Both education and work are always visible (course requirement), side by side on desktop. */
 export default function Experience() {
-  const [tab, setTab] = useState<ExperienceItem["type"]>("education");
-  const items = experience.filter((e) => e.type === tab);
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      gsap.utils.toArray<HTMLElement>("[data-timeline]").forEach((tl) => {
+        // The vertical line draws itself as you scroll through the column.
+        gsap.fromTo(
+          tl.querySelector("[data-line]"),
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: { trigger: tl, start: "top 75%", end: "bottom 60%", scrub: 0.5 },
+          },
+        );
+        tl.querySelectorAll<HTMLElement>("[data-item]").forEach((item) => {
+          gsap
+            .timeline({ scrollTrigger: { trigger: item, start: "top 82%", once: true } })
+            .from(item.querySelector("[data-dot]"), { scale: 0, duration: 0.5, ease: "back.out(3)" })
+            .from(item.querySelector("[data-body]"), { x: 30, autoAlpha: 0, duration: 0.8, ease: "expo.out" }, 0.05);
+        });
+      });
+    },
+    { scope: root },
+  );
 
   return (
-    <section id="experience" className="px-4 py-32 md:px-10">
+    <section id="experience" ref={root} className="px-4 py-32 md:px-10">
       <div className="mx-auto max-w-6xl">
         <SectionHeading title="Experience" kicker="(05)" />
 
-        <div role="tablist" aria-label="Experience type" className="mb-10 inline-flex rounded-full border border-ink-3 p-1">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
-              className={`rounded-full px-5 py-2 btn-text transition-colors ${
-                tab === t.id ? "bg-violet text-ink" : "text-stone hover:text-cream"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="grid gap-16 md:grid-cols-2 md:gap-12">
+          {columns.map((col) => {
+            const items = experience.filter((e) => e.type === col.type);
+            return (
+              <div key={col.type}>
+                <h3 className="label mb-8 flex items-center gap-2 text-violet-soft">
+                  <span aria-hidden>{col.icon}</span> {col.label}
+                </h3>
+                <ol data-timeline className="relative">
+                  <span
+                    data-line
+                    aria-hidden
+                    className="absolute top-0 bottom-0 left-0 w-px origin-top bg-gradient-to-b from-violet to-ink-3"
+                  />
+                  {items.map((it) => (
+                    <li key={it.title} data-item className="relative pb-12 pl-8 last:pb-0">
+                      <span
+                        data-dot
+                        aria-hidden
+                        className="absolute top-1.5 -left-[5px] size-2.5 rounded-full bg-violet ring-4 ring-ink"
+                      />
+                      <div data-body>
+                        <p className="label text-stone">
+                          {it.start} — {it.end}
+                        </p>
+                        <h4 className="mt-1 font-display text-2xl font-bold tracking-tight">{it.title}</h4>
+                        <p className="text-violet-soft">{it.place}</p>
+                        {it.description && <p className="mt-2 max-w-md text-sm text-stone">{it.description}</p>}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            );
+          })}
         </div>
-
-        <ol className="relative border-l border-ink-3">
-          {items.map((it) => (
-            <li key={it.title} className="relative mb-10 ml-8">
-              <span className="absolute top-1.5 -left-[37px] size-2.5 rounded-full bg-violet ring-4 ring-ink" />
-              <p className="font-mono text-xs text-stone">
-                {it.start} — {it.end}
-              </p>
-              <h3 className="mt-1 font-display text-2xl font-bold">{it.title}</h3>
-              <p className="text-violet-soft">{it.place}</p>
-              {it.description && <p className="mt-2 max-w-xl text-sm text-stone">{it.description}</p>}
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
   );
