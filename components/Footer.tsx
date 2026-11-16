@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react";
 import { useLenis } from "lenis/react";
 import Link from "next/link";
 import PixelField from "@/components/ui/PixelField";
+import SocialIcon from "@/components/ui/SocialIcon";
 import { navLinks, profile, socials } from "@/data/profile";
 
 // Live clock: null on the server, ticks every second in the browser.
@@ -56,14 +57,29 @@ export default function Footer() {
             <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="block underline decoration-violet underline-offset-4">
               {profile.email}
             </a>
-            <ul className="flex gap-4 md:justify-end">
+            <ul className="flex gap-3 md:justify-end" aria-label="Social links">
               {socials.map((s) => (
                 <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noopener noreferrer" className="text-stone hover:text-cream">
-                    {s.label} ↗
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="flex size-11 items-center justify-center rounded-full border border-ink-3 text-stone transition-colors hover:border-violet hover:text-cream"
+                  >
+                    <SocialIcon name={s.label} />
                   </a>
                 </li>
               ))}
+              <li>
+                <a
+                  href={`mailto:${profile.email}`}
+                  aria-label="Email"
+                  className="flex size-11 items-center justify-center rounded-full border border-ink-3 text-stone transition-colors hover:border-violet hover:text-cream"
+                >
+                  <SocialIcon name="email" />
+                </a>
+              </li>
             </ul>
           </div>
         </div>

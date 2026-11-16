@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import SocialIcon from "@/components/ui/SocialIcon";
 import SplitReveal from "@/components/ui/SplitReveal";
 import { profile, socials } from "@/data/profile";
 
@@ -48,11 +49,17 @@ export default function Contact() {
           <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
             {profile.email}
           </a>
-          <ul className="mt-6 flex gap-4">
+          <ul className="mt-6 flex flex-wrap gap-3">
             {socials.map((s) => (
               <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="text-stone hover:text-cream">
-                  {s.label} ↗
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-full border border-ink-3 px-4 py-2 text-stone transition-colors hover:border-violet hover:text-cream"
+                >
+                  <SocialIcon name={s.label} className="size-4" />
+                  {s.label}
                 </a>
               </li>
             ))}
