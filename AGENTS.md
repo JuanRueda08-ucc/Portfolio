@@ -58,6 +58,8 @@ Gotchas found so far:
 - Next 16 + `cacheComponents` forbids `new Date()` during prerender, even in client components → use `useSyncExternalStore` with a `null` server snapshot (see `components/Footer.tsx`).
 - ESLint `react-hooks/set-state-in-effect` is on: don't `setState` synchronously inside `useEffect`.
 - React Compiler lint (`react-hooks/immutability`) forbids mutating values returned by hooks (e.g. a `useMemo` material's uniforms) inside `useFrame`; mutate through a mesh ref instead (see `GridBackground`).
+- Turbopack dev sometimes keeps a stale CSS chunk after big `globals.css` edits (view-transition rules didn't appear). Verify CSS-heavy changes with `npm run build` + the `portfolio-prod` preview.
+- `setPointerCapture` can throw (synthetic events); wrap it in try/catch so drawing logic still runs.
 - Don't use ScrollTrigger `snap` — it fights Lenis and can jump the page back.
 - `scale`/`rotate` share `transform-origin`. When an element rotates around a far-away origin (arc carousel), apply `scale` on an inner element.
 - In tests, `el.offsetTop` is relative to the offset parent; use `getBoundingClientRect().top + scrollY` for document position.
@@ -81,6 +83,9 @@ Gotchas found so far:
 - **`<PixelField>`** — raw WebGL2 pixel terrain (footer). Pattern to copy for any light full-screen shader without three.js.
 - **Marquee** — `animate-marquee` utility (defined in `@theme`), pause with `group-hover:[animation-play-state:paused]`.
 - **Projects** (`components/projects/`) — `ProjectMedia` (video → image → generated gradient cover using `project.hue`), `FeaturedWork` (pinned retro window for `featured: true`, desktop only), `ArcCarousel` (cards on a big wheel turned by scroll, desktop only). The responsive grid in `Projects.tsx` is always rendered — it's the course's "1 col mobile / 2–3 desktop" requirement, don't remove it.
+- **Lab** (`app/lab/page.tsx`, `components/lab/`) — `LabCanvas` (infinite pan: drag with inertia, wheel, arrow keys; only visible cells render; tile pattern `TILES[(3c + r) mod 10]`), `tiles.tsx` (tile list), `Window` (draggable retro OS window, Escape closes, full-screen on mobile), apps `Terminal` (commands read from `data/`) and `PixelPaint` (32×32, pen/erase/fill/mirror/undo/PNG). To add an app: add an `AppId`, an entry in `APPS` in `LabCanvas.tsx` and a tile in `tiles.tsx`.
+- **Page transitions** — wrap each `page.tsx` in `<PageTransition>` and use `<Link transitionTypes={["page-card"]}>`. CSS in `globals.css` (`page-card-out/in`). `SmoothScroll` stores `--vt-old-oy` on click so the tall old page scales around what was on screen. Fixed-only pages need a real box (`h-svh`) to be snapshotted.
+- **Content guide for the owner** — `docs/contenido.md` (Spanish): where every piece of real content goes.
 - **3D fonts** — `npm run typeface` converts a font to `public/fonts/*.typeface.json` (script: `scripts/build-typeface.mjs`). Current: Pacifico (OFL).
 
 ## Verifying in the Claude browser pane
@@ -106,7 +111,7 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 - [x] **Phase 2** — hero: 3D glass "hello" + cursor-lit grid shader + parallax
 - [x] **Phase 3** — About (scramble text, line-drawn photo, draggable stickers), Experience (both timelines visible), Testimonials (marquee), Skills (rising cards), Contact reveal, Footer pixel background
 - [x] **Phase 4** — Projects: pinned featured section with videos + arc carousel + responsive grid (placeholder projects until real ones arrive)
-- [ ] **Phase 5** — `/lab` (infinite canvas, Terminal, Pixel Paint) + page transitions
+- [x] **Phase 5** — `/lab` (infinite canvas, Terminal, Pixel Paint) + page transitions
 - [ ] **Phase 6** — responsive, a11y, performance, course checklist
 - [ ] **Phase 7** — final content (Harvard-style CV, testimonials, videos)
 
