@@ -57,6 +57,15 @@ Next.js 16 (App Router, `cacheComponents`) · React 19.3 (built-in `<ViewTransit
 Gotchas found so far:
 - Next 16 + `cacheComponents` forbids `new Date()` during prerender, even in client components → use `useSyncExternalStore` with a `null` server snapshot (see `components/Footer.tsx`).
 - ESLint `react-hooks/set-state-in-effect` is on: don't `setState` synchronously inside `useEffect`.
+- Turbopack may instantiate a module once per chunk (layout vs page). Don't rely on module-level singletons for cross-component state; `lib/ready.ts` stores it on `<html data-app-ready>`.
+- An animated `transform` on a parent breaks `position: fixed` children; the navbar's mobile menu works because Motion resets the header transform to `none` once it lands.
+
+## Shared building blocks
+
+- **`<Loader />`** (`components/Loader.tsx`) — LOADING screen; calls `markReady()` when it leaves.
+- **`onReady(cb)`** (`lib/ready.ts`) — run intro animations after the loader.
+- **`<Cursor />`** — custom cursor. Add `data-cursor="Label"` to any element to show a pill label on hover (e.g. `"View project"`, `"Hi!"`, `"Download"`).
+- **`btn-text`** / **`label`** CSS utilities for button and meta text.
 
 ## Code layout
 
@@ -73,7 +82,7 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 ## Roadmap / status
 
 - [x] **Phase 0** — scaffold, tokens, base sections, GitHub + Vercel
-- [ ] **Phase 1** — fonts from references, loader, custom cursor, navbar motion
+- [x] **Phase 1** — fonts from references, loader, custom cursor, navbar motion
 - [ ] **Phase 2** — hero: 3D glass "hello" + cursor-lit grid shader + parallax
 - [ ] **Phase 3** — About (scramble text, line-drawn photo), Experience, Testimonials, Skills, Contact, Footer pixel background
 - [ ] **Phase 4** — Projects: pinned featured section with videos + arc carousel
