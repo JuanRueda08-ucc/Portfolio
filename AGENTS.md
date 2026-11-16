@@ -58,6 +58,8 @@ Gotchas found so far:
 - Next 16 + `cacheComponents` forbids `new Date()` during prerender, even in client components → use `useSyncExternalStore` with a `null` server snapshot (see `components/Footer.tsx`).
 - ESLint `react-hooks/set-state-in-effect` is on: don't `setState` synchronously inside `useEffect`.
 - React Compiler lint (`react-hooks/immutability`) forbids mutating values returned by hooks (e.g. a `useMemo` material's uniforms) inside `useFrame`; mutate through a mesh ref instead (see `GridBackground`).
+- Tailwind v4 drops hand-written CSS rules it doesn't recognise in some cases (a `[data-word]` media rule vanished). Prefer utilities with CSS vars, e.g. `md:left-(--x)`.
+- Motion serializes transforms with different precision on server vs client → hydration mismatch. Round initial `rotate`/`x` values (see `Stickers.tsx`).
 - Turbopack may instantiate a module once per chunk (layout vs page). Don't rely on module-level singletons for cross-component state; `lib/ready.ts` stores it on `<html data-app-ready>`.
 - An animated `transform` on a parent breaks `position: fixed` children; the navbar's mobile menu works because Motion resets the header transform to `none` once it lands.
 
@@ -69,6 +71,12 @@ Gotchas found so far:
 - **`btn-text`** / **`label`** CSS utilities for button and meta text.
 - **Hero 3D** (`components/hero/`) — `HeroScene.tsx` (R3F canvas: grid plane + glass `Text3D`), `gridMaterial.ts` (GLSL grid shader). The DOM writes pointer/scroll/intro into a shared `HeroState` ref; the scene reads it every frame. Loaded with `next/dynamic` (`ssr: false`); static fallback without WebGL or with reduced motion.
 - **`data-depth="N"`** inside the hero — mouse parallax offset in px (negative = opposite direction). **`data-split`** — SplitText line reveal. **`data-fade`** — intro fade. **`data-scroll-out`** — fades up on scroll.
+- **`<SplitReveal as="h2">`** (`components/ui/`) — masked line-by-line reveal on scroll. `SectionHeading` uses it.
+- **`<ScrambleWords words positions>`** — Elissa-style scattered words with randomly flickering letters (inline flow below `md`).
+- **`<LineDrawing src fallbackText>`** — draws an image with contour lines around the cursor, self-draws when idle. Uses `profile.photo`; falls back to the initials until a photo exists.
+- **`<Stickers items>`** — draggable tech chips (Motion `drag`), `data-cursor="Drag"`.
+- **`<PixelField>`** — raw WebGL2 pixel terrain (footer). Pattern to copy for any light full-screen shader without three.js.
+- **Marquee** — `animate-marquee` utility (defined in `@theme`), pause with `group-hover:[animation-play-state:paused]`.
 - **3D fonts** — `npm run typeface` converts a font to `public/fonts/*.typeface.json` (script: `scripts/build-typeface.mjs`). Current: Pacifico (OFL).
 
 ## Verifying in the Claude browser pane
@@ -92,7 +100,7 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 - [x] **Phase 0** — scaffold, tokens, base sections, GitHub + Vercel
 - [x] **Phase 1** — fonts from references, loader, custom cursor, navbar motion
 - [x] **Phase 2** — hero: 3D glass "hello" + cursor-lit grid shader + parallax
-- [ ] **Phase 3** — About (scramble text, line-drawn photo), Experience, Testimonials, Skills, Contact, Footer pixel background
+- [x] **Phase 3** — About (scramble text, line-drawn photo, draggable stickers), Experience (both timelines visible), Testimonials (marquee), Skills (rising cards), Contact reveal, Footer pixel background
 - [ ] **Phase 4** — Projects: pinned featured section with videos + arc carousel
 - [ ] **Phase 5** — `/lab` (infinite canvas, Terminal, Pixel Paint) + page transitions
 - [ ] **Phase 6** — responsive, a11y, performance, course checklist
