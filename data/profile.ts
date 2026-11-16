@@ -12,6 +12,10 @@ export const profile = {
   timezone: "America/Bogota",
   email: "hello@example.com",
   cv: "/cv.pdf",
+  /** TODO(Juano): add your photo at /public/images/me.jpg and set this to "/images/me.jpg". */
+  photo: undefined as string | undefined,
+  /** Phrase scattered across the About section; letters scramble randomly. */
+  manifesto: "Why not build software that feels just a little bit magical?",
   about:
     "I'm a Software Engineering student from Pasto, Colombia. I love building interfaces that feel alive: clean code on the inside, carefully crafted details on the outside. Placeholder text — we'll rewrite it together.",
   interests: ["Web development", "UI/UX", "Motion", "Video games"],
