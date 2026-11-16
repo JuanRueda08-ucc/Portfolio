@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typeface": "node scripts/build-typeface.mjs node_modules/@fontsource/pacifico/files/pacifico-latin-400-normal.woff public/fonts/pacifico.typeface.json"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -21,6 +22,7 @@
     "three": "^0.187.0"
   },
   "devDependencies": {
+    "@fontsource/pacifico": "^5.3.0",
     "@tailwindcss/turbopack": "4.3.3",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -28,6 +30,7 @@
     "@types/three": "^0.187.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "opentype.js": "^2.0.0",
     "tailwindcss": "4.3.3",
     "typescript": "^5"
   }
