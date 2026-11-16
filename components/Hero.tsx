@@ -7,6 +7,7 @@ import { SplitText } from "gsap/SplitText";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { HeroState } from "@/components/hero/HeroScene";
+import Avatar from "@/components/ui/Avatar";
 import { profile } from "@/data/profile";
 import { onReady } from "@/lib/ready";
 
@@ -152,6 +153,9 @@ export default function Hero() {
       {/* Copy layers — pointer events only on interactive bits so the scene gets the cursor */}
       <div data-scroll-out className="pointer-events-none relative ml-auto max-w-sm text-right">
         <div data-depth="-18">
+          <div data-fade className="mb-4 flex justify-end">
+            <Avatar size={56} />
+          </div>
           <p data-fade className="font-display text-2xl leading-8 font-bold tracking-[-0.03em]">
             Hi, I&apos;m {profile.displayName}
             <br />
