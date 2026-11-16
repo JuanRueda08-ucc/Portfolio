@@ -106,6 +106,67 @@ html.has-custom-cursor :is(input, textarea, [contenteditable="true"]) {
   cursor: text !important;
 }
 
+/* ───────────── Page transition (components/PageTransition.tsx) ─────────────
+   Old page shrinks into a rounded card over a pixel backdrop and leaves upward;
+   the new page rises from below as a card and expands to full screen. */
+::view-transition {
+  background:
+    radial-gradient(circle, rgb(155 93 229 / 0.35) 1.5px, transparent 1.5px) 0 0 / 22px 22px,
+    radial-gradient(ellipse at 50% 120%, #3b1a6e, #0b0a09 65%);
+}
+/* Pages are taller than the viewport, so scale around the part that was on screen:
+   --vt-old-oy is set on click by SmoothScroll (scrollY + half the viewport). */
+::view-transition-old(.page-card) {
+  transform-origin: 50% var(--vt-old-oy, 50vh);
+  animation: page-card-out 0.9s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+::view-transition-new(.page-card) {
+  transform-origin: 50% 50vh;
+  animation: page-card-in 0.9s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+/* Hide the root snapshots so the pixel backdrop shows behind the cards.
+   (page-card is the only view transition in the site, so no type check needed.) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  opacity: 0;
+}
+@keyframes page-card-out {
+  0% {
+    transform: none;
+    border-radius: 0;
+  }
+  45% {
+    transform: scale(0.86);
+    border-radius: 28px;
+  }
+  100% {
+    transform: translateY(-115vh) scale(0.86);
+    border-radius: 28px;
+  }
+}
+@keyframes page-card-in {
+  0%,
+  35% {
+    transform: translateY(115vh) scale(0.86);
+    border-radius: 28px;
+  }
+  75% {
+    transform: scale(0.86);
+    border-radius: 28px;
+  }
+  100% {
+    transform: none;
+    border-radius: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.page-card),
+  ::view-transition-new(.page-card) {
+    animation: none;
+  }
+}
+
 /* Offset the fixed navbar when jumping to a section */
 section[id] {
   scroll-margin-top: 6rem;

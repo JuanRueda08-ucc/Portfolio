@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { useLenis } from "lenis/react";
+import Link from "next/link";
 import PixelField from "@/components/ui/PixelField";
 import { navLinks, profile, socials } from "@/data/profile";
 
@@ -40,6 +41,16 @@ export default function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <Link
+                href="/lab"
+                transitionTypes={["page-card"]}
+                data-cursor="Play"
+                className="font-display text-4xl font-bold tracking-tight text-violet-soft hover:text-violet-bright md:text-5xl"
+              >
+                Lab ✦
+              </Link>
+            </li>
           </ul>
           <div className="space-y-4 md:text-right">
             <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="block underline decoration-violet underline-offset-4">

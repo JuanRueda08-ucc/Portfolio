@@ -22,9 +22,15 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     gsap.ticker.lagSmoothing(0);
     lenis?.on("scroll", ScrollTrigger.update);
 
+    // Page transitions scale the old page around the area that was on screen.
+    const markOrigin = () =>
+      document.documentElement.style.setProperty("--vt-old-oy", `${window.scrollY + window.innerHeight / 2}px`);
+    window.addEventListener("click", markOrigin, { capture: true });
+
     return () => {
       gsap.ticker.remove(update);
       lenis?.off("scroll", ScrollTrigger.update);
+      window.removeEventListener("click", markOrigin, { capture: true });
     };
   }, []);
 
