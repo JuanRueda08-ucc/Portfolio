@@ -26,7 +26,7 @@ export default function Experience() {
               role="tab"
               aria-selected={tab === t.id}
               onClick={() => setTab(t.id)}
-              className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
+              className={`rounded-full px-5 py-2 btn-text transition-colors ${
                 tab === t.id ? "bg-violet text-ink" : "text-stone hover:text-cream"
               }`}
             >
@@ -42,7 +42,7 @@ export default function Experience() {
               <p className="font-mono text-xs text-stone">
                 {it.start} — {it.end}
               </p>
-              <h3 className="mt-1 font-display text-2xl font-semibold">{it.title}</h3>
+              <h3 className="mt-1 font-display text-2xl font-bold">{it.title}</h3>
               <p className="text-violet-soft">{it.place}</p>
               {it.description && <p className="mt-2 max-w-xl text-sm text-stone">{it.description}</p>}
             </li>

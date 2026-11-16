@@ -12,7 +12,7 @@ export default function Navbar() {
         aria-label="Main"
         className="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-ink-3 bg-ink/70 py-2 pr-2 pl-5 backdrop-blur-md"
       >
-        <a href="#home" className="font-display text-lg font-semibold tracking-tight">
+        <a href="#home" className="font-display text-lg font-bold tracking-tight">
           {profile.displayName.split(" ")[0]}
           <span className="text-violet">.</span>
         </a>
@@ -35,7 +35,7 @@ export default function Navbar() {
           <a
             href={profile.cv}
             download
-            className="rounded-full bg-violet px-4 py-2 text-xs font-semibold tracking-wide text-ink uppercase transition-transform hover:scale-105"
+            className="rounded-full bg-violet px-4 py-2 btn-text text-ink transition-transform hover:scale-105"
           >
             CV ↓
           </a>
@@ -72,7 +72,7 @@ export default function Navbar() {
               <a
                 href={`#${l.id}`}
                 onClick={() => setOpen(false)}
-                className="font-display text-5xl font-semibold tracking-tight"
+                className="font-display text-5xl font-bold tracking-tight"
               >
                 {l.label}
               </a>

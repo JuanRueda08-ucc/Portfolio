@@ -14,7 +14,7 @@ export default function Hero() {
       />
 
       <div className="relative ml-auto max-w-xs text-right">
-        <p className="font-display text-xl font-semibold">
+        <p className="font-display text-xl font-bold">
           Hi, I&apos;m {profile.displayName}
           <br />
           {profile.role}.
@@ -30,7 +30,7 @@ export default function Hero() {
       </p>
 
       <div className="relative flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-        <h1 className="font-display text-5xl leading-[0.95] font-semibold tracking-tight uppercase md:text-7xl">
+        <h1 className="font-display text-5xl leading-[0.95] font-bold tracking-tight uppercase md:text-7xl">
           Building software
           <br />
           with a designer&apos;s soul
@@ -39,13 +39,13 @@ export default function Hero() {
           <a
             href={profile.cv}
             download
-            className="rounded-full bg-violet px-6 py-3 text-sm font-semibold whitespace-nowrap text-ink transition-transform hover:scale-105"
+            className="rounded-full bg-violet px-6 py-3 btn-text whitespace-nowrap text-ink transition-transform hover:scale-105"
           >
             Download CV
           </a>
           <a
             href="#projects"
-            className="rounded-full border border-ink-3 px-6 py-3 text-sm font-semibold whitespace-nowrap transition-colors hover:border-violet"
+            className="rounded-full border border-ink-3 px-6 py-3 btn-text whitespace-nowrap transition-colors hover:border-violet"
           >
             View work
           </a>

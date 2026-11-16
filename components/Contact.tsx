@@ -40,8 +40,8 @@ export default function Contact() {
     <section id="contact" className="px-4 py-32 md:px-10">
       <div className="mx-auto grid max-w-6xl gap-16 md:grid-cols-2">
         <div>
-          <p className="mb-3 font-mono text-xs tracking-widest text-violet-soft uppercase">(07)</p>
-          <h2 className="font-display text-6xl font-semibold tracking-tight md:text-8xl">
+          <p className="label mb-3 text-violet-soft">(07)</p>
+          <h2 className="font-display text-6xl font-bold tracking-tight md:text-8xl">
             Let&apos;s talk<span className="text-violet">.</span>
           </h2>
           <a href={`mailto:${profile.email}`} className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
@@ -74,7 +74,7 @@ export default function Contact() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="rounded-full bg-violet py-3 font-semibold text-ink transition-opacity disabled:opacity-60"
+            className="rounded-full bg-violet py-3.5 btn-text text-ink transition-opacity disabled:opacity-60"
           >
             {status === "sending" ? "Sending…" : "Send message"}
           </button>

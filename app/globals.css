@@ -8,13 +8,21 @@
   --color-ink-3: #2a2420;        /* borders / lines */
   --color-cream: #f3eadf;        /* primary text */
   --color-stone: #a39a90;        /* secondary text */
-  --color-violet: #9d5cf5;       /* accent */
+  --color-violet: #9b5de5;       /* accent (from elicubillos.com) */
+  --color-violet-bright: #c06dff;/* buttons / highlights (from elicubillos.com) */
   --color-violet-soft: #c4a1ff;  /* light accent */
   --color-violet-deep: #3b1a6e;  /* glows / accent backgrounds */
 
-  /* Typography */
-  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  /* Typography — copied from the reference sites (see AGENTS.md)
+     - sans/display: elicubillos.com main stack (renders as Arial on Windows)
+     - card: Outfit (elicubillos skill cards)
+     - ui: Figtree (elicubillos buttons / CTAs)
+     - serif: Newsreader (andreas.vision italic accents)
+     - mono: Geist Mono (andreas.vision / elissamartial.com labels) */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-card: var(--font-outfit), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ui: var(--font-figtree), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
@@ -52,6 +60,26 @@ html.lenis body {
 }
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+/* ───────────── Text styles (measured on elicubillos.com) ───────────── */
+/* Small uppercase meta text: "( 01 / 04 )", "(CONTACT)", years */
+@utility label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Button / CTA text: "START A PROJECT", "VISIT PROJECT" */
+@utility btn-text {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Offset the fixed navbar when jumping to a section */

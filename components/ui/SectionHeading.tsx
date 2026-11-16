@@ -10,15 +10,15 @@ export default function SectionHeading({ title, meta, kicker }: Props) {
     <div className="mb-12 flex items-end justify-between gap-6">
       <div>
         {kicker && (
-          <p className="mb-3 font-mono text-xs tracking-widest text-violet-soft uppercase">
+          <p className="label mb-3 text-violet-soft">
             {kicker}
           </p>
         )}
-        <h2 className="font-display text-4xl font-semibold tracking-tight md:text-6xl">
+        <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
           {title}
         </h2>
       </div>
-      {meta && <span className="font-mono text-xs text-stone">{meta}</span>}
+      {meta && <span className="label text-stone">{meta}</span>}
     </div>
   );
 }

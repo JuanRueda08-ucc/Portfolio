@@ -11,7 +11,7 @@ export default function Testimonials() {
             <li key={i} className="flex flex-col rounded-3xl border border-ink-3 bg-ink-2 p-6">
               <p className="flex-1 font-serif text-xl leading-snug italic">“{t.quote}”</p>
               <div className="mt-6 flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-full bg-violet/20 font-display text-sm font-semibold text-violet-soft">
+                <div className="flex size-10 items-center justify-center rounded-full bg-violet/20 font-display text-sm font-bold text-violet-soft">
                   {t.name
                     .split(" ")
                     .map((w) => w[0])
@@ -19,7 +19,7 @@ export default function Testimonials() {
                     .slice(0, 2)}
                 </div>
                 <div>
-                  <p className="font-display font-semibold">{t.name}</p>
+                  <p className="font-display font-bold">{t.name}</p>
                   <p className="text-xs text-stone">{t.relation}</p>
                 </div>
               </div>

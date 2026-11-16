@@ -4,8 +4,9 @@ import SmoothScroll from "@/components/providers/SmoothScroll";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
-const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"] });
-const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"] });
+// Main text uses the system "Helvetica Neue" → Arial stack (see globals.css).
+const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], weight: ["400", "600"] });
+const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"], weight: ["600"] });
 const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],

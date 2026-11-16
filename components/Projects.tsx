@@ -17,7 +17,7 @@ export default function Projects() {
               <div className="aspect-video bg-gradient-to-br from-violet-deep to-ink" />
               <div className="flex flex-1 flex-col p-6">
                 <p className="font-mono text-xs text-stone">{p.year}</p>
-                <h3 className="mt-1 font-display text-2xl font-semibold">{p.title}</h3>
+                <h3 className="mt-1 font-display text-2xl font-bold">{p.title}</h3>
                 <p className="mt-2 flex-1 text-sm text-stone">{p.description}</p>
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {p.tags.map((t) => (
@@ -31,7 +31,7 @@ export default function Projects() {
                     href={p.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-full border border-ink-3 px-4 py-2 text-xs font-semibold hover:border-violet"
+                    className="rounded-full border border-ink-3 px-4 py-2 btn-text hover:border-violet"
                   >
                     GitHub ↗
                   </a>
@@ -39,7 +39,7 @@ export default function Projects() {
                     href={p.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-full bg-violet px-4 py-2 text-xs font-semibold text-ink"
+                    className="rounded-full bg-violet px-4 py-2 btn-text text-ink"
                   >
                     Live demo ↗
                   </a>
