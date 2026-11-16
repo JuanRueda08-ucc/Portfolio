@@ -23,7 +23,7 @@ export const profile = {
 
 export const socials: SocialLink[] = [
   { label: "GitHub", href: "https://github.com/JuanRueda08-ucc" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/juan-jos%C3%A9-rueda-viveros-75b8972a6" },
 ];
 
 export const navLinks = [
