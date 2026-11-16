@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import SplitReveal from "@/components/ui/SplitReveal";
 import { profile, socials } from "@/data/profile";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -41,9 +42,9 @@ export default function Contact() {
       <div className="mx-auto grid max-w-6xl gap-16 md:grid-cols-2">
         <div>
           <p className="label mb-3 text-violet-soft">(07)</p>
-          <h2 className="font-display text-6xl font-bold tracking-tight md:text-8xl">
+          <SplitReveal className="font-display text-6xl font-bold tracking-tight md:text-8xl">
             Let&apos;s talk<span className="text-violet">.</span>
-          </h2>
+          </SplitReveal>
           <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
             {profile.email}
           </a>
