@@ -27,6 +27,30 @@ public/ cv.pdf · images/
 ```
 
 ## Checklist final
-- [ ] Next.js + TS · [ ] Tailwind · [ ] 8 secciones + 1 adicional
-- [ ] Responsive (celular, tablet, escritorio)
-- [ ] Código en GitHub · [ ] Publicado en Vercel
+- [x] Next.js + TS · [x] Tailwind · [x] 8 secciones + adicionales (Skills y Lab)
+- [x] Responsive (probado en 375, 768, 1280 y 1920 px sin scroll horizontal)
+- [x] Código en GitHub · [x] Publicado en Vercel
+
+## Auditoría (Fase 6) — estado por sección
+
+| Sección | Requisito | Estado |
+|---|---|---|
+| Menú | Logo/nombre, anclas, sticky, hamburguesa, scroll suave | ✅ |
+| Hero | Nombre, rol, foto/avatar, frase, **Descargar CV**, botón secundario | ✅ (avatar con iniciales hasta tener foto; `cv.pdf` provisional) |
+| Sobre mí | Párrafo, foto/ilustración, habilidades, datos rápidos | ✅ (texto provisional) |
+| Proyectos | Tarjetas con imagen, título, descripción, tags, **GitHub + demo**, grid 1/2–3 col, `_blank` | ✅ (proyectos de ejemplo) |
+| Testimonios | **≥ 3** con nombre, relación, avatar, texto | ✅ (de ejemplo) |
+| Experiencia | **Académica + laboral**, fechas, lugar, logros, orden reciente→antiguo | ✅ (de ejemplo) |
+| Contacto | Correo, LinkedIn, GitHub, formulario con validación y confirmación | ✅ (falta correo real y Formspree) |
+| Footer | Nombre + © año, íconos de redes, enlaces, volver arriba, créditos | ✅ |
+| Adicional | ≥ 1 sección extra antes del footer | ✅ Skills + Lab |
+
+**Lo único que falta es contenido real** → ver [`contenido.md`](contenido.md).
+
+### Lighthouse (producción local, 2026-11-16)
+| | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
+|---|---|---|---|---|
+| Móvil | 52 | 100 | 100 | 100 |
+| Escritorio | 63 | 100 | 100 | 100 |
+
+El rendimiento lo baja el Total Blocking Time del 3D/animaciones en el Chrome sin GPU que usa Lighthouse con CPU limitada; en un navegador con GPU no aparecen tareas largas.

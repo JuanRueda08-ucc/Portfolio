@@ -85,6 +85,9 @@ Gotchas found so far:
 - **Projects** (`components/projects/`) — `ProjectMedia` (video → image → generated gradient cover using `project.hue`), `FeaturedWork` (pinned retro window for `featured: true`, desktop only), `ArcCarousel` (cards on a big wheel turned by scroll, desktop only). The responsive grid in `Projects.tsx` is always rendered — it's the course's "1 col mobile / 2–3 desktop" requirement, don't remove it.
 - **Lab** (`app/lab/page.tsx`, `components/lab/`) — `LabCanvas` (infinite pan: drag with inertia, wheel, arrow keys; only visible cells render; tile pattern `TILES[(3c + r) mod 10]`), `tiles.tsx` (tile list), `Window` (draggable retro OS window, Escape closes, full-screen on mobile), apps `Terminal` (commands read from `data/`) and `PixelPaint` (32×32, pen/erase/fill/mirror/undo/PNG). To add an app: add an `AppId`, an entry in `APPS` in `LabCanvas.tsx` and a tile in `tiles.tsx`.
 - **Page transitions** — wrap each `page.tsx` in `<PageTransition>` and use `<Link transitionTypes={["page-card"]}>`. CSS in `globals.css` (`page-card-out/in`). `SmoothScroll` stores `--vt-old-oy` on click so the tall old page scales around what was on screen. Fixed-only pages need a real box (`h-svh`) to be snapshotted.
+- **`hasFastWebGL()`** (`lib/gpu.ts`) — use before any WebGL effect; false for software renderers.
+- **`<Avatar>`** / **`<SocialIcon name>`** (`components/ui/`) — profile avatar (photo or monogram) and inline SVG icons (github, linkedin, email).
+- **SEO** — `app/opengraph-image.tsx`, `app/icon.svg`, `app/robots.ts`, `app/sitemap.ts`, `app/not-found.tsx`; base URL in `lib/site.ts`.
 - **Content guide for the owner** — `docs/contenido.md` (Spanish): where every piece of real content goes.
 - **3D fonts** — `npm run typeface` converts a font to `public/fonts/*.typeface.json` (script: `scripts/build-typeface.mjs`). Current: Pacifico (OFL).
 
@@ -112,7 +115,7 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 - [x] **Phase 3** — About (scramble text, line-drawn photo, draggable stickers), Experience (both timelines visible), Testimonials (marquee), Skills (rising cards), Contact reveal, Footer pixel background
 - [x] **Phase 4** — Projects: pinned featured section with videos + arc carousel + responsive grid (placeholder projects until real ones arrive)
 - [x] **Phase 5** — `/lab` (infinite canvas, Terminal, Pixel Paint) + page transitions
-- [ ] **Phase 6** — responsive, a11y, performance, course checklist
+- [x] **Phase 6** — course checklist audit (avatar, CV placeholder, social icons), responsive (no horizontal scroll 375–1920), a11y (skip link, focus ring, contrast; Lighthouse a11y 100), SEO (metadata, OG image, icon, robots, sitemap, 404), perf (lighter 3D, adaptive DPR, deferred mount, software-WebGL fallback). Lighthouse: perf 52 mobile / 63 desktop, other categories 100. Open item: a 1.8–3.4 s long task in the GSAP/Lenis chunk that only shows in headless Lighthouse — not reproducible in a GPU browser.
 - [ ] **Phase 7** — final content (Harvard-style CV, testimonials, videos)
 
 **Pending from the owner:** photo, current CV (to redo in Harvard format), project GitHub/Vercel links + videos, email/LinkedIn, real experience, 3 testimonials.
