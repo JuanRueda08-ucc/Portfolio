@@ -5,7 +5,7 @@ import PageTransition from "@/components/PageTransition";
 import { profile } from "@/data/profile";
 
 export const metadata: Metadata = {
-  title: `Lab — ${profile.displayName}`,
+  title: "Lab",
   description: "Experiments and mini-apps: a terminal, a pixel-art editor and more on an infinite canvas.",
 };
 

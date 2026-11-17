@@ -1,6 +1,6 @@
 import { profile, socials } from "@/data/profile";
 
-export type AppId = "terminal" | "paint";
+export type AppId = "terminal" | "paint" | "shader" | "filters" | "food";
 
 export type Tile =
   | { kind: "app"; app: AppId; title: string; hint: string }
@@ -17,11 +17,12 @@ export const TILES: Tile[] = [
   { kind: "app", app: "terminal", title: "Terminal", hint: "Ask me things in a shell" },
   { kind: "quote", text: profile.manifesto },
   { kind: "link", title: "Selected work", href: "/#projects", hint: "Back to the projects" },
-  { kind: "soon", title: "Shader playground", hint: "Tweak the hero grid live" },
+  { kind: "app", app: "shader", title: "Shader playground", hint: "Pick your color, tune the grid" },
   { kind: "word", text: "hola" },
   { kind: "app", app: "paint", title: "Pixel Paint", hint: "Draw 32×32 pixel art" },
   { kind: "link", title: "GitHub", href: github, external: true, hint: "Code & experiments" },
-  { kind: "soon", title: "Photo filters", hint: "Pixelate & duotone your photos" },
+  { kind: "app", app: "filters", title: "Photo filters", hint: "Pixelate, dither & ASCII your photos" },
+  { kind: "app", app: "food", title: "Food", hint: "Pack a Colombian snack basket" },
   { kind: "link", title: "LinkedIn", href: linkedin, external: true, hint: "Let's connect" },
   { kind: "link", title: "Say hi", href: "/#contact", hint: "Contact form" },
 ];

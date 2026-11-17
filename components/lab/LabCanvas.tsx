@@ -3,7 +3,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import FoodApp, { FoodSprite } from "./food/Food";
+import PhotoFilters from "./PhotoFilters";
 import PixelPaint from "./PixelPaint";
+import ShaderPlayground from "./ShaderPlayground";
 import Terminal from "./Terminal";
 import { TILES, type AppId, type Tile } from "./tiles";
 import Window from "./Window";
@@ -15,17 +18,64 @@ const COL = CELL_W + GAP;
 const ROW = CELL_H + GAP;
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 /**
- * Which tile goes in grid cell (col,row). With 10 tiles, `3c + r` never repeats a
+ * Which tile goes in grid cell (col,row). With 10–11 tiles, `3c + r` never repeats a
  * tile within ±2 columns/rows of itself, so neighbours always differ.
  */
 const tileAt = (c: number, r: number) => TILES[mod(c * 3 + r, TILES.length)];
 /** Odd columns are shifted down half a cell for a masonry feel. */
 const cellY = (c: number, r: number) => r * ROW + (mod(c, 2) ? ROW / 2 : 0);
 
-const APPS: Record<AppId, { title: string; width: number; render: () => React.ReactNode }> = {
-  terminal: { title: "terminal — zsh", width: 620, render: () => <Terminal /> },
-  paint: { title: "pixel-paint.app", width: 640, render: () => <PixelPaint /> },
+const APPS: Record<AppId, { title: string; dock: string; width: number; render: () => React.ReactNode }> = {
+  terminal: { title: "terminal — zsh", dock: "› Terminal", width: 620, render: () => <Terminal /> },
+  paint: { title: "pixel-paint.app", dock: "▦ Paint", width: 640, render: () => <PixelPaint /> },
+  shader: { title: "shader-playground.app", dock: "◐ Shader", width: 760, render: () => <ShaderPlayground /> },
+  filters: { title: "photo-filters.app", dock: "▣ Filters", width: 800, render: () => <PhotoFilters /> },
+  food: { title: "food.app", dock: "🧺 Food", width: 760, render: () => <FoodApp /> },
 };
+
+/** Small preview drawn on each app tile. */
+function AppPreview({ app }: { app: AppId }) {
+  switch (app) {
+    case "terminal":
+      return (
+        <span className="block rounded-xl bg-ink p-3 font-mono text-xs text-stone">
+          <span className="text-violet-bright">juano@lab:~$</span> whoami
+          <br />
+          Juano Rueda
+          <br />
+          <span className="text-violet-bright">juano@lab:~$</span> <span className="animate-pulse">▍</span>
+        </span>
+      );
+    case "paint":
+      return (
+        <span aria-hidden className="grid w-24 grid-cols-8 gap-0.5">
+          {"0110011011111111111111111111111101111110001111000001100000000000".split("").map((b, i) => (
+            <span key={i} className={`aspect-square ${b === "1" ? "bg-violet-bright" : "bg-ink-3/40"}`} />
+          ))}
+        </span>
+      );
+    case "shader":
+      return (
+        <span aria-hidden className="flex gap-1.5">
+          {[269, 325, 18, 95, 160, 205].map((h) => (
+            <span key={h} className="size-6 rounded-full" style={{ background: `hsl(${h} 72% 63%)` }} />
+          ))}
+        </span>
+      );
+    case "filters":
+      return (
+        <span aria-hidden className="block w-28 font-mono text-[9px] leading-[1.05] text-violet-bright">
+          {"  .:-=+*#\n .:=+*#%@\n.:-=*#%@@\n :-=+*#%@\n  .:-=+*#"}
+        </span>
+      );
+    case "food":
+      return (
+        <span aria-hidden className="size-14">
+          <FoodSprite id="arepa" />
+        </span>
+      );
+  }
+}
 
 function TileCard({ tile, onOpen }: { tile: Tile; onOpen: (app: AppId) => void }) {
   const base =
@@ -41,21 +91,7 @@ function TileCard({ tile, onOpen }: { tile: Tile; onOpen: (app: AppId) => void }
           onClick={() => onOpen(tile.app)}
           className={`${base} border-violet/40 bg-ink-2 hover:border-violet-bright`}
         >
-          {tile.app === "terminal" ? (
-            <span className="block rounded-xl bg-ink p-3 font-mono text-xs text-stone">
-              <span className="text-violet-bright">juano@lab:~$</span> whoami
-              <br />
-              Juano Rueda
-              <br />
-              <span className="text-violet-bright">juano@lab:~$</span> <span className="animate-pulse">▍</span>
-            </span>
-          ) : (
-            <span aria-hidden className="grid w-24 grid-cols-8 gap-0.5">
-              {"0110011011111111111111111111111101111110001111000001100000000000".split("").map((b, i) => (
-                <span key={i} className={`aspect-square ${b === "1" ? "bg-violet-bright" : "bg-ink-3/40"}`} />
-              ))}
-            </span>
-          )}
+          <AppPreview app={tile.app} />
           <span>
             <span className="label text-violet-soft">App</span>
             <span className="mt-1 block font-display text-3xl font-bold tracking-tight">{tile.title}</span>
@@ -281,7 +317,8 @@ export default function LabCanvas() {
       {/* Dock: always-reachable app launcher (keyboard + mobile friendly) */}
       <nav
         aria-label="Lab apps"
-        className="fixed bottom-5 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-full border border-ink-3 bg-ink/80 p-1.5 backdrop-blur-md"
+        data-lenis-prevent
+        className="fixed bottom-5 left-1/2 z-40 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 overflow-x-auto rounded-full border border-ink-3 bg-ink/80 p-1.5 whitespace-nowrap backdrop-blur-md [scrollbar-width:none]"
       >
         {(Object.keys(APPS) as AppId[]).map((id) => (
           <button
@@ -290,7 +327,7 @@ export default function LabCanvas() {
             onClick={() => open(id)}
             className="btn-text rounded-full px-4 py-2 text-cream transition-colors hover:bg-ink-2"
           >
-            {id === "terminal" ? "› Terminal" : "▦ Pixel Paint"}
+            {APPS[id].dock}
           </button>
         ))}
         <span className="label hidden px-3 text-stone md:inline">Drag to explore</span>
