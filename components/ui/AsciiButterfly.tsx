@@ -16,7 +16,7 @@ import { cssRgb, subscribeTheme } from "@/lib/theme";
  * - After Skills (contact + footer) it lets go and follows the cursor lazily.
  */
 
-const SPRITE = 132; // css px of the butterfly canvas
+const SPRITE = 150; // css px of the butterfly canvas
 const DOT = 3; // dot grid cell (css px)
 const GRID = Math.round(SPRITE / DOT);
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
@@ -51,6 +51,10 @@ function drawShape(g: CanvasRenderingContext2D, open: number) {
     g.bezierCurveTo(43, -12, 32, -1, 2, 1);
     g.closePath();
     g.fill();
+    // Light rim along the outer edge (like the reference's glowing wing edges).
+    g.strokeStyle = gray(225);
+    g.lineWidth = 2.2;
+    g.stroke();
 
     // Hindwing
     const hw = g.createRadialGradient(10, 10, 1, 11, 11, 22);
@@ -64,6 +68,9 @@ function drawShape(g: CanvasRenderingContext2D, open: number) {
     g.bezierCurveTo(17, 34, 6, 26, 1, 8);
     g.closePath();
     g.fill();
+    g.strokeStyle = gray(210);
+    g.lineWidth = 1.8;
+    g.stroke();
 
     // Veins (dark lines) and spots so the dithering has texture.
     g.strokeStyle = gray(60);
@@ -108,29 +115,23 @@ function drawShape(g: CanvasRenderingContext2D, open: number) {
   g.restore();
 }
 
-/** Points of the skills wave in viewport coordinates. */
-function wavePoints(): Pt[] {
-  const pts: Pt[] = [];
-  document.querySelectorAll<SVGGeometryElement>('[data-butterfly-line="skills"]').forEach((el) => {
-    const ctm = el.getScreenCTM();
-    if (!ctm) return;
-    const len = el.getTotalLength();
-    for (let i = 0; i <= 24; i++) {
-      const p = el.getPointAtLength((len * i) / 24);
-      const q = new DOMPoint(p.x, p.y).matrixTransform(ctm);
-      pts.push({ x: q.x, y: q.y });
-    }
-  });
-  return pts;
+/** Point (viewport coords) and tangent angle at progress `p` (0..1) of an SVG path. */
+function lineAt(path: SVGGeometryElement, p: number): (Pt & { angle: number }) | null {
+  const ctm = path.getScreenCTM();
+  if (!ctm) return null;
+  const len = path.getTotalLength();
+  const l = Math.min(1, Math.max(0, p)) * len;
+  const a0 = path.getPointAtLength(Math.max(0, l - 2));
+  const b0 = path.getPointAtLength(Math.min(len, l + 2));
+  const c0 = path.getPointAtLength(l);
+  const a = new DOMPoint(a0.x, a0.y).matrixTransform(ctm);
+  const b = new DOMPoint(b0.x, b0.y).matrixTransform(ctm);
+  const c = new DOMPoint(c0.x, c0.y).matrixTransform(ctm);
+  return { x: c.x, y: c.y, angle: Math.atan2(b.y - a.y, b.x - a.x) };
 }
 
-function along(pts: Pt[], t: number): Pt {
-  const f = Math.min(1, Math.max(0, t)) * (pts.length - 1);
-  const i = Math.floor(f);
-  const a = pts[i];
-  const b = pts[Math.min(i + 1, pts.length - 1)];
-  return { x: a.x + (b.x - a.x) * (f - i), y: a.y + (b.y - a.y) * (f - i) };
-}
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const shortest = (from: number, to: number) => Math.atan2(Math.sin(to - from), Math.cos(to - from));
 
 const MOTION = "(prefers-reduced-motion: reduce)";
 const subscribe = (cb: () => void) => {
@@ -171,9 +172,12 @@ export default function AsciiButterfly() {
 
     const pos = { x: -200, y: -200 };
     const mouse = { x: -1, y: -1 };
-    let heading = 0; // radians, 0 = up
+    let heading = Math.PI / 2; // radians, 0 = up (starts facing right, along the wave)
     let alpha = 0;
     let flap = 0;
+    let prog = 0; // smoothed progress along the skills wave (0..1)
+    let facing = 1; // 1 = flying forward along the line, -1 = backward
+    let placed = false;
     let last = performance.now();
     let raf = 0;
 
@@ -215,57 +219,75 @@ export default function AsciiButterfly() {
 
       const skills = document.getElementById("skills");
       const r = skills?.getBoundingClientRect();
-      let target: Pt | null = null;
-      let visible = false;
+      const path = document.querySelector<SVGGeometryElement>('[data-butterfly-line="skills"]');
+      const trail = document.querySelector<SVGPathElement>("[data-butterfly-trail]");
+      const lr = path?.getBoundingClientRect();
+      const visible = Boolean(r && r.top < vh * 0.7);
+      let speed = 0;
 
-      if (r && r.top < vh * 0.75) {
-        visible = true;
-        if (r.bottom > vh * 0.45) {
-          // In Skills: ride the wave, progress = how far we've scrolled through it.
-          const pts = wavePoints();
-          const progress = (vh * 0.75 - r.top) / (r.height * 0.85);
-          if (pts.length > 1) {
-            const p = along(pts, progress);
-            target = { x: p.x, y: p.y - 26 + Math.sin(t * 2) * 6 };
-          }
-        } else if (mouse.x >= 0) {
-          // After Skills: lazily follow the cursor.
-          target = { x: mouse.x + 46 + Math.sin(t * 1.4) * 14, y: mouse.y - 40 + Math.cos(t * 1.9) * 10 };
-        } else {
-          target = { x: vw * (0.8 + Math.sin(t * 0.5) * 0.08), y: vh * (0.35 + Math.cos(t * 0.6) * 0.08) };
-        }
-      }
-
-      // Fade in/out; teleport to the first target when appearing.
+      // Fade in/out with the section.
       alpha += ((visible ? 1 : 0) - alpha) * Math.min(1, dt * 4);
-      if (target && alpha < 0.05) {
-        pos.x = target.x;
-        pos.y = target.y;
-      }
       el.style.opacity = alpha.toFixed(3);
-      if (alpha < 0.01 || !target) return;
 
-      // Glide toward the target and turn to face the direction of travel.
-      const vx = (target.x - pos.x) * Math.min(1, dt * 3);
-      const vy = (target.y - pos.y) * Math.min(1, dt * 3);
-      pos.x += vx;
-      pos.y += vy;
-      const speed = Math.hypot(vx, vy) / Math.max(dt, 0.001);
-      if (speed > 8) {
-        const want = Math.atan2(vx, -vy);
-        let diff = want - heading;
-        diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-        heading += diff * Math.min(1, dt * 5);
+      // ── Line mode: while the wave is on screen, sit exactly on it.
+      // Progress follows the scroll: starts when the line reaches 80% of the
+      // viewport height and ends when it reaches 20%.
+      const onLine = visible && path && lr && lr.bottom > vh * 0.12;
+      if (onLine) {
+        const want = clamp01((vh * 0.8 - lr.top) / (vh * 0.6));
+        const before = prog;
+        prog += (want - prog) * Math.min(1, dt * 3.5);
+        const dir = prog - before;
+        if (Math.abs(dir) > 1e-4) facing = dir > 0 ? 1 : -1;
+        trail?.setAttribute("stroke-dasharray", `${(prog * 1000).toFixed(1)} 1000`);
+
+        const at = lineAt(path, prog);
+        if (at) {
+          // Tiny bob perpendicular to the line so it feels alive.
+          const bob = Math.sin(t * 3.2) * 3;
+          const nx = -Math.sin(at.angle) * bob;
+          const ny = Math.cos(at.angle) * bob;
+          const tx = at.x + nx;
+          const ty = at.y + ny;
+          speed = Math.hypot(tx - pos.x, ty - pos.y) / Math.max(dt, 0.001);
+          if (alpha < 0.05 || !placed) {
+            pos.x = tx;
+            pos.y = ty;
+            placed = true;
+          } else {
+            // Stick to the line (fast follow) — no drifting off it.
+            pos.x += (tx - pos.x) * Math.min(1, dt * 14);
+            pos.y += (ty - pos.y) * Math.min(1, dt * 14);
+          }
+          // Face along the curve (sprite points up, so +90°), flipped when scrolling back.
+          const want = at.angle + Math.PI / 2 + (facing < 0 ? Math.PI : 0);
+          heading += shortest(heading, want) * Math.min(1, dt * 6);
+        }
+      } else if (visible) {
+        // ── After the line: follow the cursor lazily (owner allowed this only at the end).
+        const target: Pt =
+          mouse.x >= 0
+            ? { x: mouse.x + 46 + Math.sin(t * 1.4) * 14, y: mouse.y - 40 + Math.cos(t * 1.9) * 10 }
+            : { x: vw * (0.8 + Math.sin(t * 0.5) * 0.08), y: vh * (0.35 + Math.cos(t * 0.6) * 0.08) };
+        const vx = (target.x - pos.x) * Math.min(1, dt * 3);
+        const vy = (target.y - pos.y) * Math.min(1, dt * 3);
+        pos.x += vx;
+        pos.y += vy;
+        speed = Math.hypot(vx, vy) / Math.max(dt, 0.001);
+        if (speed > 8) heading += shortest(heading, Math.atan2(vx, -vy)) * Math.min(1, dt * 5);
+        trail?.setAttribute("stroke-dasharray", "1000 1000");
       } else {
-        heading += (Math.sin(t * 0.8) * 0.25 - heading) * Math.min(1, dt * 1.5);
+        placed = false;
       }
 
-      // Wing beat: faster when moving; wings fold toward the body (open 1 → 0.25).
-      flap += dt * (5 + Math.min(speed, 600) / 60);
-      const open = 0.25 + 0.75 * Math.abs(Math.cos(flap));
+      if (alpha < 0.01) return;
+
+      // Wing beat: faster when moving; wings fold toward the body (open 1 → 0.22).
+      flap += dt * (6 + Math.min(speed, 600) / 55);
+      const open = 0.22 + 0.78 * Math.abs(Math.cos(flap));
       render(open);
 
-      el.style.transform = `translate3d(${pos.x - SPRITE / 2}px, ${pos.y - SPRITE / 2}px, 0) rotate(${heading}rad) scale(0.8)`;
+      el.style.transform = `translate3d(${pos.x - SPRITE / 2}px, ${pos.y - SPRITE / 2}px, 0) rotate(${heading}rad) scale(0.75)`;
     };
     raf = requestAnimationFrame(tick);
 
