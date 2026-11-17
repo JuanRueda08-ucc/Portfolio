@@ -93,7 +93,7 @@ Gotchas found so far:
 - **Lab apps** — Terminal, Pixel Paint, Shader playground (`ShaderPlayground.tsx`, reuses `components/hero/gridGlsl.ts`), Photo filters (`PhotoFilters.tsx`), Food (`food/`: 12×12 text sprites of Colombian food in `sprites.ts`).
 - **`hasFastWebGL()`** (`lib/gpu.ts`) — use before any WebGL effect; false for software renderers.
 - **`<Avatar>`** / **`<SocialIcon name>`** (`components/ui/`) — profile avatar (photo or monogram) and inline SVG icons (github, linkedin, email).
-- **SEO** — `app/opengraph-image.tsx`, `app/icon.svg`, `app/robots.ts`, `app/sitemap.ts`, `app/not-found.tsx`; base URL in `lib/site.ts`.
+- **SEO** — `app/opengraph-image.tsx`, `app/icon.jpg` + `app/apple-icon.jpg` (JR logo), `app/robots.ts`, `app/sitemap.ts`, `app/not-found.tsx`; base URL in `lib/site.ts`.
 - **Content guide for the owner** — `docs/contenido.md` (Spanish): where every piece of real content goes.
 - **3D fonts** — `npm run typeface` converts a font to `public/fonts/*.typeface.json` (script: `scripts/build-typeface.mjs`). Current: Pacifico (OFL).
 
@@ -124,7 +124,7 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 - [x] **Phase 6** — course checklist audit (avatar, CV placeholder, social icons), responsive (no horizontal scroll 375–1920), a11y (skip link, focus ring, contrast; Lighthouse a11y 100), SEO (metadata, OG image, icon, robots, sitemap, 404), perf (lighter 3D, adaptive DPR, deferred mount, software-WebGL fallback). 
 - [x] **Perf pass** — root cause of the long task: first R3F frame waiting ~1.7 s on GPU shader compile (MeshTransmissionMaterial + Environment/PMREM through ANGLE/D3D on Windows). A procedural shader alone scored desktop 83–88, but the owner preferred the physical glass, so desktop keeps it (with shader warm-up) and phones use the light one. Lighthouse now: desktop 63 (headless Chrome doesn't benefit from the warm-up), mobile ~54 (LCP ~4 s = hero h1 after the intentional loader). Owner decided NOT to drop the loader or the 3D on phones.
 - [x] **Extras** — visitor theme (light mode + accent picker), Lab apps Shader playground / Photo filters / Food, ASCII butterfly.
-- [x] **Logo (partial)** — owner's JR logo now in About (line drawing) and the hero avatar. Still to decide: navbar/lab wordmark and `app/icon.svg`.
+- [x] **Logo** — owner's JR logo in About (line drawing), hero avatar and favicon (`app/icon.jpg` + `app/apple-icon.jpg`, 180px crop of the monogram). Owner chose to keep the "Juano." wordmark in the navbar/lab.
 - [ ] **Phase 7** — final content (Harvard-style CV, testimonials, videos)
 
 **Pending from the owner:** photo, current CV (to redo in Harvard format), project GitHub/Vercel links + videos, email/LinkedIn, real experience, 3 testimonials.
