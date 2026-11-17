@@ -1,8 +1,15 @@
 "use client";
 
-import { Center, PerformanceMonitor, Text3D } from "@react-three/drei";
+import {
+  Center,
+  Environment,
+  Lightformer,
+  MeshTransmissionMaterial,
+  PerformanceMonitor,
+  Text3D,
+} from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { createGlassMaterial, createGridMaterial, createHeroUniforms } from "./gridMaterial";
 
@@ -18,11 +25,20 @@ export type HeroState = {
   intro: number;
 };
 
+/**
+ * Two looks for the glass word:
+ * - "high" (desktop): the real physical glass — drei MeshTransmissionMaterial + studio
+ *   lighting. Richest look, but heavy shaders (compiled up front, see <Warmup>).
+ * - "low" (phones/tablets, or any device that can't keep up): a light procedural glass
+ *   that refracts the grid in its own shader.
+ */
+type Quality = "high" | "low";
+
 const BG_DEPTH = -3;
 const damp = THREE.MathUtils.damp;
 
-function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: string; quality: "high" | "low" }) {
-  // One uniforms object drives both the grid and the glass (they render the same grid).
+function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: string; quality: Quality }) {
+  // One uniforms object drives the grid and the light glass (they render the same grid).
   const { grid, glass } = useMemo(() => {
     const uniforms = createHeroUniforms();
     return { grid: createGridMaterial(uniforms), glass: createGlassMaterial(uniforms) };
@@ -96,14 +112,64 @@ function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: st
             bevelSize={0.045}
             bevelThickness={0.12}
             bevelSegments={hi ? 6 : 3}
-            material={glass}
+            material={hi ? undefined : glass}
           >
             {text}
+            {hi && (
+              <MeshTransmissionMaterial
+                samples={6}
+                resolution={768}
+                transmission={1}
+                roughness={0.06}
+                thickness={0.7}
+                ior={1.45}
+                chromaticAberration={0.08}
+                anisotropicBlur={0.15}
+                distortion={0.15}
+                distortionScale={0.4}
+                temporalDistortion={0.08}
+                color="#efe6ff"
+                attenuationColor="#c06dff"
+                attenuationDistance={2.5}
+                clearcoat={1}
+                clearcoatRoughness={0.1}
+                backside
+                backsideThickness={0.4}
+              />
+            )}
           </Text3D>
         </Center>
       </group>
+      {hi && (
+        // Procedural studio lighting for the physical glass (no HDR download).
+        <Environment resolution={256} frames={1}>
+          <Lightformer form="rect" intensity={3} position={[0, 4, 2]} scale={[10, 1, 1]} />
+          <Lightformer form="rect" intensity={2} color="#c06dff" position={[-5, -1, 1]} scale={[3, 6, 1]} />
+          <Lightformer form="rect" intensity={1.5} position={[5, 1, 1]} scale={[3, 6, 1]} />
+          <Lightformer form="ring" intensity={2} position={[0, 0, 6]} scale={4} />
+        </Environment>
+      )}
     </>
   );
+}
+
+/**
+ * Asks the GPU to compile every shader in the scene in the background
+ * (KHR_parallel_shader_compile) before the first frame is drawn, so the heavy
+ * glass doesn't freeze the page when it appears. Calls `onDone` when ready.
+ */
+function Warmup({ onDone }: { onDone: () => void }) {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    let cancelled = false;
+    gl.compileAsync(scene, camera)
+      .catch(() => undefined)
+      .finally(() => !cancelled && onDone());
+    return () => {
+      cancelled = true;
+    };
+  }, [gl, scene, camera, onDone]);
+  return null;
 }
 
 type Props = {
@@ -113,21 +179,29 @@ type Props = {
   active: boolean;
 };
 
+/** Phones/tablets (touch or narrow) and low-core CPUs get the light glass. */
+const prefersLight = () =>
+  typeof window !== "undefined" &&
+  (window.innerWidth < 1024 ||
+    window.matchMedia("(pointer: coarse)").matches ||
+    (navigator.hardwareConcurrency ?? 8) <= 4);
+
 export default function HeroScene({ state, text = "hello", active }: Props) {
-  const [quality, setQuality] = useState<"high" | "low">(() =>
-    typeof window !== "undefined" && (window.innerWidth < 768 || navigator.hardwareConcurrency <= 4) ? "low" : "high",
-  );
+  const [quality, setQuality] = useState<Quality>(() => (prefersLight() ? "low" : "high"));
   const [dpr, setDpr] = useState(() => (quality === "high" ? 1.5 : 1));
+  const [warm, setWarm] = useState(false);
+  const onWarm = useCallback(() => setWarm(true), []);
 
   return (
     <Canvas
-      frameloop={active ? "always" : "never"}
+      // Nothing is drawn until the shaders are compiled (see <Warmup>).
+      frameloop={active && warm ? "always" : "never"}
       dpr={dpr}
       camera={{ position: [0, 0, 8], fov: 35 }}
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       onCreated={({ gl }) => gl.setClearColor("#0b0a09")}
     >
-      {/* Drop resolution (then geometry quality) on devices that can't keep up. */}
+      {/* If the device can't keep up: lower resolution first, then switch to the light glass. */}
       <PerformanceMonitor
         onDecline={() => {
           setDpr((d) => Math.max(0.75, d - 0.25));
@@ -141,6 +215,7 @@ export default function HeroScene({ state, text = "hello", active }: Props) {
         }}
       />
       <Scene state={state} text={text} quality={quality} />
+      <Warmup onDone={onWarm} />
     </Canvas>
   );
 }
