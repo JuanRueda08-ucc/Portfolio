@@ -7,6 +7,7 @@ import { useLenis } from "lenis/react";
 import { useRef, useState } from "react";
 import type { Project } from "@/data/types";
 import ProjectMedia from "./ProjectMedia";
+import VideoButton from "./VideoButton";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -92,8 +93,9 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
               {projects.map((p, i) => (
                 <span
                   key={p.slug}
+                  // Hidden layers must not take the pointer, or hover-to-play hits the wrong project.
                   className={`absolute inset-0 transition-[opacity,transform,filter] duration-700 ease-out ${
-                    i === active ? "scale-100 opacity-100 blur-0" : "scale-105 opacity-0 blur-sm"
+                    i === active ? "scale-100 opacity-100 blur-0" : "pointer-events-none scale-105 opacity-0 blur-sm"
                   }`}
                 >
                   <ProjectMedia project={p} eager={i === 0} />
@@ -135,7 +137,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
             <p className="label mt-3 text-stone">
               {current.year} · {current.tags.join(" · ")}
             </p>
-            <div className="mt-5 flex gap-2 lg:justify-end">
+            <div className="mt-5 flex flex-wrap gap-2 lg:justify-end [&>*]:whitespace-nowrap">
               <a
                 href={current.github}
                 target="_blank"
@@ -145,6 +147,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
               >
                 GitHub ↗
               </a>
+              <VideoButton project={current} />
               {current.demo && (
               <a
                 href={current.demo}
