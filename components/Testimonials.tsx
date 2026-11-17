@@ -1,4 +1,5 @@
 import SectionHeading from "@/components/ui/SectionHeading";
+import TestimonialSlider from "@/components/ui/TestimonialSlider";
 import { testimonials } from "@/data/testimonials";
 import type { Testimonial } from "@/data/types";
 
@@ -34,7 +35,10 @@ function Card({ t }: { t: Testimonial }) {
   );
 }
 
-/** Infinite marquee of testimonials (pauses on hover; static row with reduced motion). */
+/**
+ * Testimonials as a slow slideshow with a step player under it: it plays on its own,
+ * can be paused, or a dot jumps to one testimonial.
+ */
 export default function Testimonials() {
   return (
     <section id="testimonials" className="overflow-hidden py-32">
@@ -42,19 +46,11 @@ export default function Testimonials() {
         <SectionHeading title="Kind words" kicker="(04)" meta={`(${String(testimonials.length).padStart(2, "0")})`} />
       </div>
 
-      <div className="group relative [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div className="flex w-max animate-marquee gap-6 group-hover:[animation-play-state:paused] motion-reduce:animate-none">
-          {[0, 1].map((copy) => (
-            <ul key={copy} aria-hidden={copy === 1} className="flex gap-6">
-              {testimonials.map((t, i) => (
-                <li key={`${copy}-${i}`}>
-                  <Card t={t} />
-                </li>
-              ))}
-            </ul>
-          ))}
-        </div>
-      </div>
+      <TestimonialSlider>
+        {testimonials.map((t, i) => (
+          <Card key={i} t={t} />
+        ))}
+      </TestimonialSlider>
     </section>
   );
 }
