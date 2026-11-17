@@ -129,6 +129,6 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 - [x] **Logo** — owner's JR logo in About (line drawing), hero avatar and favicon (`app/icon.jpg` + `app/apple-icon.jpg`, 180px crop of the monogram). Owner chose to keep the "Juano." wordmark in the navbar/lab.
 - [ ] **Phase 7** — final content (Harvard-style CV, testimonials, videos)
 
-**Pending from the owner:** photo, current CV (to redo in Harvard format), project GitHub/Vercel links + videos, email/LinkedIn, real experience, 3 testimonials.
+**Pending from the owner:** current CV (to redo in Harvard format), real email, real experience, 3 testimonials, optional project videos. Done: photo, real projects (5 personal + 2 team; covers in `public/images/projects/`, built from repo screenshots or live-site captures). `Project.demo` is optional: TickGo, Chef Digital, Vigía and Ecos de la Tierra have no live demo yet, so their cards link to the repo.
 
 Keep this section up to date when a phase lands.
