@@ -1,3 +1,4 @@
+import { Generate } from "@/components/ui/Generate";
 import LineDrawing from "@/components/ui/LineDrawing";
 import ScrambleWords from "@/components/ui/ScrambleWords";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -20,6 +21,9 @@ const WORD_POSITIONS = [
   { x: 76, y: 90 },
 ];
 
+/** Median luminance of the JR logo's blue ground (measured from its edges: ~0.19). */
+const LOGO_GROUND = 0.2;
+
 export default function About() {
   const facts = [
     { k: "Based in", v: profile.city },
@@ -37,15 +41,27 @@ export default function About() {
           positions={WORD_POSITIONS}
           className="w-full md:absolute md:inset-0"
         />
-        {/* The JR logo drawn with lines (owner's choice); "light" traces the chrome letters. */}
+        {/* Desktop: the JR logo drawn with lines around the cursor (owner's choice);
+            "light" traces the chrome letters. */}
         <LineDrawing
           src={profile.logo}
           trace="light"
           fallbackText={profile.initials}
           label={`${profile.displayName}'s JR monogram, drawn with lines`}
-          className="aspect-[3/4] w-[min(80vw,22rem)] md:absolute md:top-1/2 md:left-1/2 md:h-[80%] md:w-auto md:-translate-x-1/2 md:-translate-y-1/2"
+          className="hidden aspect-[3/4] md:absolute md:top-1/2 md:left-1/2 md:block md:h-[80%] md:w-auto md:-translate-x-1/2 md:-translate-y-1/2"
         />
         <span data-cursor="Hi!" aria-hidden className="absolute inset-x-1/4 inset-y-[10%] hidden md:block" />
+        <p className="label absolute bottom-0 left-1/2 hidden -translate-x-1/2 text-stone md:block">
+          ( Move your cursor over it to reveal the logo )
+        </p>
+
+        {/* Phones: no cursor, and the line drawing takes ages to build by itself,
+            so the logo is generated on demand instead (owner's choice). */}
+        <div className="flex flex-col items-center gap-3 md:hidden">
+          {/* paper = luminance of the logo's blue ground, so the contrast turns about it */}
+          <Generate src={profile.logo} alt={`${profile.displayName}'s JR logo`} paper={LOGO_GROUND} />
+          <p className="label text-stone">( Tap Generate to draw my logo )</p>
+        </div>
       </div>
 
       <div className="mx-auto max-w-6xl">
