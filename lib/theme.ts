@@ -70,7 +70,7 @@ export function applyTheme(next: Partial<Theme>) {
   root.style.colorScheme = theme.mode;
   for (const [k, v] of Object.entries(accentVars(theme.hue, theme.mode))) root.style.setProperty(k, v);
   (window as unknown as { __theme: Theme }).__theme = theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme.mode === "dark" ? "#0b0a09" : "#f4efe8");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme.mode === "dark" ? "#0b0a09" : "#e3dbcf");
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(theme));
   } catch {

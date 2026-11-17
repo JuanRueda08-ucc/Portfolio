@@ -51,11 +51,13 @@
    so every utility (bg-ink, text-cream, border-ink-3…) flips automatically.
    The accent (--color-violet*) is set at runtime by lib/theme.ts for both modes. */
 html[data-theme="light"] {
-  --color-ink: #f4efe8; /* warm paper */
-  --color-ink-2: #ebe4da;
-  --color-ink-3: #d6ccbf;
+  /* Muted warm paper (owner: the first, near-white paper glared and flattened
+     the cards), with surfaces and lines a clearer step darker. */
+  --color-ink: #e3dbcf;
+  --color-ink-2: #d5cbbd;
+  --color-ink-3: #bdb0a0;
   --color-cream: #15120f; /* text */
-  --color-stone: #5c544c;
+  --color-stone: #4f463d;
   --color-violet: hsl(269 62% 60%);
   --color-violet-bright: hsl(275 80% 66%);
   --color-violet-soft: hsl(262 55% 40%);
