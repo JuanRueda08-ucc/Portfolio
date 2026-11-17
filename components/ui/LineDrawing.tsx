@@ -86,6 +86,9 @@ export default function LineDrawing({
       ctx.clearRect(0, 0, W, H);
       strokes = 0;
       if (reduce) drawAll();
+      // Without auto-draw nothing would bring the lines back (and the Generate button
+      // is already gone), so repaint what the quick draw had done, at once.
+      else if (!autoDraw) for (let i = 0; i < tries; i++) stroke(Math.random() * W, Math.random() * H);
     });
 
     // ── Build a luminance map of the source, cropped like `object-fit: cover`.
