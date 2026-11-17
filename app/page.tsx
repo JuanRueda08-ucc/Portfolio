@@ -8,6 +8,7 @@ import PageTransition from "@/components/PageTransition";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import Testimonials from "@/components/Testimonials";
+import AsciiButterfly from "@/components/ui/AsciiButterfly";
 
 export default function Home() {
   return (
@@ -24,6 +25,8 @@ export default function Home() {
           <Contact />
         </main>
         <Footer />
+        {/* ASCII butterfly that flies along the wave, ring and timelines */}
+        <AsciiButterfly />
       </div>
     </PageTransition>
   );

@@ -60,6 +60,7 @@ export default function Experience() {
                 <ol data-timeline className="relative">
                   <span
                     data-line
+                    data-butterfly-line="timeline"
                     aria-hidden
                     className="absolute top-0 bottom-0 left-0 w-px origin-top bg-gradient-to-b from-violet to-ink-3"
                   />

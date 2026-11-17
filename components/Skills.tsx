@@ -92,6 +92,7 @@ export default function Skills() {
                 className="pointer-events-none absolute inset-x-0 top-[18%] h-[40%] w-full"
               >
                 <path
+                  data-butterfly-line="skills"
                   d={wavePath(i, skills.length)}
                   fill="none"
                   stroke="currentColor"
