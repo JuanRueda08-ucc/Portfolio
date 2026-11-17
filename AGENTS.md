@@ -139,7 +139,7 @@ Keep this section up to date when a phase lands.
 
 **Everything required by the course is built and deployed** (all sections, responsive, a11y, SEO). What remains is mostly **real content** from the owner, **project videos**, and optional polish. The site works end to end with placeholders where content is missing.
 
-**Git:** branch `main`. Pushing to `main` redeploys on Vercel. The `video/` workspace (a **separate** npm workspace with its own `package.json` and ~540 MB `node_modules` — never commit it; its `.gitignore` excludes `node_modules/`, `raw/`, `out/`, `public/clips/`) is committed, and `eslint.config.mjs` / `tsconfig.json` exclude it so the site's `lint`/`tsc` ignore it. `npm run lint` and `npx tsc --noEmit` pass.
+**Git:** branch `main`, last commit `0908e76` (Ancla Calma + Vinyl Player videos). Pushing to `main` redeploys on Vercel. The `video/` workspace is committed (without `node_modules/`, `raw/`, `out/`, `public/clips/`); `npm run lint` and `npm run build` pass with it excluded.
 
 **Content state (`data/`):**
 | File | State |
@@ -167,15 +167,14 @@ Agreed with the owner: **record each app for real, then polish with Remotion** (
 
 Items marked **[owner]** need input only the owner can give — ask in Spanish, don't invent content (especially testimonials and work history: fabricated entries would be dishonest on a graded, public portfolio).
 
-1. ~~Commit the `video/` workspace~~ and ~~ship the Ancla Calma and Vinyl Player videos~~ — done. Still worth checking: touch-hold on a real phone and the file sizes on the deployed site.
-2. **Run `npm run build`** once to confirm the whole project still builds with the new videos.
-3. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
-4. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
-5. **Record the remaining videos** in this order: Chef Digital → Vigía → TickGo → Ecos de la Tierra.
-6. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
-7. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
-8. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.
-9. **Update docs**: tick Phase 7 here, refresh `docs/requisitos-profesor.md` ("only real content is missing") and `docs/contenido.md` when content lands.
+1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
+2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
+3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
+4. **Record the remaining videos** in this order: Chef Digital → Vigía → TickGo → Ecos de la Tierra.
+5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
+6. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
+7. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.
+8. **Update docs**: tick Phase 7 here, refresh `docs/requisitos-profesor.md` ("only real content is missing") and `docs/contenido.md` when content lands.
 
 ## Decisions already taken (don't re-litigate)
 
