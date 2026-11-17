@@ -10,7 +10,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Project context — Juano Rueda's portfolio
 
-Read this file first. It is the single source of truth for any AI agent (Claude, Cursor, Copilot, …) working on this repo, so context survives across sessions.
+Read this file first. It is the single source of truth for any AI agent (Claude Code, **Codex**, Cursor, Copilot, …) working on this repo, so context survives across sessions. `CLAUDE.md` only imports this file (`@AGENTS.md`); **edit AGENTS.md, never fork the context into CLAUDE.md or into an agent's private memory.**
+
+**Multi-agent workflow (owner's plan):** the owner works with Claude Code until its 5-hour usage window runs out, then continues with Codex (and back). Therefore: read "Handoff — current state" and "Task backlog" at the bottom before starting, finish or clearly mark any half-done work, commit in small Conventional Commits, and update those two sections whenever something lands or a decision is made.
 
 ## Who / what
 
@@ -88,7 +90,7 @@ Gotchas found so far:
 - **Marquee** — `animate-marquee` utility (defined in `@theme`), pause with `group-hover:[animation-play-state:paused]`. (no longer used by Testimonials.)
 - **`<StepPlayer>`** (`components/ui/StepPlayer.tsx`) — dots + morphing play/pause button, vendored from bencho.dev (MIT); keep its comments. Portfolio-only props: `autoPlay`, `loop`, `onStep`, `label`, `hold` (freeze while off screen). Bencho tokens are mapped onto ours on `.spl` in `globals.css` (no new globals). Used by **`<TestimonialSlider>`**: a slow slideshow (active card centered, neighbours dimmed) that autoplays, pauses, or jumps with a dot.
 - **Project videos** — the card shows the cover image at rest; the video plays like a YouTube thumbnail on mouse hover, or while a finger holds the card on touch (`HOLD_MS`; the release does not open the link). An always-running, sped-up loop was rejected by the owner as too fast. Files: `public/videos/<slug>.mp4` + `image` as the thumbnail. Recipe: crop browser chrome/taskbar, speed up about 3× (not 6×), blur private data (`boxblur` + `overlay=…:enable=between(t,…)`), `ffmpeg -an -c:v libx264 -crf 27 -pix_fmt yuv420p -movflags +faststart` (FinanzIA: 46 MB → 1.2 MB, account email blurred). ffmpeg is installed through winget (`Gyan.FFmpeg.Essentials`).
-- **Video plan (owner, agreed):** record each app for real (Playwright for web apps, the Electron app for Chef Digital, Android emulator + `adb screenrecord` for Vigía), then polish with **Remotion** (device frames, zooms, short titles). Claude Motion was considered but needs a Team/Enterprise plan and does not use real footage. Start once the owner finishes the small fixes in the apps; Chef Digital first.
+- **Video tooling** (`video/`, own package.json, excluded from the site lint/tsc; see `video/README.md`) — `record/recorder.mjs` records a scripted walk with the installed Chrome (playwright-core + CDP screencast + drawn cursor); Remotion (`src/apps.ts` segments: range, speed, caption, zoom; `src/Demo.tsx` title card + browser window) polishes it. Done: Ancla Calma, Vinyl Player (FinanzIA is the owner's own recording). Claude Motion was considered but needs a Team/Enterprise plan. Next: Chef Digital (Electron) and Vigía (Android emulator + `adb screenrecord`) once the owner finishes their fixes.
 - **Projects** (`components/projects/`) — `ProjectMedia` (video → image → generated gradient cover using `project.hue`), `FeaturedWork` (pinned retro window for `featured: true`; on phones the ring + window are smaller and the title/details sit below), `ArcCarousel` (cards on a big wheel turned by scroll; `GEO.sm` geometry below 768px). The responsive grid in `Projects.tsx` is always rendered — it's the course's "1 col mobile / 2–3 desktop" requirement, don't remove it.
 - **Lab** (`app/lab/page.tsx`, `components/lab/`) — `LabCanvas` (infinite pan: drag with inertia, wheel, arrow keys; only visible cells render; tile pattern `TILES[(3c + r) mod 10]`), `tiles.tsx` (tile list), `Window` (draggable retro OS window, Escape closes, full-screen on mobile), apps `Terminal` (commands read from `data/`) and `PixelPaint` (32×32, pen/erase/fill/mirror/undo/PNG). To add an app: add an `AppId`, an entry in `APPS` in `LabCanvas.tsx` and a tile in `tiles.tsx`.
 - **Page transitions** — wrap each `page.tsx` in `<PageTransition>` and use `<Link transitionTypes={["page-card"]}>`. CSS in `globals.css` (`page-card-out/in`). `SmoothScroll` stores `--vt-old-oy` on click so the tall old page scales around what was on screen. Fixed-only pages need a real box (`h-svh`) to be snapshotted.
@@ -129,8 +131,78 @@ To change content, edit `data/*.ts` only. Placeholders are marked `TODO(Juano)`.
 - [x] **Perf pass** — root cause of the long task: first R3F frame waiting ~1.7 s on GPU shader compile (MeshTransmissionMaterial + Environment/PMREM through ANGLE/D3D on Windows). A procedural shader alone scored desktop 83–88, but the owner preferred the physical glass, so desktop keeps it (with shader warm-up) and phones use the light one. Lighthouse now: desktop 63 (headless Chrome doesn't benefit from the warm-up), mobile ~54 (LCP ~4 s = hero h1 after the intentional loader). Owner decided NOT to drop the loader or the 3D on phones.
 - [x] **Extras** — visitor theme (light mode + accent picker), Lab apps Shader playground / Photo filters / Food, ASCII butterfly.
 - [x] **Logo** — owner's JR logo in About (line drawing), hero avatar and favicon (`app/icon.jpg` + `app/apple-icon.jpg`, 180px crop of the monogram). Owner chose to keep the "Juano." wordmark in the navbar/lab.
-- [ ] **Phase 7** — final content (Harvard-style CV, testimonials, videos)
-
-**Pending from the owner:** current CV (to redo in Harvard format), real email, real experience, 3 testimonials, project videos (FinanzIA done), logos/covers for TickGo and Vinyl Player (owner is making them). Done: photo, real projects (5 personal + 2 team; covers in `public/images/projects/`, built from repo screenshots or live-site captures). `Project.demo` is optional: TickGo, Chef Digital, Vigía and Ecos de la Tierra have no live demo yet, so their cards link to the repo.
+- [ ] **Phase 7** — final content (Harvard-style CV, testimonials, videos) — **in progress**, see the backlog below.
 
 Keep this section up to date when a phase lands.
+
+## Handoff — current state (updated 2026-11-17)
+
+**Everything required by the course is built and deployed** (all sections, responsive, a11y, SEO). What remains is mostly **real content** from the owner, **project videos**, and optional polish. The site works end to end with placeholders where content is missing.
+
+**Git:** branch `main`, last commit `a63934f` (FinanzIA video slowed, Ecos title screen as cover). Pushing to `main` redeploys on Vercel. **Uncommitted work at this moment** (commit it as `chore: add the video tooling workspace` unless the owner says otherwise):
+- `video/` — a **separate** npm workspace (own `package.json`, own `node_modules`, ~540 MB — never commit it). Contents: Remotion compositions + Playwright recorders (see "Project video pipeline"). Its `.gitignore` excludes `node_modules/`, `raw/`, `out/`, `public/clips/`.
+- `eslint.config.mjs` (adds `video/**` to ignores) and `tsconfig.json` (adds `"video"` to `exclude`; the formatter also expanded some arrays — harmless). Without these the site's `lint`/`tsc` would try to check the video workspace.
+- After committing, run `npm run lint` and `npm run build` once to confirm the root project is not affected by `video/`.
+
+**Content state (`data/`):**
+| File | State |
+|---|---|
+| `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). Only **FinanzIA has a video** (`/videos/finanzia.mp4`). `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
+| `profile.ts` | Photo + JR logo done. **Email is a placeholder** (`TODO(Juano)`). |
+| `experience.ts` | **Placeholder** (`TODO(Juano)`) — needs real education + work. |
+| `testimonials.ts` | **Placeholder** (3 fake entries) — need 3 real ones. |
+| `skills.ts` | Provisional — review with the owner. |
+| `public/cv.pdf` | **Provisional** — owner will provide the current CV; redo in Harvard format. |
+| Contact form | Works in "simulated" mode until `NEXT_PUBLIC_FORMSPREE_ID` is set (in Vercel env vars **and** a local `.env.local`). |
+
+## Project video pipeline (`video/`)
+
+Agreed with the owner: **record each app for real, then polish with Remotion** (device/browser frame, zooms, short captions). Do not use AI-generated/fake footage. Videos play only on **hover** (desktop) or **touch-hold** (phones) over the cover image; the cover stays as the thumbnail. Keep the final speed gentle (~3× at most for dead time, 1× for the good parts); the owner rejected a 6× loop as unreadable. Always **blur private data** (account emails, tokens) and never record with a personal account that exposes real data.
+
+- `video/record/recorder.mjs` — Playwright (`playwright-core` + system Chrome) walk-through recorder. Frames come from the CDP screencast (JPEG q92) into ffmpeg → smooth 30 fps MP4 at 1440×900, with a fake cursor + click ripple injected into the page (headless Chrome has none). Per-app scripts: `ancla-calma.mjs`, `vinyl-player.mjs` (plus `explore.mjs` / `inspect.mjs` helpers to find selectors). Output goes to `video/raw/` (git-ignored).
+- `video/src/apps.ts` — per-app `DemoProps`: segments `{from,to,rate,caption,zoom}` over the raw recording, colors, title/tagline/url. `Demo.tsx` renders title card → browser window with the clip → captions. `Root.tsx` registers compositions (`ancla-calma`, `vinyl-player`) at 1280×800, 30 fps.
+- Render: `cd video && npx remotion render <composition-id> out/<id>.mp4`; the Remotion clips are read from `video/public/clips/` (git-ignored copies of the raw recordings).
+- **Final delivery recipe** (from the FinanzIA video): `ffmpeg -an -c:v libx264 -crf 27 -pix_fmt yuv420p -movflags +faststart` → `public/videos/<slug>.mp4` (target < 3 MB), then set `video: "/videos/<slug>.mp4"` in `data/projects.ts`. ffmpeg is installed via winget (`Gyan.FFmpeg.Essentials`); the recorder reads its path from `$FFMPEG` or the hard-coded WinGet path.
+- **State:** Ancla Calma and Vinyl Player recordings + Remotion renders exist locally (`video/out/ancla-calma.mp4`, `video/out/vinyl-player.mp4`) but are **not yet compressed into `public/videos/` nor wired into `projects.ts`** — review them (look at stills with `video/out/*-sheet.jpg`), fix timing/captions if needed, then ship. Vinyl Player needs MP3s (`video/raw/tracks/`, local only — royalty-free, don't commit).
+- **Still to record:** Chef Digital (Electron app, first priority once the owner finishes small fixes in the app — record the desktop window with Playwright's Electron support or OBS), Vigía (Android emulator + `adb screenrecord`), TickGo (Wear OS emulator), Ecos de la Tierra (Godot export or screen capture). Apps without a public URL need either a screen recording from the owner or a local run.
+
+## Task backlog (priority order)
+
+Items marked **[owner]** need input only the owner can give — ask in Spanish, don't invent content (especially testimonials and work history: fabricated entries would be dishonest on a graded, public portfolio).
+
+1. **Commit the `video/` workspace** and the eslint/tsconfig exclusions (see Handoff). Verify `npm run lint && npm run build`.
+2. **Ship the Ancla Calma and Vinyl Player videos** (review → compress → `public/videos/` → `projects.ts`). Check phone touch-hold behaviour and the file sizes.
+3. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
+4. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
+5. **Record the remaining videos** in this order: Chef Digital → Vigía → TickGo → Ecos de la Tierra.
+6. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
+7. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
+8. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.
+9. **Update docs**: tick Phase 7 here, refresh `docs/requisitos-profesor.md` ("only real content is missing") and `docs/contenido.md` when content lands.
+
+## Decisions already taken (don't re-litigate)
+
+- Desktop keeps the physical glass 3D (owner prefers it) even though it costs Lighthouse points; phones use the light shader. The LOADING loader stays. 3D stays on phones.
+- Navbar/lab keep the "Juano." wordmark; the JR logo is used in About, the hero avatar and the favicon.
+- Butterfly must never follow the visitor through the page, and must never drop/vanish mid-route in Skills.
+- Scramble words keep the measured Elissa rhythm (not a fast flicker). Project videos are hover/hold-to-play, not autoplaying loops.
+- Site copy, code, comments, commits in **English**; chat with the owner in **Spanish**; `docs/` in Spanish.
+- Commits: Conventional Commits, one logical change each; push to `main` only when the owner wants it live (every push redeploys).
+- Claude Motion (Team/Enterprise only, no real footage) was rejected for videos in favour of real recordings + Remotion.
+
+## Open decisions (ask the owner when reached)
+
+- Whether to publish the Remotion polished clips for **all** projects or keep plain screen recordings for the apps that can't be recorded cleanly (Wear OS, Godot).
+- Language of the CV (English only vs. English + Spanish download) and whether to add a Spanish toggle to the site (not planned; site is English-only).
+- Whether to add the optional WhatsApp contact (course lists it as optional).
+- Whether to keep `/lab` apps as they are or add one more (course doesn't require them; the owner added them as personal extras).
+
+## Working notes for any agent (Windows, owner's machine)
+
+- OS is **Windows 11**; shell is PowerShell/Git Bash. Use forward slashes in scripts that must run in both. Paths contain spaces (`C:\Users\Edwin Rueda\…`) — quote them.
+- Dev servers: `npm run dev` (port 3000) or, for real timings, `npm run build` then `npm run start -- -p 3001` (Claude's launch configs are in `.claude/launch.json`: `portfolio-dev`, `portfolio-prod`). Codex: just run those npm commands.
+- Verify UI in a browser that is actually visible (a hidden tab pauses `requestAnimationFrame`, so GSAP/loader freeze and screenshots look black).
+- Before finishing any change: `npm run lint`, `npx tsc --noEmit`, and for CSS/animation changes `npm run build`.
+- Never put secrets or personal data in commits; `.env*` is git-ignored.
+- Read `node_modules/next/dist/docs/` before touching Next.js APIs (this is Next 16 with breaking changes — see the block at the top).
+- Claude-specific tooling (memory in `~/.claude`, `ccd_*` tools, the browser pane) is not available to other agents; everything durable must live in this file or in `docs/`.
