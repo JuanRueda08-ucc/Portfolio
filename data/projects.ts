@@ -24,7 +24,7 @@ export const projects: Project[] = [
       "Team project. Conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent.",
     year: 2026,
     tags: ["Next.js", "LangGraph", "Java", "Team"],
-    image: "/images/projects/finanzia-poster.webp",
+    image: "/images/projects/finanzia.webp",
     video: "/videos/finanzia.mp4",
     github: "https://github.com/Proyecto-final-4",
     demo: "https://frontend-sooty-five-52.vercel.app",
