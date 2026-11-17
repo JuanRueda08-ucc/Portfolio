@@ -12,8 +12,8 @@ export const profile = {
   timezone: "America/Bogota",
   email: "hello@example.com",
   cv: "/cv.pdf",
-  /** TODO(Juano): add your photo at /public/images/me.jpg and set this to "/images/me.jpg". */
-  photo: undefined as string | undefined,
+  /** Profile photo (hero avatar). */
+  photo: "/images/me.webp" as string | undefined,
   /** Personal JR monogram logo (chrome on blue). Drawn with lines in About and used as avatar until there's a photo. */
   logo: "/images/logo-jr.webp",
   /** Phrase scattered across the About section; letters scramble randomly. */
