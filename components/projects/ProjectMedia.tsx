@@ -1,34 +1,30 @@
+"use client";
+
+import { useRef, useState } from "react";
 import type { Project } from "@/data/types";
 
 type Props = {
   project: Project;
   className?: string;
-  /** Load the video eagerly (featured screen) instead of on demand. */
+  /** Above-the-fold copy (featured screen): load the thumbnail and video metadata eagerly. */
   eager?: boolean;
 };
 
+/** How long a finger must rest on a card before its video plays (touch). */
+const HOLD_MS = 350;
+
 /**
- * Project visual: autoplaying muted video if there is one, else the image,
- * else a generated cover (gradient + pixel grid + title) so placeholders
- * still look intentional.
+ * Project visual: the cover image (or a generated cover) at rest. Projects with a
+ * video play it like a YouTube thumbnail: on mouse hover, or while a finger holds
+ * the card on touch screens; leaving or lifting brings the thumbnail back (owner's
+ * choice — an always-running, sped-up loop was too fast to follow).
  */
 export default function ProjectMedia({ project, className = "", eager = false }: Props) {
-  if (project.video) {
-    return (
-      <video
-        className={`size-full object-cover ${className}`}
-        src={project.video}
-        poster={project.image}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload={eager ? "auto" : "metadata"}
-        aria-label={`${project.title} preview`}
-      />
-    );
-  }
+  if (project.video) return <HoverVideo project={project} className={className} eager={eager} />;
+  return <Cover project={project} className={className} eager={eager} />;
+}
 
+function Cover({ project, className, eager }: Required<Props>) {
   if (project.image) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
@@ -36,6 +32,7 @@ export default function ProjectMedia({ project, className = "", eager = false }:
         src={project.image}
         alt={`${project.title} screenshot`}
         loading={eager ? "eager" : "lazy"}
+        draggable={false}
         className={`size-full object-cover ${className}`}
       />
     );
@@ -67,5 +64,86 @@ export default function ProjectMedia({ project, className = "", eager = false }:
         {project.title}
       </span>
     </div>
+  );
+}
+
+function HoverVideo({ project, className, eager }: Required<Props>) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  // Touch hold: the pending timer, and whether this press turned into a hold
+  // (then the release must not open the link underneath).
+  const hold = useRef({ timer: 0, held: false });
+
+  const play = () => {
+    const v = video.current;
+    if (!v) return;
+    v.currentTime = 0;
+    v.play().then(
+      () => setPlaying(true),
+      () => {},
+    );
+  };
+  const stop = () => {
+    const v = video.current;
+    window.clearTimeout(hold.current.timer);
+    hold.current.timer = 0;
+    if (!v) return;
+    v.pause();
+    setPlaying(false);
+  };
+
+  return (
+    <span
+      className="relative block size-full touch-manipulation select-none [-webkit-touch-callout:none]"
+      onPointerEnter={(e) => e.pointerType === "mouse" && play()}
+      onPointerLeave={(e) => e.pointerType === "mouse" && stop()}
+      onPointerDown={(e) => {
+        if (e.pointerType === "mouse") return;
+        hold.current.held = false;
+        hold.current.timer = window.setTimeout(() => {
+          hold.current.held = true;
+          play();
+        }, HOLD_MS);
+      }}
+      onPointerUp={(e) => e.pointerType !== "mouse" && stop()}
+      // Scrolling the page with the finger cancels the press before it becomes a hold.
+      onPointerCancel={stop}
+      onClickCapture={(e) => {
+        if (!hold.current.held) return;
+        hold.current.held = false;
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      // A long press would also open the browser's link menu.
+      onContextMenu={(e) => {
+        if (hold.current.timer || hold.current.held) e.preventDefault();
+      }}
+    >
+      <Cover project={project} className={className} eager={eager} />
+      <video
+        ref={video}
+        src={project.video}
+        muted
+        loop
+        playsInline
+        preload={eager ? "metadata" : "none"}
+        aria-hidden
+        className={`absolute inset-0 size-full object-cover transition-opacity duration-300 ${className} ${
+          playing ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <span
+        aria-hidden
+        className={`label pointer-events-none absolute right-3 bottom-3 flex items-center gap-1.5 rounded-full bg-ink/75 px-2.5 py-1 text-cream backdrop-blur-sm transition-opacity duration-300 ${
+          playing ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <svg viewBox="0 0 10 10" className="size-2 fill-current" aria-hidden>
+          <path d="M2 1l7 4-7 4z" />
+        </svg>
+        <span className="pointer-coarse:hidden">Hover to play</span>
+        <span className="hidden pointer-coarse:inline">Hold to play</span>
+      </span>
+    </span>
   );
 }
