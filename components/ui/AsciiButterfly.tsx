@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
-import { SKILLS_TIMELINE } from "@/components/Skills";
+import { SKILLS_LEAD, SKILLS_TIMELINE } from "@/components/Skills";
 import { cssRgb, subscribeTheme } from "@/lib/theme";
 
 /**
@@ -131,7 +131,9 @@ function lineAt(path: SVGGeometryElement, p: number): (Pt & { angle: number }) |
   return { x: c.x, y: c.y, angle: Math.atan2(b.y - a.y, b.x - a.x) };
 }
 
-const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+/** How early (in cards) the butterfly starts gliding in before the route begins. */
+const ENTER = 0.35;
+const clamp01 =(v: number) => Math.min(1, Math.max(0, v));
 const shortest = (from: number, to: number) => Math.atan2(Math.sin(to - from), Math.cos(to - from));
 
 const MOTION = "(prefers-reduced-motion: reduce)";
@@ -228,15 +230,18 @@ export default function AsciiButterfly() {
       const paths = Array.from(document.querySelectorAll<SVGGeometryElement>('[data-butterfly-line="skills"]'));
       const trails = Array.from(document.querySelectorAll<SVGPathElement>("[data-butterfly-trail]"));
       const count = paths.length;
-      const units = pinned ? Number(progAttr) * SKILLS_TIMELINE : 0;
+      // b = how far along the route the butterfly is, in cards (2.4 = 40% across card #3).
+      const b = pinned ? Number(progAttr) * SKILLS_TIMELINE - SKILLS_LEAD : -Infinity;
       const staged = Boolean(r && pinned && r.top <= vh * 0.05 && r.bottom >= vh * 0.95);
+      const hasMouse = fine.matches;
 
-      // Hidden before Skills. Rides the rising card's curve while the stage is pinned.
-      // After the cards are done (or the section has scrolled away) it may follow the cursor.
-      const lineMode = staged && units > 0.02 && units < count;
-      const after = Boolean(r && pinned && (r.bottom < vh * 0.95 || (staged && units >= count)));
-      // Following the cursor only makes sense with a mouse; on touch it leaves after the cards.
-      const visible = lineMode || (after && fine.matches);
+      // Hidden before Skills. Glides in while the first card rises, then stays on the
+      // dotted route (one continuous line across the cards) while the stage is pinned.
+      // After the cards: follows the cursor (mouse only); on touch it rests at the end
+      // of the line and leaves with the section.
+      const lineMode = staged && b > -ENTER && (b < count || !hasMouse);
+      const after = Boolean(r && pinned && (r.bottom < vh * 0.95 || (staged && b >= count)));
+      const visible = lineMode || (after && hasMouse);
       let speed = 0;
 
       // Fade in/out.
@@ -244,7 +249,7 @@ export default function AsciiButterfly() {
       el.style.opacity = alpha.toFixed(3);
 
       // Trail on every card: finished cards fully drawn, current card up to the butterfly.
-      const cardIndex = Math.min(count - 1, Math.floor(prog));
+      const cardIndex = Math.min(count - 1, Math.max(0, Math.floor(prog)));
       trails.forEach((tr) => {
         const j = Number(tr.dataset.butterflyTrail);
         // Not pinned (mobile / reduced motion): no butterfly, show the curves fully drawn.
@@ -255,7 +260,7 @@ export default function AsciiButterfly() {
             : after || j < cardIndex
               ? 1
               : j === cardIndex
-                ? prog - cardIndex
+                ? Math.max(0, prog - cardIndex)
                 : 0;
         tr.setAttribute("stroke-dasharray", `${(clamp01(drawn) * 1000).toFixed(1)} 1000`);
       });
@@ -263,13 +268,20 @@ export default function AsciiButterfly() {
       // ── Line mode: sit exactly on the curve of the card that is rising.
       if (lineMode) {
         const before = prog;
-        prog = alpha < 0.05 ? units : prog + (units - prog) * Math.min(1, dt * 5);
+        const goal = Math.min(count - 1e-4, b);
+        prog = alpha < 0.05 ? goal : prog + (goal - prog) * Math.min(1, dt * 5);
         const dir = prog - before;
         if (Math.abs(dir) > 1e-4) facing = dir > 0 ? 1 : -1;
         const i = Math.min(count - 1, Math.max(0, Math.floor(prog)));
         const path = paths.find((p) => Number(p.dataset.index) === i) ?? paths[i];
 
         const at = path ? lineAt(path, prog - i) : null;
+        if (at && prog < 0) {
+          // Flying in from the upper left toward the start of the route.
+          const k = -prog / ENTER; // 1 → 0
+          at.x -= k * 160;
+          at.y -= k * 70;
+        }
         if (at) {
           // Tiny bob perpendicular to the line so it feels alive.
           const bob = Math.sin(t * 3.2) * 3;

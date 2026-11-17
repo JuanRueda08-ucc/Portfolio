@@ -10,11 +10,26 @@ import { skills } from "@/data/skills";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /**
- * Timeline length in "card units": each card takes 1 unit to rise, plus a short
- * hold at the end so the finished row stays on screen. The butterfly reads the
- * section progress (data-progress) and maps it with the same constant.
+ * Timeline in "card units" (like elicubillos.com, the flyer never jumps):
+ * - unit 0 → SKILLS_LEAD: the first card rises; the butterfly flies in.
+ * - then the butterfly crosses one card per unit (its progress `b` = units − LEAD).
+ *   Card i (i ≥ 1) rises during b ∈ [i − RISE, i], so it is already up when the
+ *   butterfly reaches it and the dotted route continues at the same height.
+ * - a short hold at the end so the finished row stays on screen.
+ * The butterfly reads the section progress (data-progress) and maps it with these.
  */
-export const SKILLS_TIMELINE = skills.length + 0.35;
+export const SKILLS_LEAD = 1;
+const RISE = 0.5;
+export const SKILLS_TIMELINE = SKILLS_LEAD + skills.length + 0.35;
+
+/** Adds the card rises (shared by the desktop and mobile timelines). */
+function addRises(tl: gsap.core.Timeline, cards: HTMLElement[], from: number) {
+  cards.forEach((card, i) =>
+    i === 0
+      ? tl.fromTo(card, { yPercent: from }, { yPercent: 0, duration: SKILLS_LEAD * 0.6 }, 0)
+      : tl.fromTo(card, { yPercent: from }, { yPercent: 0, duration: RISE }, SKILLS_LEAD + i - RISE),
+  );
+}
 
 /** Bell-shaped "hump" across a card, in real pixels (like the dotted curves on elicubillos.com). */
 function humpPath(w: number, h: number) {
@@ -130,8 +145,8 @@ export default function Skills() {
             onUpdate: (self) => (section.dataset.progress = self.progress.toFixed(4)),
           },
         });
-        cards.forEach((card, i) => tl.fromTo(card, { yPercent: 84 }, { yPercent: 0, duration: 1 }, i));
-        tl.to({}, { duration: SKILLS_TIMELINE - cards.length }); // hold the finished row
+        addRises(tl, cards, 84);
+        tl.to({}, { duration: 0.001 }, SKILLS_TIMELINE - 0.001); // hold the finished row
         return () => delete section.dataset.progress;
       });
 
@@ -152,12 +167,16 @@ export default function Skills() {
             onUpdate: (self) => (section.dataset.progress = self.progress.toFixed(4)),
           },
         });
-        cards.forEach((card, i) => {
-          tl.fromTo(card, { yPercent: 70 }, { yPercent: 0, duration: 1 }, i);
-          // Slide the row so the rising card is the one in front.
-          if (i > 0) tl.to(list.current, { x: () => -i * step(), duration: 1 }, i);
-        });
-        tl.to({}, { duration: SKILLS_TIMELINE - cards.length });
+        addRises(tl, cards, 70);
+        // The row slides at the butterfly's pace, so the butterfly stays near the
+        // middle of the screen while the cards pass underneath (like the bee on Eli's).
+        tl.fromTo(
+          list.current,
+          { x: 0 },
+          { x: () => -(cards.length - 1) * step(), duration: cards.length - 1 },
+          SKILLS_LEAD + 0.5,
+        );
+        tl.to({}, { duration: 0.001 }, SKILLS_TIMELINE - 0.001);
         return () => delete section.dataset.progress;
       });
       return () => mm.revert();
