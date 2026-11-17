@@ -53,11 +53,14 @@ function Container({ mode }: { mode: "basket" | "picnic" }) {
   );
 }
 
-/** Positions (in %) for the 12 foods around the container. */
+/**
+ * Centers (in %) for the 12 foods around the container. Kept ≥10% from the
+ * edges so the sprites (centered on these points) never get clipped.
+ */
 const SPOTS = [
-  [6, 8], [26, 4], [50, 3], [74, 4], [93, 8],
-  [3, 45], [96, 45],
-  [6, 84], [26, 90], [50, 92], [74, 90], [93, 84],
+  [11, 13], [30, 12], [50, 12], [70, 12], [89, 13],
+  [11, 50], [89, 50],
+  [11, 87], [30, 88], [50, 88], [70, 88], [89, 87],
 ];
 
 /**
