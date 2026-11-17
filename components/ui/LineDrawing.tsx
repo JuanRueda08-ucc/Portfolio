@@ -101,7 +101,8 @@ export default function LineDrawing({
       strokes = 0;
 
       sw = SAMPLE_W;
-      sh = Math.max(1, Math.round((SAMPLE_W * H) / W));
+      // A hidden copy (desktop vs phone variant) measures 0×0; 0/0 would be NaN.
+      sh = W > 0 && H > 0 ? Math.max(1, Math.round((SAMPLE_W * H) / W)) : SAMPLE_W;
       const off = document.createElement("canvas");
       off.width = sw;
       off.height = sh;
