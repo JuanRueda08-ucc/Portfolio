@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { hasFastWebGL } from "@/lib/gpu";
 
 const VERT = `#version 300 es
 in vec2 p;
@@ -77,8 +78,9 @@ export default function PixelField({ className = "" }: { className?: string }) {
 
   useEffect(() => {
     const cvs = canvas.current;
-    const gl = cvs?.getContext("webgl2", { antialias: false, alpha: false });
-    if (!cvs || !gl) return;
+    if (!cvs || !hasFastWebGL()) return; // software WebGL would stall the page
+    const gl = cvs.getContext("webgl2", { antialias: false, alpha: false });
+    if (!gl) return;
 
     let program: WebGLProgram;
     try {
@@ -163,5 +165,17 @@ export default function PixelField({ className = "" }: { className?: string }) {
     };
   }, []);
 
-  return <canvas ref={canvas} aria-hidden className={`block ${className}`} />;
+  return (
+    <canvas
+      ref={canvas}
+      aria-hidden
+      className={`block ${className}`}
+      // CSS fallback (no WebGL / software rendering): purple pixel grid fading upward.
+      style={{
+        backgroundImage:
+          "linear-gradient(to top, rgb(155 93 229 / 0.55), transparent 85%), radial-gradient(rgb(11 10 9) 30%, transparent 31%)",
+        backgroundSize: "100% 100%, 18px 18px",
+      }}
+    />
+  );
 }
