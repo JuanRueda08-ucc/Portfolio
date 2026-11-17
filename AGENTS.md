@@ -139,15 +139,12 @@ Keep this section up to date when a phase lands.
 
 **Everything required by the course is built and deployed** (all sections, responsive, a11y, SEO). What remains is mostly **real content** from the owner, **project videos**, and optional polish. The site works end to end with placeholders where content is missing.
 
-**Git:** branch `main`, last commit `a63934f` (FinanzIA video slowed, Ecos title screen as cover). Pushing to `main` redeploys on Vercel. **Uncommitted work at this moment** (commit it as `chore: add the video tooling workspace` unless the owner says otherwise):
-- `video/` — a **separate** npm workspace (own `package.json`, own `node_modules`, ~540 MB — never commit it). Contents: Remotion compositions + Playwright recorders (see "Project video pipeline"). Its `.gitignore` excludes `node_modules/`, `raw/`, `out/`, `public/clips/`.
-- `eslint.config.mjs` (adds `video/**` to ignores) and `tsconfig.json` (adds `"video"` to `exclude`; the formatter also expanded some arrays — harmless). Without these the site's `lint`/`tsc` would try to check the video workspace.
-- After committing, run `npm run lint` and `npm run build` once to confirm the root project is not affected by `video/`.
+**Git:** branch `main`. Pushing to `main` redeploys on Vercel. The `video/` workspace (a **separate** npm workspace with its own `package.json` and ~540 MB `node_modules` — never commit it; its `.gitignore` excludes `node_modules/`, `raw/`, `out/`, `public/clips/`) is committed, and `eslint.config.mjs` / `tsconfig.json` exclude it so the site's `lint`/`tsc` ignore it. `npm run lint` and `npx tsc --noEmit` pass.
 
 **Content state (`data/`):**
 | File | State |
 |---|---|
-| `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). Only **FinanzIA has a video** (`/videos/finanzia.mp4`). `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
+| `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). **FinanzIA, Ancla Calma and Vinyl Player have videos** (`/videos/<slug>.mp4`); the rest don't yet. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
 | `profile.ts` | Photo + JR logo done. **Email is a placeholder** (`TODO(Juano)`). |
 | `experience.ts` | **Placeholder** (`TODO(Juano)`) — needs real education + work. |
 | `testimonials.ts` | **Placeholder** (3 fake entries) — need 3 real ones. |
@@ -163,15 +160,15 @@ Agreed with the owner: **record each app for real, then polish with Remotion** (
 - `video/src/apps.ts` — per-app `DemoProps`: segments `{from,to,rate,caption,zoom}` over the raw recording, colors, title/tagline/url. `Demo.tsx` renders title card → browser window with the clip → captions. `Root.tsx` registers compositions (`ancla-calma`, `vinyl-player`) at 1280×800, 30 fps.
 - Render: `cd video && npx remotion render <composition-id> out/<id>.mp4`; the Remotion clips are read from `video/public/clips/` (git-ignored copies of the raw recordings).
 - **Final delivery recipe** (from the FinanzIA video): `ffmpeg -an -c:v libx264 -crf 27 -pix_fmt yuv420p -movflags +faststart` → `public/videos/<slug>.mp4` (target < 3 MB), then set `video: "/videos/<slug>.mp4"` in `data/projects.ts`. ffmpeg is installed via winget (`Gyan.FFmpeg.Essentials`); the recorder reads its path from `$FFMPEG` or the hard-coded WinGet path.
-- **State:** Ancla Calma and Vinyl Player recordings + Remotion renders exist locally (`video/out/ancla-calma.mp4`, `video/out/vinyl-player.mp4`) but are **not yet compressed into `public/videos/` nor wired into `projects.ts`** — review them (look at stills with `video/out/*-sheet.jpg`), fix timing/captions if needed, then ship. Vinyl Player needs MP3s (`video/raw/tracks/`, local only — royalty-free, don't commit).
+- **State:** FinanzIA, Ancla Calma and Vinyl Player are shipped (compressed into `public/videos/` and wired in `data/projects.ts`). Vinyl Player recording needs MP3s (`video/raw/tracks/`, local only — royalty-free, don't commit).
 - **Still to record:** Chef Digital (Electron app, first priority once the owner finishes small fixes in the app — record the desktop window with Playwright's Electron support or OBS), Vigía (Android emulator + `adb screenrecord`), TickGo (Wear OS emulator), Ecos de la Tierra (Godot export or screen capture). Apps without a public URL need either a screen recording from the owner or a local run.
 
 ## Task backlog (priority order)
 
 Items marked **[owner]** need input only the owner can give — ask in Spanish, don't invent content (especially testimonials and work history: fabricated entries would be dishonest on a graded, public portfolio).
 
-1. **Commit the `video/` workspace** and the eslint/tsconfig exclusions (see Handoff). Verify `npm run lint && npm run build`.
-2. **Ship the Ancla Calma and Vinyl Player videos** (review → compress → `public/videos/` → `projects.ts`). Check phone touch-hold behaviour and the file sizes.
+1. ~~Commit the `video/` workspace~~ and ~~ship the Ancla Calma and Vinyl Player videos~~ — done. Still worth checking: touch-hold on a real phone and the file sizes on the deployed site.
+2. **Run `npm run build`** once to confirm the whole project still builds with the new videos.
 3. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
 4. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
 5. **Record the remaining videos** in this order: Chef Digital → Vigía → TickGo → Ecos de la Tierra.
