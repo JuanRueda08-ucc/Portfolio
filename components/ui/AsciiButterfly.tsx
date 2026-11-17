@@ -187,6 +187,7 @@ export default function AsciiButterfly() {
       mouse.y = e.clientY;
     };
     window.addEventListener("pointermove", onMove);
+    const fine = window.matchMedia("(pointer: fine)");
 
     const render = (open: number) => {
       drawShape(og, open);
@@ -234,7 +235,8 @@ export default function AsciiButterfly() {
       // After the cards are done (or the section has scrolled away) it may follow the cursor.
       const lineMode = staged && units > 0.02 && units < count;
       const after = Boolean(r && pinned && (r.bottom < vh * 0.95 || (staged && units >= count)));
-      const visible = lineMode || after;
+      // Following the cursor only makes sense with a mouse; on touch it leaves after the cards.
+      const visible = lineMode || (after && fine.matches);
       let speed = 0;
 
       // Fade in/out.
@@ -313,7 +315,7 @@ export default function AsciiButterfly() {
       const open = 0.22 + 0.78 * Math.abs(Math.cos(flap));
       render(open);
 
-      el.style.transform = `translate3d(${pos.x - SPRITE / 2}px, ${pos.y - SPRITE / 2}px, 0) rotate(${heading}rad) scale(0.75)`;
+      el.style.transform = `translate3d(${pos.x - SPRITE / 2}px, ${pos.y - SPRITE / 2}px, 0) rotate(${heading}rad) scale(${vw < 768 ? 0.55 : 0.75})`;
     };
     raf = requestAnimationFrame(tick);
 

@@ -3,20 +3,28 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import type { Project } from "@/data/types";
 import ProjectMedia from "./ProjectMedia";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const pad = (n: number) => String(n).padStart(2, "0");
-const RADIUS = 1500; // px — radius of the invisible wheel the cards sit on
-const STEP = 15; // degrees between cards
-const CARD_W = 340;
-const CARD_H = 240;
+/** Wheel geometry per screen size: radius of the invisible wheel, degrees between cards, card size. */
+const GEO = {
+  lg: { radius: 1500, step: 15, w: 340, h: 240, top: "40svh", lift: 1.18, details: 190 },
+  sm: { radius: 900, step: 19, w: 230, h: 165, top: "33svh", lift: 1.12, details: 128 },
+} as const;
+const SM_QUERY = "(max-width: 767px)";
+const subscribe = (cb: () => void) => {
+  const mq = window.matchMedia(SM_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+const getSize = () => (window.matchMedia(SM_QUERY).matches ? "sm" : "lg");
 
 /**
- * "All work" arc carousel (desktop only), inspired by elicubillos.com:
+ * "All work" arc carousel (compact geometry on phones), inspired by elicubillos.com:
  * cards ride on a huge wheel that turns as you scroll; the centered card grows
  * and its details appear underneath.
  */
@@ -26,6 +34,8 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState(0);
   const n = projects.length;
   const current = projects[active];
+  const size = useSyncExternalStore(subscribe, getSize, () => "lg" as const);
+  const { radius: RADIUS, step: STEP, w: CARD_W, h: CARD_H, top: TOP, lift, details } = GEO[size];
 
   useGSAP(
     () => {
@@ -42,19 +52,19 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
         },
       });
     },
-    { scope: root },
+    { scope: root, dependencies: [size], revertOnUpdate: true },
   );
 
   return (
     <section
       ref={root}
       aria-label="All work"
-      className="relative hidden lg:block"
+      className="relative"
       style={{ height: `${n * 55 + 60}svh` }}
     >
-      <div className="sticky top-0 h-svh overflow-hidden px-10 pt-28">
+      <div className="sticky top-0 h-svh overflow-hidden px-4 pt-24 lg:px-10 lg:pt-28">
         <div className="flex items-start justify-between">
-          <h2 className="font-display text-6xl font-bold tracking-tight">All work</h2>
+          <h2 className="font-display text-4xl font-bold tracking-tight lg:text-6xl">All work</h2>
           <span className="label text-stone">
             ({pad(active + 1)} / {pad(n)})
           </span>
@@ -64,14 +74,14 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 rounded-full border border-dashed border-ink-3"
-          style={{ width: RADIUS * 2, height: RADIUS * 2, top: "40svh", marginLeft: -RADIUS }}
+          style={{ width: RADIUS * 2, height: RADIUS * 2, top: TOP, marginLeft: -RADIUS }}
         />
 
         {/* Wheel: its center sits far below the viewport */}
         <div
           ref={wheel}
           className="absolute left-1/2"
-          style={{ top: `calc(40svh + ${RADIUS}px)`, width: 0, height: 0 }}
+          style={{ top: `calc(${TOP} + ${RADIUS}px)`, width: 0, height: 0 }}
         >
           {projects.map((p, i) => (
             <a
@@ -96,8 +106,9 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
               {/* Scale on an inner box so it grows around its own center, not the wheel's. */}
               <span
                 className={`block size-full overflow-hidden rounded-2xl border border-ink-3 bg-ink-2 shadow-2xl shadow-black/50 transition-[scale,opacity,filter] duration-500 ${
-                  i === active ? "scale-[1.18] opacity-100" : "scale-95 opacity-60 saturate-50"
+                  i === active ? "opacity-100" : "scale-95 opacity-60 saturate-50"
                 }`}
+                style={i === active ? { scale: String(lift) } : undefined}
               >
                 <ProjectMedia project={p} />
               </span>
@@ -108,12 +119,13 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
         {/* Details of the centered project */}
         <div
           key={current.slug}
-          className="absolute inset-x-0 top-[calc(40svh+190px)] mx-auto max-w-md animate-fade-up px-4 text-center"
+          className="absolute inset-x-0 mx-auto max-w-md animate-fade-up px-4 text-center"
+          style={{ top: `calc(${TOP} + ${details}px)` }}
         >
           <p className="label text-stone">
             (Project {pad(active + 1)}) · {current.year}
           </p>
-          <h3 className="mt-2 font-display text-4xl font-bold tracking-tight">{current.title}</h3>
+          <h3 className="mt-2 font-display text-3xl font-bold tracking-tight lg:text-4xl">{current.title}</h3>
           <p className="mt-3 text-sm text-cream/85">{current.description}</p>
           <ul className="mt-4 flex flex-wrap justify-center gap-2">
             {current.tags.map((t) => (

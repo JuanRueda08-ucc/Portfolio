@@ -56,20 +56,20 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
     <section
       ref={root}
       aria-label="Featured work"
-      className="relative hidden lg:block"
+      className="relative"
       style={{ height: `${n * 100 + 50}svh` }}
     >
-      <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pt-28 pb-10">
+      <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-4 pt-24 pb-8 lg:px-10 lg:pt-28 lg:pb-10">
         <div className="flex items-start justify-between">
-          <h2 className="font-display text-6xl font-bold tracking-tight">Featured work</h2>
+          <h2 className="font-display text-4xl leading-none font-bold tracking-tight lg:text-6xl">Featured work</h2>
           <span className="label text-stone">
             ({pad(active + 1)} / {pad(n)})
           </span>
         </div>
 
         {/* Center: dotted ring + retro window */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <svg data-ring aria-hidden viewBox="0 0 200 200" className="absolute h-[86svh] w-[86svh] text-violet/50">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center pb-[22svh] lg:pb-0">
+          <svg data-ring aria-hidden viewBox="0 0 200 200" className="absolute size-[min(92vw,58svh)] text-violet/50 lg:size-[86svh]">
             <circle cx="100" cy="100" r="97" fill="none" stroke="currentColor" strokeWidth="1.2" strokeDasharray="0.4 2.6" strokeLinecap="round" />
             <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" strokeOpacity=".35" strokeWidth=".4" strokeDasharray="0.3 4" />
           </svg>
@@ -79,7 +79,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="View project"
-            className="pointer-events-auto relative w-[min(38vw,34rem)] rounded-2xl border border-ink-3 bg-ink-2 p-2 shadow-[0_30px_120px_-20px] shadow-violet/40"
+            className="pointer-events-auto relative w-[min(64vw,22rem)] rounded-2xl lg:w-[min(38vw,34rem)] border border-ink-3 bg-ink-2 p-2 shadow-[0_30px_120px_-20px] shadow-violet/40"
           >
             {/* Window chrome */}
             <span className="flex items-center gap-1.5 px-2 pt-1 pb-2">
@@ -110,8 +110,8 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
         </div>
 
         {/* Bottom: names (left) + details (right) */}
-        <div className="relative mt-auto flex items-end justify-between gap-10">
-          <ol className="space-y-1">
+        <div className="relative mt-auto flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+          <ol className="hidden space-y-1 lg:block">
             {projects.map((p, i) => (
               <li key={p.slug}>
                 <button
@@ -128,12 +128,14 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
             ))}
           </ol>
 
-          <div key={current.slug} className="max-w-xs animate-fade-up text-right">
+          <div key={current.slug} className="animate-fade-up lg:max-w-xs lg:text-right">
+            {/* Mobile: the list of names is hidden, so show the current title here */}
+            <h3 className="mb-2 font-display text-4xl font-bold tracking-tight lg:hidden">{current.title}</h3>
             <p className="text-sm text-cream/90">{current.description}</p>
             <p className="label mt-3 text-stone">
               {current.year} · {current.tags.join(" · ")}
             </p>
-            <div className="mt-5 flex justify-end gap-2">
+            <div className="mt-5 flex gap-2 lg:justify-end">
               <a
                 href={current.github}
                 target="_blank"

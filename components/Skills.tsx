@@ -135,17 +135,30 @@ export default function Skills() {
         return () => delete section.dataset.progress;
       });
 
-      // Smaller screens: no pin, simple staggered fade-up.
+      // Phones/tablets (like elicubillos.com on mobile): pinned stage, the cards sit in a
+      // horizontal row that slides left; each card rises as it comes into view.
       mm.add("(max-width: 1023px)", () => {
-        if (reduce) return;
-        gsap.from("[data-card]", {
-          y: 60,
-          autoAlpha: 0,
-          duration: 0.9,
-          ease: "expo.out",
-          stagger: 0.1,
-          scrollTrigger: { trigger: "[data-cards]", start: "top 80%", once: true },
+        if (reduce) return; // plain stacked grid
+        const cards = gsap.utils.toArray<HTMLElement>("[data-card]");
+        const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : 0);
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.4,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => (section.dataset.progress = self.progress.toFixed(4)),
+          },
         });
+        cards.forEach((card, i) => {
+          tl.fromTo(card, { yPercent: 70 }, { yPercent: 0, duration: 1 }, i);
+          // Slide the row so the rising card is the one in front.
+          if (i > 0) tl.to(list.current, { x: () => -i * step(), duration: 1 }, i);
+        });
+        tl.to({}, { duration: SKILLS_TIMELINE - cards.length });
+        return () => delete section.dataset.progress;
       });
       return () => mm.revert();
     },
@@ -153,9 +166,9 @@ export default function Skills() {
   );
 
   return (
-    <section id="skills" ref={root} className="relative lg:h-[280vh]">
-      <div className="flex flex-col px-4 pt-32 pb-16 md:px-10 lg:sticky lg:top-0 lg:h-svh lg:overflow-hidden lg:pt-28 lg:pb-8">
-        <div className="mb-12 ml-auto max-w-xs text-right lg:mb-0">
+    <section id="skills" ref={root} className="relative motion-safe:max-lg:h-[400vh] lg:h-[280vh]">
+      <div className="flex flex-col px-4 pt-32 pb-16 md:px-10 motion-safe:max-lg:sticky motion-safe:max-lg:top-0 motion-safe:max-lg:h-svh motion-safe:max-lg:overflow-hidden motion-safe:max-lg:pt-24 motion-safe:max-lg:pb-8 lg:sticky lg:top-0 lg:h-svh lg:overflow-hidden lg:pt-28 lg:pb-8">
+        <div className="mb-12 ml-auto max-w-xs text-right motion-safe:max-lg:mb-4 lg:mb-0">
           <p className="label mb-3 text-violet-soft">(06)</p>
           <SplitReveal className="font-display text-4xl font-bold tracking-tight md:text-5xl">Skills &amp; tools</SplitReveal>
           <p className="mt-4 text-sm text-stone">Always excited to take on new challenges and keep learning new tools.</p>
@@ -164,13 +177,13 @@ export default function Skills() {
         <ul
           ref={list}
           data-cards
-          className="mx-auto mt-auto grid w-full max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="mx-auto mt-auto grid w-full max-w-7xl gap-4 sm:grid-cols-2 motion-safe:max-lg:flex lg:grid-cols-4"
         >
           {skills.map((s, i) => (
             <li
               key={s.title}
               data-card
-              className="relative flex min-h-[26rem] flex-col overflow-hidden rounded-2xl bg-violet p-6 text-on-accent lg:h-[62svh]"
+              className="relative flex min-h-[26rem] flex-col overflow-hidden rounded-2xl bg-violet p-6 text-on-accent motion-safe:max-lg:h-[min(60svh,34rem)] motion-safe:max-lg:min-h-0 motion-safe:max-lg:w-[min(80vw,26rem)] motion-safe:max-lg:shrink-0 motion-safe:max-lg:p-5 lg:h-[62svh]"
             >
               <span className="label">{String(i + 1).padStart(2, "0")}</span>
               <CardCurve index={i} w={curve.w} h={curve.h} />
