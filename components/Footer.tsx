@@ -5,6 +5,7 @@ import { useLenis } from "lenis/react";
 import Link from "next/link";
 import PixelField from "@/components/ui/PixelField";
 import SocialIcon from "@/components/ui/SocialIcon";
+import { AccentSwatches, ThemeToggle } from "@/components/ui/ThemeControls";
 import { navLinks, profile, socials } from "@/data/profile";
 
 // Live clock: null on the server, ticks every second in the browser.
@@ -54,6 +55,12 @@ export default function Footer() {
             </li>
           </ul>
           <div className="space-y-4 md:text-right">
+            {/* Quick theme: accent presets + light/dark (full picker in /lab → Shader playground) */}
+            <div className="flex items-center gap-3 md:justify-end">
+              <span className="label text-stone">Make it yours</span>
+              <AccentSwatches />
+              <ThemeToggle />
+            </div>
             <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="block underline decoration-violet underline-offset-4">
               {profile.email}
             </a>

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { navLinks, profile } from "@/data/profile";
+import { ThemeToggle } from "@/components/ui/ThemeControls";
 import { onReady } from "@/lib/ready";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -101,11 +102,12 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <a
             href={profile.cv}
             data-cursor="Download"
             download
-            className="btn-text rounded-full bg-violet px-4 py-2 text-ink transition-transform hover:scale-105"
+            className="btn-text rounded-full bg-violet px-4 py-2 text-on-accent transition-transform hover:scale-105"
           >
             CV ↓
           </a>
