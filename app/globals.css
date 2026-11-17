@@ -339,7 +339,9 @@ html[data-theme="light"] .spl {
   box-shadow: 0 0 0 2px var(--fill-slab, var(--card)), 0 0 0 4px rgba(var(--fill-on-rgb, var(--ink-rgb)), 0.45);}
 
 /* ══ Generate ══════════════════════════════════════════════
-   components/ui/Generate.tsx (from bencho.dev, MIT).
+   From bencho.dev's Generate (MIT). The component itself was removed
+   (the owner wanted the line drawing, not a generated picture); its pill
+   and counter remain for <LogoReveal> (components/ui/LogoReveal.tsx).
    Bencho's design tokens, mapped onto this project's on the
    component's own root so nothing leaks out:
    - --fill-slab: the blank page and the pills → ink-2, the surface
@@ -349,13 +351,11 @@ html[data-theme="light"] .spl {
      dots use, which would sit under AA contrast at 11–14px.
    - --fill-on-rgb: cream as bare, comma-separated numbers (the CSS
      writes rgba(var(--fill-on-rgb), a)); flipped for light mode below.
-   - --pane-edge: the hairline (with data-stroke="on") → ink-3.
    - --font-ui is already this project's UI font (Figtree): not redefined. */
 .gen {
   --fill-slab: var(--color-ink-2);
   --fill-on: var(--color-cream);
   --fill-on-rgb: 243, 234, 223;
-  --pane-edge: var(--color-ink-3);
 }
 
 html[data-theme="light"] .gen {
@@ -379,46 +379,6 @@ html[data-theme="light"] .gen {
   flex-direction: column;
   align-items: center;
   gap: 12px;}
-
-.gen-card {
-  position: relative;
-  width: 270px;
-  /* 330, down from the picture's own 360 (3:4). The print is
-     `cover`, so the frame trims a sliver of paper top and
-     bottom rather than squashing the flower */
-  height: 330px;
-  border-radius: 20px;
-  overflow: hidden;
-  /* white, the blank page. The print's own paper is a warm grey,
-     and the run carries the card from one to the other: the
-     haze fades up over the white, so the page greys as the
-     picture arrives rather than starting grey. */
-  background: var(--fill-slab, #ffffff);
-  /* the corner clips a canvas and an image, and Safari leaks
-     both past a radius without a layer of its own */
-  isolation: isolate;}
-
-.gen-canvas,
-.gen-print {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;}
-
-.gen-print {
-  object-fit: cover;
-  user-select: none;
-  -webkit-user-drag: none;}
-
-/* the filter's defs, out of the flow — an svg with no size is
-   300x150 of layout otherwise */
-.gen-defs {
-  position: absolute;
-  width: 0;
-  height: 0;}
-
-[data-stroke="on"] .gen-card {
-  box-shadow: 0 0 0 1px var(--pane-edge);}
 
 /* ── the button, in the middle of the frame ─────────────────
    Light grey on the white page. It answers the pointer by
@@ -462,17 +422,6 @@ html[data-theme="light"] .gen {
   opacity: 0;
   scale: 0.9;
   pointer-events: none;}
-
-/* made: out of the way until the pointer is on the picture,
-   and WHITE over the print — the grey that sits quietly on a
-   blank page reads as a smudge on a grey halftone */
-.gen[data-made="true"]:not([data-loading="true"]) .gen-go {
-  opacity: 0;
-  background: var(--fill-slab, #ffffff);}
-
-.gen[data-made="true"]:not([data-loading="true"]) .gen-card:hover .gen-go,
-.gen[data-made="true"]:not([data-loading="true"]) .gen-go:focus-visible {
-  opacity: 1;}
 
 /* ── the count ──────────────────────────────────────────────
    A small pill in the bottom-left corner, only while a run is

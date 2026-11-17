@@ -20,7 +20,7 @@ type Props = {
 /**
  * Phones: the same line drawing as on desktop, but there is no cursor to draw it and
  * the idle self-drawing is slow, so it waits for a "Generate" press and then draws the
- * whole logo in ~3 s. The pill and the % counter are the Generate component's
+ * whole logo in ~3 s. The pill and the % counter come from bencho.dev's Generate
  * (`.gen-go` / `.gen-pct` in globals.css); once drawn the button is gone for good, so
  * nothing covers the logo (owner's request).
  */
