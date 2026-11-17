@@ -14,6 +14,8 @@ export const profile = {
   cv: "/cv.pdf",
   /** TODO(Juano): add your photo at /public/images/me.jpg and set this to "/images/me.jpg". */
   photo: undefined as string | undefined,
+  /** Personal JR monogram logo (chrome on blue). Drawn with lines in About and used as avatar until there's a photo. */
+  logo: "/images/logo-jr.webp",
   /** Phrase scattered across the About section; letters scramble randomly. */
   manifesto: "Why not build software that feels just a little bit magical?",
   about:

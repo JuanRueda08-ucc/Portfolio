@@ -7,6 +7,11 @@ type Props = {
   /** Image to draw. Without it, `fallbackText` is rendered as the source shape. */
   src?: string;
   fallbackText?: string;
+  /**
+   * Which parts of the image get lines: "dark" (default, e.g. a photo) or "light"
+   * (e.g. the chrome JR logo on a darker background).
+   */
+  trace?: "dark" | "light";
   className?: string;
   /** Accessible description of the image. */
   label: string;
@@ -22,7 +27,7 @@ const STEP = 2.4;
  * the cursor and accumulate over time (inspired by elissamartial.com).
  * On touch devices (or when idle) it slowly draws itself.
  */
-export default function LineDrawing({ src, fallbackText = "JR", className = "", label }: Props) {
+export default function LineDrawing({ src, fallbackText = "JR", trace = "dark", className = "", label }: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -89,7 +94,21 @@ export default function LineDrawing({ src, fallbackText = "JR", className = "", 
       const data = o.getImageData(0, 0, sw, sh).data;
       lum = new Float32Array(sw * sh);
       for (let i = 0; i < sw * sh; i++) {
-        lum[i] = (0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2]) / 255;
+        const l = (0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2]) / 255;
+        if (trace === "light") {
+          // Bright, low-saturation shapes (the chrome letters) become "ink"; a saturated
+          // background (the blue) stays empty even where it is light.
+          const r = data[i * 4];
+          const gch = data[i * 4 + 1];
+          const b = data[i * 4 + 2];
+          const max = Math.max(r, gch, b);
+          const sat = max ? (max - Math.min(r, gch, b)) / max : 0;
+          const v = l * Math.max(0, 1 - sat * 1.8);
+          const t = Math.min(1, Math.max(0, (v - 0.28) / 0.32));
+          lum[i] = 1 - t * t * (3 - 2 * t);
+        } else {
+          lum[i] = l;
+        }
       }
       if (reduce) drawAll();
     };
@@ -184,7 +203,7 @@ export default function LineDrawing({ src, fallbackText = "JR", className = "", 
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
     };
-  }, [src, fallbackText]);
+  }, [src, fallbackText, trace]);
 
   return (
     <div ref={wrap} className={className} role="img" aria-label={label}>

@@ -37,10 +37,12 @@ export default function About() {
           positions={WORD_POSITIONS}
           className="w-full md:absolute md:inset-0"
         />
+        {/* The JR logo drawn with lines (owner's choice); "light" traces the chrome letters. */}
         <LineDrawing
-          src={profile.photo}
+          src={profile.logo}
+          trace="light"
           fallbackText={profile.initials}
-          label={`Portrait of ${profile.displayName}, drawn with lines`}
+          label={`${profile.displayName}'s JR monogram, drawn with lines`}
           className="aspect-[3/4] w-[min(80vw,22rem)] md:absolute md:top-1/2 md:left-1/2 md:h-[80%] md:w-auto md:-translate-x-1/2 md:-translate-y-1/2"
         />
         <span data-cursor="Hi!" aria-hidden className="absolute inset-x-1/4 inset-y-[10%] hidden md:block" />
