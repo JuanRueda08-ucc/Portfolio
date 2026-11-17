@@ -70,7 +70,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
         {/* Center: dotted ring + retro window */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <svg data-ring aria-hidden viewBox="0 0 200 200" className="absolute h-[86svh] w-[86svh] text-violet/50">
-            <circle data-butterfly-line="featured" cx="100" cy="100" r="97" fill="none" stroke="currentColor" strokeWidth="1.2" strokeDasharray="0.4 2.6" strokeLinecap="round" />
+            <circle cx="100" cy="100" r="97" fill="none" stroke="currentColor" strokeWidth="1.2" strokeDasharray="0.4 2.6" strokeLinecap="round" />
             <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" strokeOpacity=".35" strokeWidth=".4" strokeDasharray="0.3 4" />
           </svg>
 
