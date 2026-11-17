@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { hasFastWebGL } from "@/lib/gpu";
+import { cssRgb, subscribeTheme } from "@/lib/theme";
 
 const VERT = `#version 300 es
 in vec2 p;
@@ -16,6 +17,7 @@ precision highp float;
 uniform float uTime;
 uniform vec2 uRes;    // canvas size in px
 uniform vec2 uMouse;  // px, y up; negative when outside
+uniform vec3 uInk, uDeep, uViolet, uBright; // theme colors (lib/theme.ts)
 out vec4 outColor;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -54,15 +56,11 @@ void main() {
   float slats = step(0.35, fract(f.y * 3.0));
   float shape = sq.x * sq.y * slats;
 
-  vec3 ink = vec3(0.043, 0.039, 0.035);
-  vec3 deep = vec3(0.231, 0.102, 0.431);
-  vec3 violet = vec3(0.608, 0.365, 0.898);
-  vec3 bright = vec3(0.753, 0.427, 1.0);
   float level = clamp((n - threshold) * 2.5 + near * 0.6, 0.0, 1.0);
-  vec3 col = mix(deep, violet, level);
-  col = mix(col, bright, near * 0.8);
+  vec3 col = mix(uDeep, uViolet, level);
+  col = mix(col, uBright, near * 0.8);
 
-  outColor = vec4(mix(ink, col, on * shape), 1.0);
+  outColor = vec4(mix(uInk, col, on * shape), 1.0);
 }`;
 
 function compile(gl: WebGL2RenderingContext, type: number, src: string) {
@@ -104,6 +102,12 @@ export default function PixelField({ className = "" }: { className?: string }) {
     const uTime = gl.getUniformLocation(program, "uTime");
     const uRes = gl.getUniformLocation(program, "uRes");
     const uMouse = gl.getUniformLocation(program, "uMouse");
+    const uColors = (["uInk", "uDeep", "uViolet", "uBright"] as const).map((n) => gl.getUniformLocation(program, n));
+    let palette: [number, number, number][] = [];
+    const readPalette = () => {
+      palette = ["--color-ink", "--color-violet-deep", "--color-violet", "--color-violet-bright"].map(cssRgb);
+      if (reduce) draw(0);
+    };
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -131,6 +135,7 @@ export default function PixelField({ className = "" }: { className?: string }) {
       gl.uniform1f(uTime, t);
       gl.uniform2f(uRes, cvs.width, cvs.height);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
+      palette.forEach((c, i) => gl.uniform3f(uColors[i], c[0], c[1], c[2]));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -148,6 +153,8 @@ export default function PixelField({ className = "" }: { className?: string }) {
       mouse.ty = inside ? (r.height - y) * dpr : -1;
     };
 
+    readPalette();
+    const stopTheme = subscribeTheme(readPalette);
     const ro = new ResizeObserver(resize);
     ro.observe(cvs);
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
@@ -160,6 +167,7 @@ export default function PixelField({ className = "" }: { className?: string }) {
       ro.disconnect();
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
+      stopTheme();
       gl.deleteBuffer(buf);
       gl.deleteProgram(program);
     };
@@ -173,7 +181,7 @@ export default function PixelField({ className = "" }: { className?: string }) {
       // CSS fallback (no WebGL / software rendering): purple pixel grid fading upward.
       style={{
         backgroundImage:
-          "linear-gradient(to top, rgb(155 93 229 / 0.55), transparent 85%), radial-gradient(rgb(11 10 9) 30%, transparent 31%)",
+          "linear-gradient(to top, color-mix(in oklab, var(--color-violet) 55%, transparent), transparent 85%), radial-gradient(var(--color-ink) 30%, transparent 31%)",
         backgroundSize: "100% 100%, 18px 18px",
       }}
     />

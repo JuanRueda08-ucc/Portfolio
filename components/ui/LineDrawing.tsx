@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { cssColor, subscribeTheme } from "@/lib/theme";
 
 type Props = {
   /** Image to draw. Without it, `fallbackText` is rendered as the source shape. */
@@ -43,6 +44,15 @@ export default function LineDrawing({ src, fallbackText = "JR", className = "", 
     let lastPointer = 0;
     const spawns: { x: number; y: number }[] = [];
     let source: CanvasImageSource | null = null;
+    // Stroke colors follow the visitor's accent; a theme change clears and redraws.
+    const ink = { bright: cssColor("--color-violet-bright"), soft: cssColor("--color-violet-soft") };
+    const stopTheme = subscribeTheme(() => {
+      ink.bright = cssColor("--color-violet-bright");
+      ink.soft = cssColor("--color-violet-soft");
+      ctx.clearRect(0, 0, W, H);
+      strokes = 0;
+      if (reduce) drawAll();
+    });
 
     // ── Build a luminance map of the source, cropped like `object-fit: cover`.
     const buildMap = () => {
@@ -110,8 +120,9 @@ export default function LineDrawing({ src, fallbackText = "JR", className = "", 
         ctx.lineTo(x, y);
         if (Math.random() < 0.04) dir *= -1;
       }
-      const a = 0.12 + darkness * 0.38;
-      ctx.strokeStyle = Math.random() < 0.18 ? `rgba(192,109,255,${a})` : `rgba(196,161,255,${a * 0.85})`;
+      const accent = Math.random() < 0.18;
+      ctx.globalAlpha = (0.12 + darkness * 0.38) * (accent ? 1 : 0.85);
+      ctx.strokeStyle = accent ? ink.bright : ink.soft;
       ctx.lineWidth = 0.5 + Math.random() * 0.6;
       ctx.stroke();
       strokes++;
@@ -169,6 +180,7 @@ export default function LineDrawing({ src, fallbackText = "JR", className = "", 
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
+      stopTheme();
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
     };

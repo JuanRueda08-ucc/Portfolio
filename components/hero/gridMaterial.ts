@@ -25,7 +25,10 @@ export function createHeroUniforms() {
     uScroll: { value: 0 },
     uIntro: { value: 0 },
     uCell: { value: 34 },
+    uGlow: { value: 1 },
+    // Colors follow the visitor theme (set from CSS variables in HeroScene).
     uInk: { value: new THREE.Color("#0b0a09") },
+    uTile: { value: new THREE.Color("#141210") }, // resting tile color (ink nudged toward text)
     uViolet: { value: new THREE.Color("#9b5de5") },
     uBright: { value: new THREE.Color("#c06dff") },
   };
@@ -41,7 +44,9 @@ const GRID_GLSL = /* glsl */ `
   uniform float uScroll;
   uniform float uIntro;
   uniform float uCell;
+  uniform float uGlow;
   uniform vec3 uInk;
+  uniform vec3 uTile;
   uniform vec3 uViolet;
   uniform vec3 uBright;
 
@@ -78,14 +83,14 @@ const GRID_GLSL = /* glsl */ `
     float wave = 0.5 + 0.5 * sin((c.x + c.y) * 6.0 - uTime * 0.6);
     float shimmer = step(0.985, hash(id + floor(uTime * 1.5))) * 0.35;
 
-    float intensity = (base * (0.5 + 0.2 * wave) + halo * 0.75 + shimmer * base) * uIntro;
+    float intensity = (base * (0.5 + 0.2 * wave) * uGlow + halo * 0.75 + shimmer * base) * uIntro;
 
-    vec3 tileColor = mix(uInk * 1.8, uViolet, clamp(intensity, 0.0, 1.0));
+    vec3 tileColor = mix(uTile, uViolet, clamp(intensity, 0.0, 1.0));
     tileColor = mix(tileColor, uBright, clamp(halo * 0.6 * uIntro, 0.0, 1.0));
     vec3 color = mix(uInk, tileColor, tile);
 
-    // Darken the top so text stays readable.
-    color *= mix(0.35, 1.0, smoothstep(1.0, 0.45, px.y / uRes.y));
+    // Fade the top toward the page background so text stays readable (works in both modes).
+    color = mix(uInk, color, mix(0.35, 1.0, smoothstep(1.0, 0.45, px.y / uRes.y)));
     return color;
   }
 `;

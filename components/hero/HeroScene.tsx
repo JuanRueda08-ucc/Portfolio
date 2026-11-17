@@ -11,6 +11,7 @@ import {
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
+import { cssColor, currentTheme, subscribeTheme } from "@/lib/theme";
 import { createGlassMaterial, createGridMaterial, createHeroUniforms } from "./gridMaterial";
 
 /** Shared, mutable state written by the DOM (pointer, scroll, intro) and read every frame. */
@@ -37,6 +38,13 @@ type Quality = "high" | "low";
 const BG_DEPTH = -3;
 const damp = THREE.MathUtils.damp;
 
+/** Current theme colors as hex strings; "tile" is the background nudged 6% toward the text color. */
+function readColors() {
+  const ink = cssColor("--color-ink");
+  const tile = "#" + new THREE.Color(ink).lerp(new THREE.Color(cssColor("--color-cream")), 0.06).getHexString();
+  return { ink, tile, violet: cssColor("--color-violet"), bright: cssColor("--color-violet-bright") };
+}
+
 function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: string; quality: Quality }) {
   // One uniforms object drives the grid and the light glass (they render the same grid).
   const { grid, glass } = useMemo(() => {
@@ -55,13 +63,27 @@ function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: st
   const group = useRef<THREE.Group>(null);
   const wordWidth = useRef(0); // width of the word at scale 1, measured by <Center>
   const smooth = useRef({ x: 0.5, y: 0.3, hover: 0 });
-  const { camera, viewport } = useThree();
+  const { camera, viewport, gl: renderer } = useThree();
   // Background plane covering the viewport at its depth.
   const vp = viewport.getCurrentViewport(camera, new THREE.Vector3(0, 0, BG_DEPTH));
+
+  // Theme colors (from CSS variables) — refreshed whenever the visitor changes theme.
+  const colors = useRef(readColors());
+  const [accent, setAccent] = useState(() => cssColor("--color-violet-bright"));
+  useEffect(() => {
+    const update = () => {
+      colors.current = readColors();
+      setAccent(colors.current.bright);
+      renderer.setClearColor(colors.current.ink);
+    };
+    update();
+    return subscribeTheme(update);
+  }, [renderer]);
 
   useFrame(({ clock, size, viewport: v, gl }, dt) => {
     const s = state.current;
     const m = smooth.current;
+    const theme = currentTheme();
     m.x = damp(m.x, s.mouse.x, 6, dt);
     m.y = damp(m.y, s.mouse.y, 6, dt);
     m.hover = damp(m.hover, s.hover, 4, dt);
@@ -69,7 +91,14 @@ function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: st
     // Uniforms are mutated through the mesh ref (React Compiler forbids mutating hook values).
     if (bg.current) {
       const u = (bg.current.material as THREE.ShaderMaterial).uniforms;
-      u.uTime.value += dt;
+      const c = colors.current;
+      u.uInk.value.set(c.ink);
+      u.uTile.value.set(c.tile);
+      u.uViolet.value.set(c.violet);
+      u.uBright.value.set(c.bright);
+      u.uCell.value = theme.cell;
+      u.uGlow.value = theme.glow;
+      u.uTime.value += dt * theme.speed;
       u.uRes.value.set(size.width, size.height);
       u.uDpr.value = gl.getPixelRatio();
       u.uMouse.value.set(m.x, m.y);
@@ -129,7 +158,7 @@ function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: st
                 distortionScale={0.4}
                 temporalDistortion={0.08}
                 color="#efe6ff"
-                attenuationColor="#c06dff"
+                attenuationColor={accent}
                 attenuationDistance={2.5}
                 clearcoat={1}
                 clearcoatRoughness={0.1}
@@ -144,7 +173,7 @@ function Scene({ state, text, quality }: { state: RefObject<HeroState>; text: st
         // Procedural studio lighting for the physical glass (no HDR download).
         <Environment resolution={256} frames={1}>
           <Lightformer form="rect" intensity={3} position={[0, 4, 2]} scale={[10, 1, 1]} />
-          <Lightformer form="rect" intensity={2} color="#c06dff" position={[-5, -1, 1]} scale={[3, 6, 1]} />
+          <Lightformer form="rect" intensity={2} color={accent} position={[-5, -1, 1]} scale={[3, 6, 1]} />
           <Lightformer form="rect" intensity={1.5} position={[5, 1, 1]} scale={[3, 6, 1]} />
           <Lightformer form="ring" intensity={2} position={[0, 0, 6]} scale={4} />
         </Environment>
@@ -199,7 +228,7 @@ export default function HeroScene({ state, text = "hello", active }: Props) {
       dpr={dpr}
       camera={{ position: [0, 0, 8], fov: 35 }}
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
-      onCreated={({ gl }) => gl.setClearColor("#0b0a09")}
+      onCreated={({ gl }) => gl.setClearColor(cssColor("--color-ink"))}
     >
       {/* If the device can't keep up: lower resolution first, then switch to the light glass. */}
       <PerformanceMonitor
