@@ -1,6 +1,13 @@
 "use client";
 
-import { Center, Environment, Lightformer, MeshTransmissionMaterial, Text3D } from "@react-three/drei";
+import {
+  Center,
+  Environment,
+  Lightformer,
+  MeshTransmissionMaterial,
+  PerformanceMonitor,
+  Text3D,
+} from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
@@ -87,16 +94,17 @@ function GlassWord({ state, text, quality }: { state: RefObject<HeroState>; text
           font="/fonts/pacifico.typeface.json"
           size={1}
           height={0.35}
-          curveSegments={hi ? 24 : 12}
+          // Segment counts drive triangulation cost on the main thread; these keep curves smooth.
+          curveSegments={hi ? 14 : 8}
           bevelEnabled
           bevelSize={0.045}
           bevelThickness={0.12}
-          bevelSegments={hi ? 10 : 5}
+          bevelSegments={hi ? 6 : 3}
         >
           {text}
           <MeshTransmissionMaterial
-            samples={hi ? 8 : 3}
-            resolution={hi ? 1024 : 384}
+            samples={hi ? 6 : 3}
+            resolution={hi ? 768 : 256}
             transmission={1}
             roughness={0.06}
             thickness={0.7}
@@ -128,18 +136,32 @@ type Props = {
 };
 
 export default function HeroScene({ state, text = "hello", active }: Props) {
-  const [quality] = useState<"high" | "low">(() =>
+  const [quality, setQuality] = useState<"high" | "low">(() =>
     typeof window !== "undefined" && (window.innerWidth < 768 || navigator.hardwareConcurrency <= 4) ? "low" : "high",
   );
+  const [dpr, setDpr] = useState(() => (quality === "high" ? 1.5 : 1));
 
   return (
     <Canvas
       frameloop={active ? "always" : "never"}
-      dpr={quality === "high" ? [1, 1.75] : [1, 1.25]}
+      dpr={dpr}
       camera={{ position: [0, 0, 8], fov: 35 }}
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       onCreated={({ gl }) => gl.setClearColor("#0b0a09")}
     >
+      {/* Drop resolution (then quality) on devices that can't keep up. */}
+      <PerformanceMonitor
+        onDecline={() => {
+          setDpr((d) => Math.max(0.75, d - 0.25));
+          if (dpr <= 1) setQuality("low");
+        }}
+        onIncline={() => setDpr((d) => Math.min(quality === "high" ? 1.75 : 1.25, d + 0.25))}
+        flipflops={3}
+        onFallback={() => {
+          setDpr(0.75);
+          setQuality("low");
+        }}
+      />
       <GridBackground state={state} />
       <GlassWord state={state} text={text} quality={quality} />
       {/* Procedural studio lighting (no HDR download). */}

@@ -9,38 +9,42 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { HeroState } from "@/components/hero/HeroScene";
 import Avatar from "@/components/ui/Avatar";
 import { profile } from "@/data/profile";
+import { hasFastWebGL } from "@/lib/gpu";
 import { onReady } from "@/lib/ready";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 const HeroScene = dynamic(() => import("@/components/hero/HeroScene"), { ssr: false });
 
-/* 3D is enabled only with WebGL and without a reduced-motion preference. */
-let webglCache: boolean | null = null;
-function hasWebGL() {
-  if (webglCache === null) {
-    try {
-      const c = document.createElement("canvas");
-      webglCache = Boolean(c.getContext("webgl2") || c.getContext("webgl"));
-    } catch {
-      webglCache = false;
-    }
-  }
-  return webglCache;
-}
+/* 3D is enabled only with hardware WebGL and without a reduced-motion preference. */
 const MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const subscribe = (cb: () => void) => {
   const mq = window.matchMedia(MOTION_QUERY);
   mq.addEventListener("change", cb);
   return () => mq.removeEventListener("change", cb);
 };
-const can3D = () => hasWebGL() && !window.matchMedia(MOTION_QUERY).matches;
+const can3D = () => hasFastWebGL() && !window.matchMedia(MOTION_QUERY).matches;
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
   const state = useRef<HeroState>({ mouse: { x: 0.5, y: 0.3 }, hover: 0, scroll: 0, intro: 0 });
   const enable3D = useSyncExternalStore(subscribe, can3D, () => false);
   const [inView, setInView] = useState(true);
+  const [mount3D, setMount3D] = useState(false);
+
+  // Mount the (heavy) 3D scene only after the loader leaves and the browser is idle,
+  // so shader compilation doesn't block the intro. The word grows in when it appears.
+  useEffect(() => {
+    let idle = 0;
+    const stop = onReady(() => {
+      const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 200));
+      idle = ric(() => setMount3D(true), { timeout: 1200 });
+    });
+    return () => {
+      stop();
+      (window.cancelIdleCallback ?? window.clearTimeout)(idle);
+    };
+  }, []);
 
   // Pause the WebGL loop when the hero leaves the screen.
   useEffect(() => {
@@ -128,7 +132,14 @@ export default function Hero() {
       {/* Background: WebGL scene, or a static glow + serif word as fallback */}
       <div className="absolute inset-0" data-cursor="Hi!">
         {enable3D ? (
-          <HeroScene state={state} active={inView} />
+          <>
+            {/* Glow placeholder until the WebGL scene mounts */}
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_110%,var(--color-violet-deep),transparent_60%)]"
+            />
+            {mount3D && <HeroScene state={state} active={inView} />}
+          </>
         ) : (
           <>
             <div
