@@ -39,8 +39,14 @@ export default function Loader() {
     () => {
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const state = { p: 0 };
-      // Max extra width of the "O", relative to the viewport.
-      const maxGrow = () => Math.min(window.innerWidth * 0.55, 900);
+      // Max extra width of the "O": whatever room is left next to "L…ADING" (capped),
+      // so the word never overflows on narrow screens.
+      const word = pill.current?.parentElement;
+      const baseWidth = word?.getBoundingClientRect().width ?? 0; // measured with --grow: 0
+      const maxGrow = () => {
+        const room = (root.current?.clientWidth ?? window.innerWidth) - baseWidth - 48;
+        return Math.max(0, Math.min(room, window.innerWidth * 0.55, 900));
+      };
 
       const render = () => {
         if (count.current) count.current.textContent = `${Math.round(state.p)}%`;
@@ -56,19 +62,19 @@ export default function Loader() {
               if (root.current) root.current.style.display = "none";
             },
           })
-          .to(state, { p: 100, duration: reduce ? 0 : 0.5, ease: "power2.out", onUpdate: render })
+          .to(state, { p: 100, duration: reduce ? 0 : 0.35, ease: "power2.out", onUpdate: render })
           .to(root.current, {
             yPercent: -100,
-            duration: reduce ? 0 : 1,
+            duration: reduce ? 0 : 0.85,
             ease: "expo.inOut",
-            delay: reduce ? 0 : 0.15,
+            delay: reduce ? 0 : 0.1,
             onStart: markReady,
           });
       };
 
       // Count up to 90% while assets load, then finish once everything is ready.
-      const crawl = gsap.to(state, { p: 90, duration: reduce ? 0 : 2, ease: "power1.out", onUpdate: render });
-      const minTime = new Promise((r) => setTimeout(r, reduce ? 0 : 1400));
+      const crawl = gsap.to(state, { p: 90, duration: reduce ? 0 : 1.2, ease: "power1.out", onUpdate: render });
+      const minTime = new Promise((r) => setTimeout(r, reduce ? 0 : 800));
       Promise.all([assetsReady(), minTime]).then(() => {
         crawl.kill();
         finish();
@@ -87,7 +93,7 @@ export default function Loader() {
       <span ref={count} className="text-[clamp(1rem,2.5vw,2.25rem)] leading-none">
         0%
       </span>
-      <p className="flex items-center text-[clamp(3rem,7vw,7.5rem)] leading-none font-medium tracking-[-0.06em] uppercase">
+      <p className="flex w-fit items-center text-[clamp(3rem,7vw,7.5rem)] leading-none font-medium tracking-[-0.06em] uppercase">
         L
         <span
           ref={pill}

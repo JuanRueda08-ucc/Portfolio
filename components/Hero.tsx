@@ -85,14 +85,14 @@ export default function Hero() {
       document.documentElement.addEventListener("pointerleave", onLeave);
 
       // ── Intro, after the loader leaves.
-      const split = SplitText.create("[data-split]", { type: "lines", mask: "lines" });
+      const split = SplitText.create("[data-split]", { type: "lines", mask: "lines", aria: "none" });
       gsap.set(split.lines, { yPercent: 110 });
       gsap.set("[data-fade]", { autoAlpha: 0, y: 16 });
       const stopReady = onReady(() => {
         gsap
           .timeline({ defaults: { ease: "expo.out" } })
           .to(s, { intro: 1, duration: reduce ? 0 : 2.2, ease: "power2.out" }, 0)
-          .to(split.lines, { yPercent: 0, duration: reduce ? 0 : 1.3, stagger: 0.08 }, 0.25)
+          .to(split.lines, { yPercent: 0, duration: reduce ? 0 : 1.1, stagger: 0.07 }, 0.1)
           .to("[data-fade]", { autoAlpha: 1, y: 0, duration: reduce ? 0 : 1, stagger: 0.08 }, 0.5);
       });
 
