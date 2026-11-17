@@ -74,7 +74,7 @@ export default function Cursor() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed top-0 left-0 z-[90]"
+      className="pointer-events-none fixed top-0 left-0 z-[9999]"
       style={{ x: sx, y: sy }}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.2 }}

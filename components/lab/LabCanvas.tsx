@@ -274,10 +274,16 @@ export default function LabCanvas() {
     };
   }, [apply]);
 
+  // Bring a window to the front (or open it). Only bumps the z-index when it isn't
+  // already on top, so clicking/drawing inside a window doesn't grow it forever
+  // (it used to end up above the custom cursor).
   const open = (app: AppId) =>
     setWindows((ws) => {
-      zTop.current += 1;
-      return ws.some((w) => w.app === app)
+      const existing = ws.find((w) => w.app === app);
+      const top = Math.max(0, ...ws.map((w) => w.z));
+      if (existing && existing.z === top) return ws;
+      zTop.current = top + 1;
+      return existing
         ? ws.map((w) => (w.app === app ? { ...w, z: zTop.current } : w))
         : [...ws, { app, z: zTop.current }];
     });
