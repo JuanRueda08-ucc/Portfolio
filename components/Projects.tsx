@@ -32,7 +32,7 @@ export default function Projects() {
                 className="group flex flex-col overflow-hidden rounded-3xl border border-ink-3 bg-ink-2 transition-colors hover:border-violet/60"
               >
                 <a
-                  href={p.demo}
+                  href={p.demo ?? p.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor="View project"
@@ -64,6 +64,7 @@ export default function Projects() {
                     >
                       GitHub ↗
                     </a>
+                    {p.demo && (
                     <a
                       href={p.demo}
                       data-cursor="Live"
@@ -73,6 +74,7 @@ export default function Projects() {
                     >
                       Live demo ↗
                     </a>
+                    )}
                   </div>
                 </div>
               </li>

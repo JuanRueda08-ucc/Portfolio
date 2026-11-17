@@ -86,7 +86,7 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
           {projects.map((p, i) => (
             <a
               key={p.slug}
-              href={p.demo}
+              href={p.demo ?? p.github}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="View project"
@@ -144,6 +144,7 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
             >
               GitHub ↗
             </a>
+            {current.demo && (
             <a
               href={current.demo}
               target="_blank"
@@ -153,6 +154,7 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
             >
               Visit project ↗
             </a>
+            )}
           </div>
         </div>
       </div>

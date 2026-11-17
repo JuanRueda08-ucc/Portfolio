@@ -75,7 +75,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
           </svg>
 
           <a
-            href={current.demo}
+            href={current.demo ?? current.github}
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="View project"
@@ -145,6 +145,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
               >
                 GitHub ↗
               </a>
+              {current.demo && (
               <a
                 href={current.demo}
                 target="_blank"
@@ -154,6 +155,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
               >
                 Visit project ↗
               </a>
+              )}
             </div>
           </div>
         </div>

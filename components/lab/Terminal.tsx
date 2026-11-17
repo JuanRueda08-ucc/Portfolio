@@ -52,7 +52,7 @@ const COMMANDS: Record<string, { help: string; run: (args: string[]) => ReactNod
           `${p.title} (${p.year}) — ${p.description}`,
           `stack: ${p.tags.join(", ")}`,
           <span key="l">
-            <A href={p.demo}>live demo</A> · <A href={p.github}>source</A>
+            {p.demo && <><A href={p.demo}>live demo</A> · </>}<A href={p.github}>source</A>
           </span>,
         ];
       }

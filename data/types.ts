@@ -9,7 +9,8 @@ export type Project = {
   /** Short video (MP4/WebM) in /public/videos */
   video?: string;
   github: string;
-  demo: string;
+  /** Live demo; projects without one link to the repository instead. */
+  demo?: string;
   /** Shown in the pinned "Featured work" section. */
   featured?: boolean;
   /** Hue (0–360) for the generated cover when there's no image/video yet. */
