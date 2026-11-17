@@ -47,10 +47,10 @@ public/ cv.pdf · images/
 
 **Lo único que falta es contenido real** → ver [`contenido.md`](contenido.md).
 
-### Lighthouse (producción local, 2026-11-16, tras la optimización)
+### Lighthouse (producción local, 2026-11-16)
 | | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 |---|---|---|---|---|
-| Móvil | 51–56 | 100 | 100 | 100 |
-| Escritorio | 83–88 | 100 | 100 | 100 |
+| Móvil | ~54 | 100 | 100 | 100 |
+| Escritorio | 63 | 100 | 100 | 100 |
 
-Antes: 52 móvil / 63 escritorio. La causa principal era el material de vidrio 3D, que tardaba ~1,7 s en compilar sus shaders en Windows; se reemplazó por un shader propio. En móvil el puntaje lo limitan el loader (diseño intencional, retrasa el titular ~4 s en la simulación) y la CPU 4× más lenta que simula Lighthouse.
+Decisión de diseño: en computador se conserva el vidrio 3D "físico" (se ve mejor) y en celular se usa uno liviano. El vidrio físico cuesta puntos en Lighthouse, pero en un navegador real se precompila y el tirón al aparecer bajó de ~1 s a ~0,36 s. En móvil el puntaje lo limita sobre todo el loader (intencional).
