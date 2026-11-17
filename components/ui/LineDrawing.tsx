@@ -15,21 +15,48 @@ type Props = {
   className?: string;
   /** Accessible description of the image. */
   label: string;
+  /** Slowly draw itself when idle (default). Off = only draws on `drawSignal` (phones). */
+  autoDraw?: boolean;
+  /** Change this number to clear and draw the whole image quickly (~3 s). */
+  drawSignal?: number;
+  /** Progress of a quick draw, 0..1. */
+  onProgress?: (p: number) => void;
 };
 
 const SAMPLE_W = 220; // luminance map resolution (width)
 const MAX_STROKES = 16000; // auto-draw stops after this many strokes
 const STROKE_STEPS = 22;
 const STEP = 2.4;
+// Quick draw: a fixed number of stroke ATTEMPTS (most land on empty background and are
+// skipped), spread over ~160 frames ≈ 2.7 s whatever the image, so the % is honest.
+const FAST_TRIES = 48000;
+const FAST_FRAMES = 160;
 
 /**
  * Draws an image with fine contour-following lines that only appear around
  * the cursor and accumulate over time (inspired by elissamartial.com).
  * On touch devices (or when idle) it slowly draws itself.
  */
-export default function LineDrawing({ src, fallbackText = "JR", trace = "dark", className = "", label }: Props) {
+export default function LineDrawing({
+  src,
+  fallbackText = "JR",
+  trace = "dark",
+  className = "",
+  label,
+  autoDraw = true,
+  drawSignal = 0,
+  onProgress,
+}: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  // Quick-draw requests and the progress callback, read by the animation loop.
+  const quick = useRef({ pending: false, onProgress });
+  useEffect(() => {
+    quick.current.onProgress = onProgress;
+  }, [onProgress]);
+  useEffect(() => {
+    if (drawSignal) quick.current.pending = true;
+  }, [drawSignal]);
 
   useEffect(() => {
     const host = wrap.current;
@@ -47,6 +74,8 @@ export default function LineDrawing({ src, fallbackText = "JR", trace = "dark", 
     let raf = 0;
     let inView = false;
     let lastPointer = 0;
+    let fast = false;
+    let tries = 0;
     const spawns: { x: number; y: number }[] = [];
     let source: CanvasImageSource | null = null;
     // Stroke colors follow the visitor's accent; a theme change clears and redraws.
@@ -155,6 +184,21 @@ export default function LineDrawing({ src, fallbackText = "JR", trace = "dark", 
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
       if (!inView || !W) return;
+      // Quick draw (the Generate button on phones): start from blank, draw fast.
+      if (quick.current.pending) {
+        quick.current.pending = false;
+        ctx.clearRect(0, 0, W, H);
+        strokes = 0;
+        tries = 0;
+        fast = true;
+      }
+      if (fast) {
+        const n = Math.ceil(FAST_TRIES / FAST_FRAMES);
+        for (let i = 0; i < n && tries < FAST_TRIES; i++, tries++) stroke(Math.random() * W, Math.random() * H);
+        quick.current.onProgress?.(tries / FAST_TRIES);
+        if (tries >= FAST_TRIES) fast = false;
+        return;
+      }
       // Strokes around the cursor.
       while (spawns.length) {
         const p = spawns.shift()!;
@@ -165,7 +209,7 @@ export default function LineDrawing({ src, fallbackText = "JR", trace = "dark", 
         }
       }
       // Slow self-drawing when idle (and always on touch screens).
-      if (now - lastPointer > 1400 && strokes < MAX_STROKES) {
+      if (autoDraw && now - lastPointer > 1400 && strokes < MAX_STROKES) {
         for (let i = 0; i < 30; i++) stroke(Math.random() * W, Math.random() * H);
       }
     };
@@ -203,7 +247,7 @@ export default function LineDrawing({ src, fallbackText = "JR", trace = "dark", 
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
     };
-  }, [src, fallbackText, trace]);
+  }, [src, fallbackText, trace, autoDraw]);
 
   return (
     <div ref={wrap} className={className} role="img" aria-label={label}>

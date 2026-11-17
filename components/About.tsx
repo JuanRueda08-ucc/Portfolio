@@ -1,5 +1,5 @@
-import { Generate } from "@/components/ui/Generate";
 import LineDrawing from "@/components/ui/LineDrawing";
+import LogoReveal from "@/components/ui/LogoReveal";
 import ScrambleWords from "@/components/ui/ScrambleWords";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Stickers from "@/components/ui/Stickers";
@@ -20,9 +20,6 @@ const WORD_POSITIONS = [
   { x: 62, y: 82 },
   { x: 76, y: 90 },
 ];
-
-/** Median luminance of the JR logo's blue ground (measured from its edges: ~0.19). */
-const LOGO_GROUND = 0.2;
 
 export default function About() {
   const facts = [
@@ -56,11 +53,14 @@ export default function About() {
         </p>
 
         {/* Phones: no cursor, and the line drawing takes ages to build by itself,
-            so the logo is generated on demand instead (owner's choice). */}
-        <div className="flex flex-col items-center gap-3 md:hidden">
-          {/* paper = luminance of the logo's blue ground, so the contrast turns about it */}
-          <Generate src={profile.logo} alt={`${profile.displayName}'s JR logo`} paper={LOGO_GROUND} />
-          <p className="label text-stone">( Tap Generate to draw my logo )</p>
+            so a Generate press draws the same lines quickly (owner's choice). */}
+        <div className="md:hidden">
+          <LogoReveal
+            src={profile.logo}
+            fallbackText={profile.initials}
+            label={`${profile.displayName}'s JR monogram, drawn with lines`}
+            className="aspect-[3/4] w-[min(80vw,22rem)]"
+          />
         </div>
       </div>
 
