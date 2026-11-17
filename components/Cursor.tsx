@@ -92,7 +92,7 @@ export default function Cursor() {
           {label && (
             <motion.span
               key={label}
-              className="btn-text whitespace-nowrap text-ink"
+              className="btn-text whitespace-nowrap text-on-accent"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}

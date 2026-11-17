@@ -35,7 +35,7 @@ export default function Stickers({ items, className = "" }: Props) {
             data-cursor="Drag"
             className={`cursor-grab touch-none rounded-full px-4 py-2 font-mono text-sm shadow-lg shadow-black/30 select-none active:cursor-grabbing ${
               rand(i, 2) > 0.7
-                ? "bg-violet-bright text-ink"
+                ? "bg-violet-bright text-on-accent"
                 : rand(i, 3) > 0.5
                   ? "bg-cream text-ink"
                   : "border border-violet/40 bg-ink-2 text-violet-soft"

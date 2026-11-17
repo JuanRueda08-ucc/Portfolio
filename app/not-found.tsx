@@ -18,7 +18,7 @@ export default function NotFound() {
       </h1>
       <p className="max-w-sm text-stone">This page wandered off. Let&apos;s get you back somewhere magical.</p>
       <div className="flex gap-3">
-        <Link href="/" className="btn-text rounded-full bg-violet px-6 py-3 text-ink">
+        <Link href="/" className="btn-text rounded-full bg-violet px-6 py-3 text-on-accent">
           Back home
         </Link>
         <Link href="/lab" className="btn-text rounded-full border border-ink-3 px-6 py-3 hover:border-violet">

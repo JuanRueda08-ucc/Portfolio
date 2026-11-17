@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { profile } from "@/data/profile";
 import { siteUrl } from "@/lib/site";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 // Main text uses the system "Helvetica Neue" → Arial stack (see globals.css).
@@ -48,13 +49,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-theme="dark"
+      // The inline theme script may change data-theme/style before hydration.
+      suppressHydrationWarning
       className={`${outfit.variable} ${figtree.variable} ${newsreader.variable} ${geistMono.variable} scroll-smooth antialiased`}
     >
+      <head>
+        {/* Applies the visitor's saved mode + accent before first paint (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-screen">
         {/* Keyboard users can jump straight past the navbar */}
         <a
           href="#main-content"
-          className="btn-text fixed top-3 left-3 z-[110] -translate-y-20 rounded-full bg-violet-bright px-4 py-2 text-ink transition-transform focus:translate-y-0"
+          className="btn-text fixed top-3 left-3 z-[110] -translate-y-20 rounded-full bg-violet-bright px-4 py-2 text-on-accent transition-transform focus:translate-y-0"
         >
           Skip to content
         </a>

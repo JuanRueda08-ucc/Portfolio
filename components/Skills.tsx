@@ -81,7 +81,7 @@ export default function Skills() {
             <li
               key={s.title}
               data-card
-              className="relative flex min-h-[26rem] flex-col overflow-hidden rounded-2xl bg-violet p-6 text-ink"
+              className="relative flex min-h-[26rem] flex-col overflow-hidden rounded-2xl bg-violet p-6 text-on-accent"
             >
               <span className="label">{String(i + 1).padStart(2, "0")}</span>
 

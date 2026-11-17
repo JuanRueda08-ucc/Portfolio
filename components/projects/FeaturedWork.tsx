@@ -148,7 +148,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="Live"
-                className="btn-text rounded-full bg-violet-bright px-4 py-2 text-ink"
+                className="btn-text rounded-full bg-violet-bright px-4 py-2 text-on-accent"
               >
                 Visit project ↗
               </a>

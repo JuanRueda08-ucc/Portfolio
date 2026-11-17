@@ -69,7 +69,7 @@ export default function Projects() {
                       data-cursor="Live"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-text rounded-full bg-violet px-4 py-2 text-ink"
+                      className="btn-text rounded-full bg-violet px-4 py-2 text-on-accent"
                     >
                       Live demo ↗
                     </a>

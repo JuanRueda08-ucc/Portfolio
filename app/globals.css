@@ -12,6 +12,7 @@
   --color-violet-bright: #c06dff;/* buttons / highlights (from elicubillos.com) */
   --color-violet-soft: #c4a1ff;  /* light accent */
   --color-violet-deep: #3b1a6e;  /* glows / accent backgrounds */
+  --color-on-accent: #15120f;    /* text on accent backgrounds (same in both modes) */
 
   /* Typography — copied from the reference sites (see AGENTS.md)
      - sans/display: elicubillos.com main stack (renders as Arial on Windows)
@@ -45,10 +46,29 @@
   }
 }
 
+/* ───────────── Light mode ─────────────
+   Same token names, inverted roles: "ink" is the background and "cream" the text,
+   so every utility (bg-ink, text-cream, border-ink-3…) flips automatically.
+   The accent (--color-violet*) is set at runtime by lib/theme.ts for both modes. */
+html[data-theme="light"] {
+  --color-ink: #f4efe8; /* warm paper */
+  --color-ink-2: #ebe4da;
+  --color-ink-3: #d6ccbf;
+  --color-cream: #15120f; /* text */
+  --color-stone: #5c544c;
+  --color-violet: hsl(269 62% 60%);
+  --color-violet-bright: hsl(275 80% 66%);
+  --color-violet-soft: hsl(262 55% 40%);
+  --color-violet-deep: hsl(263 85% 88%);
+}
+
 /* ───────────── Base ───────────── */
 html {
   background: var(--color-ink);
   color-scheme: dark;
+}
+html[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {
@@ -120,8 +140,8 @@ html.has-custom-cursor :is(input, textarea, [contenteditable="true"]) {
    the new page rises from below as a card and expands to full screen. */
 ::view-transition {
   background:
-    radial-gradient(circle, rgb(155 93 229 / 0.35) 1.5px, transparent 1.5px) 0 0 / 22px 22px,
-    radial-gradient(ellipse at 50% 120%, #3b1a6e, #0b0a09 65%);
+    radial-gradient(circle, color-mix(in oklab, var(--color-violet) 35%, transparent) 1.5px, transparent 1.5px) 0 0 / 22px 22px,
+    radial-gradient(ellipse at 50% 120%, var(--color-violet-deep), var(--color-ink) 65%);
 }
 /* Pages are taller than the viewport, so scale around the part that was on screen:
    --vt-old-oy is set on click by SmoothScroll (scrollY + half the viewport). */

@@ -86,7 +86,7 @@ function TileCard({ tile, onOpen }: { tile: Tile; onOpen: (app: AppId) => void }
     }
     case "quote":
       return (
-        <div data-tile className={`${base} border-transparent bg-violet text-ink hover:translate-y-0`}>
+        <div data-tile className={`${base} border-transparent bg-violet text-on-accent hover:translate-y-0`}>
           <span className="label">Manifesto</span>
           <p className="font-serif text-3xl leading-tight italic">{tile.text}</p>
         </div>

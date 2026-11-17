@@ -149,7 +149,7 @@ export default function PixelPaint() {
       type="button"
       onClick={() => setTool(t)}
       aria-pressed={tool === t}
-      className={`btn-text rounded-full px-3 py-1.5 ${tool === t ? "bg-violet text-ink" : "bg-ink text-stone hover:text-cream"}`}
+      className={`btn-text rounded-full px-3 py-1.5 ${tool === t ? "bg-violet text-on-accent" : "bg-ink text-stone hover:text-cream"}`}
     >
       {label}
     </button>
@@ -209,7 +209,7 @@ export default function PixelPaint() {
           <button type="button" onClick={clear} className="btn-text rounded-full bg-ink px-3 py-1.5 text-stone hover:text-cream">
             Clear
           </button>
-          <button type="button" onClick={download} className="btn-text rounded-full bg-violet-bright px-3 py-1.5 text-ink">
+          <button type="button" onClick={download} className="btn-text rounded-full bg-violet-bright px-3 py-1.5 text-on-accent">
             PNG ↓
           </button>
         </div>

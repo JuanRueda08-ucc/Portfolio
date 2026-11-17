@@ -198,7 +198,7 @@ export default function Hero() {
               href={profile.cv}
               data-cursor="Download"
               download
-              className="btn-text rounded-full bg-violet px-6 py-3 whitespace-nowrap text-ink transition-transform hover:scale-105"
+              className="btn-text rounded-full bg-violet px-6 py-3 whitespace-nowrap text-on-accent transition-transform hover:scale-105"
             >
               Download CV
             </a>

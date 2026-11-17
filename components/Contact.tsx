@@ -82,7 +82,7 @@ export default function Contact() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="rounded-full bg-violet py-3.5 btn-text text-ink transition-opacity disabled:opacity-60"
+            className="rounded-full bg-violet py-3.5 btn-text text-on-accent transition-opacity disabled:opacity-60"
           >
             {status === "sending" ? "Sending…" : "Send message"}
           </button>
