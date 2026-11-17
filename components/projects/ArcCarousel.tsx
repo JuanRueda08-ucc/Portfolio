@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useState, useSyncExternalStore } from "react";
 import type { Project } from "@/data/types";
 import ProjectMedia from "./ProjectMedia";
+import VideoButton from "./VideoButton";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -134,7 +135,7 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
               </li>
             ))}
           </ul>
-          <div className="mt-6 flex justify-center gap-2">
+          <div className="mt-6 flex flex-wrap justify-center gap-2 [&>*]:whitespace-nowrap">
             <a
               href={current.github}
               target="_blank"
@@ -144,6 +145,7 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
             >
               GitHub ↗
             </a>
+            <VideoButton project={current} />
             {current.demo && (
             <a
               href={current.demo}

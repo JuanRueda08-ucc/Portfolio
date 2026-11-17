@@ -3,6 +3,7 @@ import FeaturedWork from "@/components/projects/FeaturedWork";
 import ProjectMedia from "@/components/projects/ProjectMedia";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { projects } from "@/data/projects";
+import VideoButton from "@/components/projects/VideoButton";
 
 /**
  * Projects:
@@ -54,7 +55,7 @@ export default function Projects() {
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-6 flex gap-2">
+                  <div className="mt-6 flex flex-wrap gap-2 [&>*]:whitespace-nowrap">
                     <a
                       href={p.github}
                       data-cursor="Code"
@@ -64,6 +65,7 @@ export default function Projects() {
                     >
                       GitHub ↗
                     </a>
+                    <VideoButton project={p} />
                     {p.demo && (
                     <a
                       href={p.demo}
