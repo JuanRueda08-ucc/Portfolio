@@ -1,21 +1,9 @@
 import type { Project } from "./types";
 
-// Five personal projects first, then the two team projects.
+// The three main projects first (shown in Featured work, in this order), then the rest.
 // Covers live in /public/images/projects/<slug>.webp (1280×800); videos would go in /public/videos/<slug>.mp4.
 // Projects without a live demo link their whole card to the repository.
 export const projects: Project[] = [
-  {
-    slug: "tickgo",
-    title: "TickGo",
-    description:
-      "Wear OS app that gets you out the door on time: it plans your prep backwards from the event, walks you through four states with distinct vibrations, learns how long you really take and explains why it nudged you.",
-    year: 2026,
-    tags: ["Kotlin", "Wear OS", "Voice input"],
-    image: "/images/projects/tickgo.webp",
-    github: "https://github.com/JuanRueda08-ucc/Smartwatch-project",
-    featured: true,
-    hue: 200,
-  },
   {
     slug: "ancla-calma",
     title: "Ancla Calma",
@@ -30,6 +18,19 @@ export const projects: Project[] = [
     hue: 220,
   },
   {
+    slug: "finanzia",
+    title: "FinanzIA",
+    description:
+      "Team project. Conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent.",
+    year: 2026,
+    tags: ["Next.js", "LangGraph", "Java", "Team"],
+    image: "/images/projects/finanzia.webp",
+    github: "https://github.com/Proyecto-final-4",
+    demo: "https://frontend-sooty-five-52.vercel.app",
+    featured: true,
+    hue: 110,
+  },
+  {
     slug: "chef-digital",
     title: "Chef Digital",
     description:
@@ -38,7 +39,19 @@ export const projects: Project[] = [
     tags: ["Electron", "Svelte", "TypeScript", "Supabase"],
     image: "/images/projects/chef-digital.webp",
     github: "https://github.com/JuanRueda08-ucc/assistant-chef-desktop",
+    featured: true,
     hue: 18,
+  },
+  {
+    slug: "tickgo",
+    title: "TickGo",
+    description:
+      "Wear OS app that gets you out the door on time: it plans your prep backwards from the event, walks you through four states with distinct vibrations, learns how long you really take and explains why it nudged you.",
+    year: 2026,
+    tags: ["Kotlin", "Wear OS", "Voice input"],
+    image: "/images/projects/tickgo.webp",
+    github: "https://github.com/JuanRueda08-ucc/Smartwatch-project",
+    hue: 200,
   },
   {
     slug: "vigia",
@@ -62,19 +75,6 @@ export const projects: Project[] = [
     github: "https://github.com/JuanRueda08-ucc/Vinyl-Player",
     demo: "https://vinyl-player-beryl.vercel.app",
     hue: 350,
-  },
-  {
-    slug: "finanzia",
-    title: "FinanzIA",
-    description:
-      "Team project. Conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent.",
-    year: 2026,
-    tags: ["Next.js", "LangGraph", "Java", "Team"],
-    image: "/images/projects/finanzia.webp",
-    github: "https://github.com/Proyecto-final-4",
-    demo: "https://frontend-sooty-five-52.vercel.app",
-    featured: true,
-    hue: 110,
   },
   {
     slug: "ecos-de-la-tierra",
