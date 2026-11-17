@@ -47,10 +47,10 @@ public/ cv.pdf · images/
 
 **Lo único que falta es contenido real** → ver [`contenido.md`](contenido.md).
 
-### Lighthouse (producción local, 2026-11-16)
+### Lighthouse (producción local, 2026-11-16, tras la optimización)
 | | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 |---|---|---|---|---|
-| Móvil | 52 | 100 | 100 | 100 |
-| Escritorio | 63 | 100 | 100 | 100 |
+| Móvil | 51–56 | 100 | 100 | 100 |
+| Escritorio | 83–88 | 100 | 100 | 100 |
 
-El rendimiento lo baja el Total Blocking Time del 3D/animaciones en el Chrome sin GPU que usa Lighthouse con CPU limitada; en un navegador con GPU no aparecen tareas largas.
+Antes: 52 móvil / 63 escritorio. La causa principal era el material de vidrio 3D, que tardaba ~1,7 s en compilar sus shaders en Windows; se reemplazó por un shader propio. En móvil el puntaje lo limitan el loader (diseño intencional, retrasa el titular ~4 s en la simulación) y la CPU 4× más lenta que simula Lighthouse.
