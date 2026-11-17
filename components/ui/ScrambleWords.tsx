@@ -7,7 +7,8 @@ import { useEffect, useRef } from "react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const GLYPHS = "abcdefghijklmnopqrstuvwxyz";
+// Same kind of glyph pool as the reference: letters, digits and a few symbols.
+const GLYPHS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&*#%";
 
 type Props = {
   words: string[];
@@ -39,38 +40,80 @@ export default function ScrambleWords({ words, positions, className = "" }: Prop
     { scope: root },
   );
 
-  // Continuous scramble: every tick one random letter flickers, while in view.
+  /*
+   * Scramble rhythm measured on elissamartial.com:
+   * - each word "decodes" about every 2.9 s (with jitter), never all at once;
+   * - in a burst only 2–3 of its letters change;
+   * - each of those letters cycles a new glyph every ~55 ms for 350–550 ms,
+   *   then settles back on the real letter.
+   */
   useEffect(() => {
     const el = root.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const letters = Array.from(el.querySelectorAll<HTMLSpanElement>("[data-ch]"));
+
+    const wordEls = Array.from(el.querySelectorAll<HTMLSpanElement>("[data-word]"));
+    const wordLetters = wordEls.map((w) => Array.from(w.querySelectorAll<HTMLSpanElement>("[data-ch]")));
+    const rand = (a: number, b: number) => a + Math.random() * (b - a);
+    const glyph = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+
+    // Next burst time per word (staggered so they don't fire together).
+    let now = 0;
+    const nextAt = wordEls.map(() => rand(300, 3000));
+    // Active letters: when to stop and when to swap the glyph next.
+    const active = new Map<HTMLSpanElement, { until: number; swap: number }>();
+
+    const STEP = 55;
     let timer: ReturnType<typeof setInterval> | undefined;
-    const timeouts = new Set<ReturnType<typeof setTimeout>>();
 
     const tick = () => {
-      const span = letters[Math.floor(Math.random() * letters.length)];
-      if (!span || span.dataset.busy) return;
-      span.dataset.busy = "1";
-      span.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-      span.classList.add("text-violet-bright");
-      const id = setTimeout(() => {
-        span.textContent = span.dataset.ch ?? "";
-        span.classList.remove("text-violet-bright");
-        delete span.dataset.busy;
-        timeouts.delete(id);
-      }, 160 + Math.random() * 220);
-      timeouts.add(id);
+      now += STEP;
+
+      // Start bursts on words whose time has come (at most 2 words active at once).
+      const busyWords = new Set(wordLetters.filter((ls) => ls.some((l) => active.has(l))).map((ls) => ls));
+      wordLetters.forEach((letters, i) => {
+        if (now < nextAt[i] || busyWords.size >= 2 || busyWords.has(letters)) return;
+        nextAt[i] = now + rand(2400, 3400);
+        const n = Math.min(letters.length, Math.random() < 0.5 ? 2 : 3);
+        const picks = [...letters].sort(() => Math.random() - 0.5).slice(0, n);
+        picks.forEach((l) => {
+          const start = now + rand(0, 120);
+          active.set(l, { until: start + rand(350, 550), swap: start });
+        });
+        busyWords.add(letters);
+      });
+
+      // Advance active letters.
+      for (const [l, s] of active) {
+        if (now >= s.until) {
+          l.textContent = l.dataset.ch ?? "";
+          l.classList.remove("text-violet-bright");
+          active.delete(l);
+        } else if (now >= s.swap) {
+          l.textContent = glyph();
+          l.classList.add("text-violet-bright");
+          s.swap = now + STEP;
+        }
+      }
+    };
+
+    const reset = () => {
+      for (const l of active.keys()) {
+        l.textContent = l.dataset.ch ?? "";
+        l.classList.remove("text-violet-bright");
+      }
+      active.clear();
     };
 
     const io = new IntersectionObserver(([e]) => {
       clearInterval(timer);
-      if (e.isIntersecting) timer = setInterval(tick, 70);
+      if (e.isIntersecting) timer = setInterval(tick, STEP);
+      else reset();
     });
     io.observe(el);
     return () => {
       io.disconnect();
       clearInterval(timer);
-      timeouts.forEach(clearTimeout);
+      reset();
     };
   }, [words]);
 
