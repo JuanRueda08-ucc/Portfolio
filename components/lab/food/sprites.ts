@@ -1,0 +1,253 @@
+/**
+ * 12×12 pixel-art food sprites (original, drawn as text). Each char maps to a
+ * palette color; "." is transparent. Colombian / Pasto favorites.
+ */
+export const PALETTE: Record<string, string> = {
+  k: "#2b1d14", // outline
+  y: "#f4c44e", // golden
+  Y: "#ffe08a", // light golden
+  o: "#e8893a", // orange
+  b: "#8a4b22", // brown
+  B: "#5a2e14", // dark brown
+  l: "#c98a4b", // light brown
+  g: "#6fbf4a", // green
+  d: "#2f7a3a", // dark green
+  r: "#e2483d", // red
+  p: "#ff8fb3", // pink
+  w: "#fff8ee", // white
+  c: "#f1dfb8", // cream
+  m: "#7a4a2a", // mug
+};
+
+export type Food = { id: string; name: string; pun: string; sprite: string[] };
+
+export const FOODS: Food[] = [
+  {
+    id: "arepa",
+    name: "Arepa",
+    pun: "Arepa-solutely delicious!",
+    sprite: [
+      "....kkkk....",
+      "..kkyyyykk..",
+      ".kyyYyyyyyk.",
+      ".kyyybyyYyk.",
+      "kyYyyyyybyyk",
+      "kyyyyyyyyyyk",
+      "kyybyyyYyyyk",
+      "kyyyyyybyyyk",
+      ".kyYyyyyyyk.",
+      ".kyyyybyyyk.",
+      "..kkyyyykk..",
+      "....kkkk....",
+    ],
+  },
+  {
+    id: "empanada",
+    name: "Empanada",
+    pun: "Empa-nada can stop me now.",
+    sprite: [
+      "............",
+      "............",
+      "............",
+      "....kkkkk...",
+      "..kkoooookk.",
+      ".koooYooooyk",
+      "koooooooYoyk",
+      "kooYooooooyk",
+      "kyoyoyoyoyok",
+      ".kkkkkkkkkk.",
+      "............",
+      "............",
+    ],
+  },
+  {
+    id: "bunuelo",
+    name: "Buñuelo",
+    pun: "Round, golden and proudly fried.",
+    sprite: [
+      "............",
+      "....kkkk....",
+      "..kkllllkk..",
+      ".kllYlllllk.",
+      ".klYlllllbk.",
+      "kllllllllblk",
+      "klllllllbllk",
+      ".kllllllblk.",
+      ".klllllbblk.",
+      "..kkbbbbkk..",
+      "....kkkk....",
+      "............",
+    ],
+  },
+  {
+    id: "mango",
+    name: "Mango",
+    pun: "Mango-ing nowhere without you.",
+    sprite: [
+      ".....dd.....",
+      "....kdgk....",
+      "...kkkkkk...",
+      "..kgggyyyk..",
+      ".kggyyyyyyk.",
+      ".kgyyyyyoyk.",
+      "kgyyyyyoooyk",
+      "kyyyyyoooork",
+      ".kyyyoooork.",
+      ".kyooorrrk..",
+      "..kkrrrkk...",
+      "....kkk.....",
+    ],
+  },
+  {
+    id: "banano",
+    name: "Banano",
+    pun: "You're one in a melon… I mean banana.",
+    sprite: [
+      ".........kb.",
+      "........kyk.",
+      ".......kyyk.",
+      "......kyyyk.",
+      ".....kyyyYk.",
+      "....kyyyYk..",
+      "..kkyyyYyk..",
+      ".kyyyyYyk...",
+      "kyyyyyyk....",
+      "kbyyyykk....",
+      ".kkkkk......",
+      "............",
+    ],
+  },
+  {
+    id: "cafe",
+    name: "Café",
+    pun: "Colombian coffee: certified debugging fuel.",
+    sprite: [
+      "...w..w.....",
+      "....w..w....",
+      "...w..w.....",
+      ".kkkkkkkk...",
+      ".kwwwwwwkkk.",
+      ".kwBBBBwk.k.",
+      ".kwwwwwwk.k.",
+      ".kwwwwwwkkk.",
+      ".kwwwwwwk...",
+      "..kwwwwk....",
+      "kkkkkkkkkk..",
+      "............",
+    ],
+  },
+  {
+    id: "aguacate",
+    name: "Aguacate",
+    pun: "Holy guaca-mole!",
+    sprite: [
+      "....kkkk....",
+      "...kddddk...",
+      "..kdggggdk..",
+      "..kdgYYgdk..",
+      ".kdgYYYYgdk.",
+      ".kdgYbbYgdk.",
+      "kdgYbBBbYgdk",
+      "kdgYbBBbYgdk",
+      "kdgYYbbYYgdk",
+      ".kdgYYYYgdk.",
+      "..kddddddk..",
+      "...kkkkkk...",
+    ],
+  },
+  {
+    id: "pandebono",
+    name: "Pandebono",
+    pun: "Pan-de-bono, pan-de-bueno.",
+    sprite: [
+      "............",
+      "....kkkk....",
+      "..kkccYckk..",
+      ".kcYccccclk.",
+      ".kcckkkkcck.",
+      "kccck..kccck",
+      "kclck..kcclk",
+      ".kcckkkkcck.",
+      ".klccccclck.",
+      "..kkllcckk..",
+      "....kkkk....",
+      "............",
+    ],
+  },
+  {
+    id: "paila",
+    name: "Helado de paila",
+    pun: "Hand-spun cold, straight from Pasto.",
+    sprite: [
+      "....kkkk....",
+      "...kppwpk...",
+      "..kpppppwk..",
+      "..kpwppppk..",
+      "..kkkkkkkk..",
+      "..kycyccyk..",
+      "...kcyccyk..",
+      "...kycyck...",
+      "....kcyk....",
+      "....kyck....",
+      ".....kk.....",
+      "............",
+    ],
+  },
+  {
+    id: "lulo",
+    name: "Lulo",
+    pun: "Lulo-ve at first sip.",
+    sprite: [
+      ".....dk.....",
+      "...kgddgk...",
+      "..kkkkkkkk..",
+      ".kooooYoook.",
+      "kooooYYooook",
+      "koooooooooyk",
+      "kooYooooooyk",
+      "koooooooooyk",
+      ".kooooooyyk.",
+      ".kkooooyykk.",
+      "...kkkkkk...",
+      "............",
+    ],
+  },
+  {
+    id: "chocolate",
+    name: "Chocolate",
+    pun: "Hot chocolate with cheese? Trust the process.",
+    sprite: [
+      "...w...w....",
+      "....w.w.....",
+      "............",
+      ".kkkkkkkk...",
+      ".kBBBBBBkkk.",
+      ".kmmmmmmk.k.",
+      ".kmmmcmmk.k.",
+      ".kmmmmmmkkk.",
+      ".kmmmmmmk...",
+      "..kmmmmk....",
+      "...kkkk.....",
+      "............",
+    ],
+  },
+  {
+    id: "aji",
+    name: "Ají",
+    pun: "Adding a little spice to the codebase.",
+    sprite: [
+      "..........dk",
+      ".........dk.",
+      "........kgk.",
+      "......kkrrk.",
+      ".....krrrrk.",
+      "....krrwrrk.",
+      "...krrrrrk..",
+      "..krrrrrk...",
+      ".krrrrrk....",
+      "krrrrkk.....",
+      ".kkkk.......",
+      "............",
+    ],
+  },
+];
