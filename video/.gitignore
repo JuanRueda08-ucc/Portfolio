@@ -1,0 +1,5 @@
+node_modules/
+# Raw recordings and renders are large; only the final clips go to ../public/videos.
+raw/
+out/
+public/clips/

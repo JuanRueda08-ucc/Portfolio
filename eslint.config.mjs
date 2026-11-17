@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Video tooling (Remotion + recordings) has its own package.json.
+    "video/**",
   ]),
 ]);
 
