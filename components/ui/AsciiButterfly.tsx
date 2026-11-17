@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
+import { SKILLS_TIMELINE } from "@/components/Skills";
 import { cssRgb, subscribeTheme } from "@/lib/theme";
 
 /**
@@ -175,7 +176,7 @@ export default function AsciiButterfly() {
     let heading = Math.PI / 2; // radians, 0 = up (starts facing right, along the wave)
     let alpha = 0;
     let flap = 0;
-    let prog = 0; // smoothed progress along the skills wave (0..1)
+    let prog = 0; // smoothed progress in card units (2.4 = 40% along card #3's curve)
     let facing = 1; // 1 = flying forward along the line, -1 = backward
     let placed = false;
     let last = performance.now();
@@ -217,31 +218,56 @@ export default function AsciiButterfly() {
       const vh = window.innerHeight;
       const vw = window.innerWidth;
 
+      // The Skills section pins on desktop and exposes its scroll progress (0..1)
+      // in data-progress; each card rises during one "unit" of the timeline.
       const skills = document.getElementById("skills");
       const r = skills?.getBoundingClientRect();
-      const path = document.querySelector<SVGGeometryElement>('[data-butterfly-line="skills"]');
-      const trail = document.querySelector<SVGPathElement>("[data-butterfly-trail]");
-      const lr = path?.getBoundingClientRect();
-      const visible = Boolean(r && r.top < vh * 0.7);
+      const progAttr = skills?.dataset.progress;
+      const pinned = progAttr !== undefined;
+      const paths = Array.from(document.querySelectorAll<SVGGeometryElement>('[data-butterfly-line="skills"]'));
+      const trails = Array.from(document.querySelectorAll<SVGPathElement>("[data-butterfly-trail]"));
+      const count = paths.length;
+      const units = pinned ? Number(progAttr) * SKILLS_TIMELINE : 0;
+      const staged = Boolean(r && pinned && r.top <= vh * 0.05 && r.bottom >= vh * 0.95);
+
+      // Hidden before Skills. Rides the rising card's curve while the stage is pinned.
+      // After the cards are done (or the section has scrolled away) it may follow the cursor.
+      const lineMode = staged && units > 0.02 && units < count;
+      const after = Boolean(r && pinned && (r.bottom < vh * 0.95 || (staged && units >= count)));
+      const visible = lineMode || after;
       let speed = 0;
 
-      // Fade in/out with the section.
+      // Fade in/out.
       alpha += ((visible ? 1 : 0) - alpha) * Math.min(1, dt * 4);
       el.style.opacity = alpha.toFixed(3);
 
-      // ── Line mode: while the wave is on screen, sit exactly on it.
-      // Progress follows the scroll: starts when the line reaches 80% of the
-      // viewport height and ends when it reaches 20%.
-      const onLine = visible && path && lr && lr.bottom > vh * 0.12;
-      if (onLine) {
-        const want = clamp01((vh * 0.8 - lr.top) / (vh * 0.6));
+      // Trail on every card: finished cards fully drawn, current card up to the butterfly.
+      const cardIndex = Math.min(count - 1, Math.floor(prog));
+      trails.forEach((tr) => {
+        const j = Number(tr.dataset.butterflyTrail);
+        // Not pinned (mobile / reduced motion): no butterfly, show the curves fully drawn.
+        const drawn = !pinned
+          ? 1
+          : !visible && !after
+            ? 0
+            : after || j < cardIndex
+              ? 1
+              : j === cardIndex
+                ? prog - cardIndex
+                : 0;
+        tr.setAttribute("stroke-dasharray", `${(clamp01(drawn) * 1000).toFixed(1)} 1000`);
+      });
+
+      // ── Line mode: sit exactly on the curve of the card that is rising.
+      if (lineMode) {
         const before = prog;
-        prog += (want - prog) * Math.min(1, dt * 3.5);
+        prog = alpha < 0.05 ? units : prog + (units - prog) * Math.min(1, dt * 5);
         const dir = prog - before;
         if (Math.abs(dir) > 1e-4) facing = dir > 0 ? 1 : -1;
-        trail?.setAttribute("stroke-dasharray", `${(prog * 1000).toFixed(1)} 1000`);
+        const i = Math.min(count - 1, Math.max(0, Math.floor(prog)));
+        const path = paths.find((p) => Number(p.dataset.index) === i) ?? paths[i];
 
-        const at = lineAt(path, prog);
+        const at = path ? lineAt(path, prog - i) : null;
         if (at) {
           // Tiny bob perpendicular to the line so it feels alive.
           const bob = Math.sin(t * 3.2) * 3;
@@ -275,9 +301,9 @@ export default function AsciiButterfly() {
         pos.y += vy;
         speed = Math.hypot(vx, vy) / Math.max(dt, 0.001);
         if (speed > 8) heading += shortest(heading, Math.atan2(vx, -vy)) * Math.min(1, dt * 5);
-        trail?.setAttribute("stroke-dasharray", "1000 1000");
       } else {
         placed = false;
+        if (!after) prog = 0;
       }
 
       if (alpha < 0.01) return;
