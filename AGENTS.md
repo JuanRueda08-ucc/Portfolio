@@ -145,6 +145,8 @@ Keep this section up to date when a phase lands.
 
 FinanzIA also has a full local demo (2:52, 1.54 MB) from the owner's recording. Its four chapters cover the workspace, spending, income and savings goals. The login, greeting, sidebar and browser password prompt were masked before rendering; the three contact sheets and outro were reviewed.
 
+Vinyl Player has a full local demo (2:15, 1.11 MB). The recording checks insertion at the start, end and second slot, playback, shuffle, repeat and node removal. Both contact sheets were reviewed through the final pause and outro.
+
 | File | State |
 |---|---|
 | `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). **FinanzIA, Ancla Calma and Vinyl Player have videos** (`/videos/<slug>.mp4`); the rest don't yet. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
@@ -189,7 +191,7 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
 2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
 3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
-4. **Full-length demo videos (Codex)** — Chef Digital and FinanzIA are complete locally. Next: Ancla Calma (owner signs into a temporary browser using a demo account), Vinyl Player, Vigía → TickGo → Ecos de la Tierra.
+4. **Full-length demo videos (Codex)** — Chef Digital, FinanzIA and Vinyl Player are complete locally. Remaining: Ancla Calma (owner signs into a temporary browser using a demo account), Vigía, TickGo and Ecos de la Tierra.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
 6. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
 7. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.

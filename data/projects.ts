@@ -78,6 +78,7 @@ export const projects: Project[] = [
     tags: ["TypeScript", "Web Audio API", "Data structures"],
     image: "/images/projects/vinyl-player.webp",
     video: "/videos/vinyl-player.mp4",
+    videoFull: "/videos/vinyl-player-full.mp4",
     github: "https://github.com/JuanRueda08-ucc/Vinyl-Player",
     demo: "https://vinyl-player-beryl.vercel.app",
     hue: 350,

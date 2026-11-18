@@ -125,6 +125,21 @@ export const chefDigitalFull: DemoProps = {
   ],
 };
 
+export const vinylPlayerFull: DemoProps = {
+  ...vinylPlayer,
+  clip: "clips/vinyl-player-full.mp4",
+  outro: { github: "https://github.com/JuanRueda08-ucc/Vinyl-Player", demo: "https://vinyl-player-beryl.vercel.app" },
+  segments: [
+    { from: 0, to: 9, rate: 1, chapter: "Build the queue", caption: "Append two tracks, then put Lo-fi Sunrise first" },
+    { from: 9, to: 20.7, rate: 1, chapter: "Insert at a position", caption: "Insert Ocean Static into the second slot" },
+    { from: 20.7, to: 36, rate: 1, chapter: "Play a record", caption: "Play the first record and skip between tracks" },
+    { from: 36, to: 45.4, rate: 1, chapter: "Playback controls", caption: "Seek within a track, adjust the volume and mute" },
+    { from: 45.4, to: 66.8, rate: 1, chapter: "Shuffle and repeat", caption: "Shuffle the next track and cycle through the repeat modes" },
+    { from: 66.8, to: 90.2, rate: 1, chapter: "Inspect the linked list", caption: "Follow the links between the head, current track and tail" },
+    { from: 90.2, to: 113.7, rate: 1, chapter: "Edit the playlist", caption: "Remove a track, check the new links and pause the record" },
+  ],
+};
+
 /** Frames a list of segments takes once each runs at its own speed. */
 export const segmentFrames = (s: Segment) => Math.round(((s.to - s.from) * FPS) / s.rate);
 export function timeline(p: DemoProps) {
