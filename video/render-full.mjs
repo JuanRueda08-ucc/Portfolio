@@ -5,7 +5,7 @@ import { openBrowser, renderStill, selectComposition } from "@remotion/renderer"
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { CHAPTER, FPS, INTRO, OUTRO, WINDOW, segmentFrames, timeline } from "./src/apps.ts";
+import { CHAPTER, FPS, INTRO, OUTRO, WATCH, WINDOW, segmentFrames, timeline } from "./src/apps.ts";
 import { FFMPEG } from "./record/recorder.mjs";
 
 const [id, chrome] = process.argv.slice(2);
@@ -34,10 +34,14 @@ try {
     });
     const args = ["-loop", "1", "-framerate", String(FPS), "-i", plate];
     if (source) {
-      const { width, height, x, y } = WINDOW;
+      const watch = demo.frame === "watch";
+      const { width, height, x, y } = watch ? WATCH : WINDOW;
+      const mask = watch
+        ? `[square];nullsrc=s=${width}x${height}:r=${FPS},format=gray,trim=end_frame=1,geq=lum='255*lte(hypot(X-W/2,Y-H/2),W/2)',loop=loop=-1:size=1:start=0[mask];[square][mask]alphamerge`
+        : "";
       args.push("-ss", String(source.from), "-t", String(source.to - source.from), "-i", resolve("public", demo.clip),
         "-filter_complex_threads", "2", "-filter_complex",
-        `[1:v]setpts=(PTS-STARTPTS)/${source.rate},fps=${FPS},scale=${width}:${height}:force_original_aspect_ratio=decrease:force_divisible_by=2,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0x111111[clip];[0:v][clip]overlay=${x}:${y}[v]`,
+        `[1:v]setpts=(PTS-STARTPTS)/${source.rate},fps=${FPS},scale=${width}:${height}:force_original_aspect_ratio=decrease:force_divisible_by=2,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=0x111111${mask}[clip];[0:v][clip]overlay=${x}:${y}[v]`,
         "-map", "[v]");
     }
     console.log(index, source?.chapter ?? source?.from ?? "Card", frames);

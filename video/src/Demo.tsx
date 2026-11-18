@@ -9,7 +9,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { CHAPTER, FPS, INTRO, OUTRO, WINDOW, segmentFrames, timeline, type DemoProps, type Segment } from "./apps";
+import { CHAPTER, FPS, INTRO, OUTRO, WATCH, WINDOW, segmentFrames, timeline, type DemoProps, type Segment } from "./apps";
 
 // The recording is 1440×900; on the 1280×800 canvas it sits in a browser window.
 const SRC = { w: 1440, h: 900 };
@@ -50,47 +50,56 @@ export const Demo: React.FC<DemoProps> = (p) => {
         </div>
       </AbsoluteFill>
 
-      {/* Browser window */}
-      <div
-        style={{
-          position: "absolute",
-          left: (width - CLIP.w) / 2,
-          top: winTop + (1 - rise) * 120,
-          opacity: rise,
-          width: CLIP.w,
-          borderRadius: 14,
-          overflow: "hidden",
-          boxShadow: "0 40px 90px -20px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.08)",
-          background: "#111",
-        }}
-      >
-        <div style={{ height: BAR, display: "flex", alignItems: "center", gap: 7, padding: "0 12px", background: "#1c1c1f" }}>
-          {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
-            <span key={c} style={{ width: 11, height: 11, borderRadius: 6, background: c }} />
-          ))}
-          <span
-            style={{
-              margin: "0 auto",
-              padding: "3px 14px",
-              borderRadius: 7,
-              background: "#2a2a2e",
-              color: "rgba(255,255,255,.6)",
-              fontSize: 12,
-              transform: "translateX(-24px)",
-            }}
-          >
-            {p.url}
-          </span>
-        </div>
-        <div style={{ position: "relative", width: CLIP.w, height: CLIP.h, overflow: "hidden" }}>
+      {p.frame === "watch" ? (
+        <div style={{ position: "absolute", opacity: frame >= INTRO ? 1 : 0, left: WATCH.x, top: WATCH.y, width: WATCH.width, height: WATCH.height, borderRadius: "50%", overflow: "hidden", background: "#080a0d", boxShadow: "0 0 0 10px #181c23, 0 0 0 12px #77818b, 0 24px 60px #090b10" }}>
           {parts.map(({ s, start }) => (
-            <Sequence key={s.from} from={start} durationInFrames={segmentFrames(s)} layout="none">
+            <Sequence key={start} from={start} durationInFrames={segmentFrames(s)} layout="none">
               {p.clip && <Clip clip={p.clip} s={s} />}
             </Sequence>
           ))}
         </div>
-      </div>
+      ) : (
+        <div
+          style={{
+            position: "absolute",
+            left: (width - CLIP.w) / 2,
+            top: winTop + (1 - rise) * 120,
+            opacity: rise,
+            width: CLIP.w,
+            borderRadius: 14,
+            overflow: "hidden",
+            boxShadow: "0 40px 90px -20px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.08)",
+            background: "#111",
+          }}
+        >
+          <div style={{ height: BAR, display: "flex", alignItems: "center", gap: 7, padding: "0 12px", background: "#1c1c1f" }}>
+            {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
+              <span key={c} style={{ width: 11, height: 11, borderRadius: 6, background: c }} />
+            ))}
+            <span
+              style={{
+                margin: "0 auto",
+                padding: "3px 14px",
+                borderRadius: 7,
+                background: "#2a2a2e",
+                color: "rgba(255,255,255,.6)",
+                fontSize: 12,
+                transform: "translateX(-24px)",
+              }}
+            >
+              {p.url}
+            </span>
+          </div>
+          <div style={{ position: "relative", width: CLIP.w, height: CLIP.h, overflow: "hidden" }}>
+            {parts.map(({ s, start }) => (
+              <Sequence key={s.from} from={start} durationInFrames={segmentFrames(s)} layout="none">
+                {p.clip && <Clip clip={p.clip} s={s} />}
+              </Sequence>
+            ))}
+          </div>
+        </div>
 
+      )}
       {/* Captions */}
       {parts.map(({ s, start }) =>
         s.caption ? (

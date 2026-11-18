@@ -145,15 +145,17 @@ Ancla Calma has a nine-chapter full demo (3:06, 2.04 MB). The owner signed into 
 
 Ecos de la Tierra has a full local walkthrough (3:37, 9.26 MB) and a 55-second hover preview. Both combat systems were recorded in Godot 4.7.2 from an isolated checkout at 2f412f5. The action run reaches the final dialogue, and the turn-based encounter plays through victory. The final three sheets and the preview were reviewed.
 
-**Content state (`data/`):**
+TickGo has a full local walkthrough (3:22, 2.28 MB) and a 56-second hover preview. Two fresh ADB recordings show creating and saving an event with the built-in offline sample and editing a routine. The project recording follows the four preparation states through departure, explanation and weekly summary. Three full contact sheets and the preview were reviewed. The isolated watch was restored to the original APK and closed.
 
 FinanzIA also has a full local demo (2:52, 1.54 MB) from the owner's recording. Its four chapters cover the workspace, spending, income and savings goals. The login, greeting, sidebar and browser password prompt were masked before rendering; the three contact sheets and outro were reviewed.
 
 Vinyl Player has a full local demo (2:15, 1.11 MB). The recording checks insertion at the start, end and second slot, playback, shuffle, repeat and node removal. Both contact sheets were reviewed through the final pause and outro.
 
+**Content state (`data/`):**
+
 | File | State |
 |---|---|
-| `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). **FinanzIA, Ancla Calma and Vinyl Player have videos** (`/videos/<slug>.mp4`); the rest don't yet. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
+| `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). Six projects have both a short hover video and a full player video. Vigía is pending the owner's changes. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
 | `profile.ts` | Photo + JR logo done. **Email is a placeholder** (`TODO(Juano)`). |
 | `experience.ts` | **Placeholder** (`TODO(Juano)`) — needs real education + work. |
 | `testimonials.ts` | **Placeholder** (3 fake entries) — need 3 real ones. |
@@ -170,7 +172,7 @@ Agreed with the owner: **record each app for real, then polish with Remotion** (
 - Render: `cd video && npx remotion render src/index.ts <composition-id> out/<id>.mp4 --browser-executable="C:Program FilesGoogleChromeApplicationchrome.exe"` (the flag avoids downloading Remotion's own Chrome); the Remotion clips are read from `video/public/clips/` (git-ignored copies of the raw recordings).
 - **Final delivery recipe** (from the FinanzIA video): `ffmpeg -an -c:v libx264 -crf 27 -pix_fmt yuv420p -movflags +faststart` → `public/videos/<slug>.mp4` (target < 3 MB), then set `video: "/videos/<slug>.mp4"` in `data/projects.ts`. ffmpeg is installed via winget (`Gyan.FFmpeg.Essentials`); the recorder reads its path from `$FFMPEG` or the hard-coded WinGet path.
 - **State:** FinanzIA, Ancla Calma, Chef Digital and Vinyl Player are shipped as **short previews** (40–64 s, compressed into `public/videos/`, wired in `data/projects.ts`). Chef Digital is recorded with `record/chef-app.mjs` + `record/chef-digital.mjs` (see the Video tooling bullet above). Vinyl Player recording needs MP3s (`video/raw/tracks/`, local only — royalty-free, don't commit).
-- **Still to record:** Vigía (Android emulator + `adb screenrecord`), TickGo (Wear OS emulator), Ecos de la Tierra (Godot export or screen capture). Apps without a public URL need either a screen recording from the owner or a local run.
+- **Still to record:** Vigía (Android emulator and ADB), after the owner finishes the app changes. The other six projects have full videos and hover previews locally.
 
 ### Next: full-length demo videos (owner request, 2026-11-17) — assigned to Codex
 
@@ -195,7 +197,7 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
 2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
 3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
-4. **Full-length demo videos (Codex)** — Chef Digital, FinanzIA, Vinyl Player, Ancla Calma and Ecos de la Tierra are complete locally. TickGo is next. Vigía is on hold while the owner adjusts the app.
+4. **Full-length demo videos (Codex)** — Chef Digital, FinanzIA, Vinyl Player, Ancla Calma, Ecos de la Tierra and TickGo are complete locally. Vigía is on hold while the owner adjusts the app.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
 6. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
 7. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.

@@ -56,6 +56,8 @@ export const projects: Project[] = [
     year: 2026,
     tags: ["Kotlin", "Wear OS", "Voice input"],
     image: "/images/projects/tickgo.webp",
+    video: "/videos/tickgo.mp4",
+    videoFull: "/videos/tickgo-full.mp4",
     github: "https://github.com/JuanRueda08-ucc/Smartwatch-project",
     hue: 200,
   },

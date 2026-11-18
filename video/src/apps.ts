@@ -15,6 +15,7 @@ export type Segment = {
 
 export type DemoProps = {
   clip: string;
+  frame?: "watch";
   title: string;
   tagline: string;
   url: string;
@@ -26,6 +27,7 @@ export type DemoProps = {
 };
 
 export const FPS = 30;
+export const WATCH = { x: 336, y: 72, width: 608, height: 608 };
 export const WINDOW = { x: 96, y: 75, width: 1088, height: 680 };
 export const INTRO = 36; // frames of title card before the clip slides in
 export const CHAPTER = FPS * 2;
@@ -187,5 +189,25 @@ export const ecosFull: DemoProps = {
     { from: 140.9, to: 235.2, rate: 1.35, chapter: "Turn-based combat", caption: "Give the party an order and sustain Bruma’s firebreak through victory" },
     { from: 104, to: 111.03, rate: 1, chapter: "Action combat", caption: "Switch to Bruma and use the firebreak directly on the map" },
     { from: 111.03, to: 140.86, rate: 1, chapter: "The forest recovers", caption: "See the forest in bloom and follow the path to the end of the demo" },
+  ],
+};
+
+export const tickgoFull: DemoProps = {
+  title: "TickGo",
+  tagline: "Plan backwards from the time you need to leave",
+  url: "TickGo · Wear OS",
+  frame: "watch",
+  clip: "clips/tickgo-full.mp4",
+  bg: ["#0e1927", "#27455d"],
+  accent: "#8fc7ff",
+  outro: { github: "https://github.com/JuanRueda08-ucc/Smartwatch-project" },
+  segments: [
+    { from: 139, to: 173.8, rate: 1.15, chapter: "Create an event", caption: "Try the built-in class example, check the details and save it" },
+    { from: 175, to: 194.65, rate: 1, chapter: "Adjust a routine", caption: "Add a minute to the first step and check the new total" },
+    { from: 0, to: 34.8, rate: 1.15, chapter: "Plan the departure", caption: "Explore events and enable the watch’s built-in demo clock" },
+    { from: 34.8, to: 55, rate: 1, chapter: "Get ready", caption: "Finish the current task and leave enough time to get dressed" },
+    { from: 55, to: 94, rate: 1, chapter: "Check and leave", caption: "Tick off essentials, confirm departure and review the result" },
+    { from: 94, to: 124, rate: 1, chapter: "Understand a reminder", caption: "See how the next event’s preparation and travel times add up" },
+    { from: 124, to: 135, rate: 1, chapter: "Review the week", caption: "Check the weekly record of on-time departures" },
   ],
 };
