@@ -13,6 +13,7 @@ export const projects: Project[] = [
     tags: ["React", "Vite", "Tailwind", "Supabase"],
     image: "/images/projects/ancla-calma.webp",
     video: "/videos/ancla-calma.mp4",
+    videoFull: "/videos/ancla-calma-full.mp4",
     github: "https://github.com/JuanRueda08-ucc/ancla-calma",
     demo: "https://ancla-calma.vercel.app",
     featured: true,

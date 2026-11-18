@@ -125,6 +125,22 @@ export const chefDigitalFull: DemoProps = {
   ],
 };
 
+export const anclaCalmaFull: DemoProps = {
+  ...anclaCalma,
+  clip: "clips/ancla-calma-full.mp4",
+  outro: { github: "https://github.com/JuanRueda08-ucc/ancla-calma", demo: "https://ancla-calma.vercel.app" },
+  segments: [
+    { from: 0, to: 12, rate: 1, chapter: "Choose your path", caption: "Explore the islands in daylight and after dark" },
+    { from: 12, to: 18, rate: 1, chapter: "Find support", caption: "Set up a trusted contact on the island of help" },
+    { from: 18, to: 39, rate: 1, chapter: "Breathe with the waves", caption: "Follow a complete guided breathing cycle" },
+    { from: 39, to: 102, rate: 1, chapter: "Anchor your senses", caption: "Practice grounding, muscle relaxation and sensory awareness" },
+    { from: 102, to: 112, rate: 1, chapter: "Visit the lighthouse", caption: "Save a tool to your personal collection" },
+    { from: 112, to: 135, rate: 1, chapter: "Keep a journal", caption: "Record how you feel and add a voice note" },
+    { from: 135, to: 144, rate: 1, chapter: "Recognise the signs", caption: "Read about the signs of distress" },
+    { from: 144, to: 154.5, rate: 1, chapter: "Support someone", caption: "Explore resources for accompanying someone through distress" },
+    { from: 154.5, to: 160.8, rate: 1, chapter: "Return to the map", caption: "Review the profile and return to the islands" },
+  ],
+};
 export const vinylPlayerFull: DemoProps = {
   ...vinylPlayer,
   clip: "clips/vinyl-player-full.mp4",
