@@ -61,6 +61,8 @@ export const projects: Project[] = [
     year: 2026,
     tags: ["Flutter", "Dart", "Kotlin", "Firebase"],
     image: "/images/projects/vigia.webp",
+    video: "/videos/vigia.mp4",
+    videoFull: "/videos/vigia-full.mp4",
     github: "https://github.com/JuanRueda08-ucc/mobile-final-interface",
     hue: 30,
   },
