@@ -88,10 +88,12 @@ export const projects: Project[] = [
     slug: "ecos-de-la-tierra",
     title: "Ecos de la Tierra",
     description:
-      "Team project. Turn-based 2D pixel-art RPG about the environment: every monster grows from a real cause, like deforestation, and only the right ecological skill heals the region.",
+      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and only the right ecological skill heals the region.",
     year: 2026,
     tags: ["Godot 4", "GDScript", "Game design", "Team"],
     image: "/images/projects/ecos-de-la-tierra.webp",
+    video: "/videos/ecos-de-la-tierra.mp4",
+    videoFull: "/videos/ecos-de-la-tierra-full.mp4",
     github: "https://github.com/diarpicu2022-commits/ecos-de-la-tierra",
     hue: 130,
   },

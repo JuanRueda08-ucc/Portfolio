@@ -171,3 +171,21 @@ export function timeline(p: DemoProps) {
 }
 
 export const totalFrames = (p: DemoProps) => timeline(p).duration;
+
+export const ecosFull: DemoProps = {
+  title: "Ecos de la Tierra",
+  tagline: "Two ways to heal the Forest of Ashes",
+  url: "Ecos de la Tierra · Godot",
+  clip: "clips/ecos-de-la-tierra-full.mp4",
+  bg: ["#10241b", "#305038"],
+  accent: "#b4e786",
+  outro: { github: "https://github.com/diarpicu2022-commits/ecos-de-la-tierra" },
+  segments: [
+    { from: 0, to: 14.7, rate: 1, chapter: "Answer the call", caption: "Start a new game and listen to Yara" },
+    { from: 14.7, to: 55.36, rate: 1.18, chapter: "Cross Valdehoja", caption: "Meet Yara at the seedbed and take the eastern road" },
+    { from: 55.36, to: 105.36, rate: 1.2, chapter: "The Forest of Ashes", caption: "Hear Commander Rasgo and follow the damage to its source" },
+    { from: 140.9, to: 235.2, rate: 1.35, chapter: "Turn-based combat", caption: "Give the party an order and sustain Bruma’s firebreak through victory" },
+    { from: 104, to: 111.03, rate: 1, chapter: "Action combat", caption: "Switch to Bruma and use the firebreak directly on the map" },
+    { from: 111.03, to: 140.86, rate: 1, chapter: "The forest recovers", caption: "See the forest in bloom and follow the path to the end of the demo" },
+  ],
+};
