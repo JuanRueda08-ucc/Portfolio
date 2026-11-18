@@ -1,7 +1,11 @@
-export type Project = {
+/** Spanish copy of an item's text fields; anything missing falls back to English. */
+export type Es<T> = { es?: Partial<T> };
+
+type ProjectText = { description: string };
+
+export type Project = ProjectText & Es<ProjectText> & {
   slug: string;
   title: string;
-  description: string;
   year: number;
   tags: string[];
   /** Cover image in /public/images/projects */
@@ -19,26 +23,36 @@ export type Project = {
   hue?: number;
 };
 
-export type Testimonial = {
-  name: string;
+type TestimonialText = {
   relation: string; // Professor, Classmate, Client…
-  avatar?: string;
   quote: string;
 };
 
-export type ExperienceItem = {
-  type: "education" | "work";
+export type Testimonial = TestimonialText & Es<TestimonialText> & {
+  name: string;
+  avatar?: string;
+};
+
+type ExperienceText = {
   title: string;
   place: string;
-  start: string;
-  end: string; // "Present" if ongoing
   description?: string;
 };
 
-export type SkillGroup = {
+export type ExperienceItem = ExperienceText & Es<ExperienceText> & {
+  type: "education" | "work";
+  start: string;
+  /** "Present" if ongoing (translated on screen). */
+  end: string;
+};
+
+type SkillText = {
   title: string;
   subtitle: string;
   description: string;
+};
+
+export type SkillGroup = SkillText & Es<SkillText> & {
   items: string[];
 };
 

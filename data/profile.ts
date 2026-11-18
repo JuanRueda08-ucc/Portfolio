@@ -21,6 +21,17 @@ export const profile = {
   about:
     "I'm a Software Engineering student from Pasto, Colombia. I love building interfaces that feel alive: clean code on the inside, carefully crafted details on the outside. Placeholder text — we'll rewrite it together.",
   interests: ["Web development", "UI/UX", "Motion", "Video games"],
+  /** Spanish copy (same keys). The manifesto keeps 11 words to match About's word positions. */
+  es: {
+    role: "Estudiante de Ingeniería de Software",
+    tagline: "Construyo software que se siente un poquito mágico.",
+    career: "Ingeniería de Software",
+    semester: "5.º semestre",
+    manifesto: "¿Por qué no construir software que se sienta un poquito mágico?",
+    about:
+      "Soy estudiante de Ingeniería de Software de Pasto, Colombia. Me encanta crear interfaces que se sienten vivas: código limpio por dentro y detalles cuidados por fuera. Texto provisional — lo reescribimos juntos.",
+    interests: ["Desarrollo web", "UI/UX", "Animación", "Videojuegos"],
+  },
 };
 
 export const socials: SocialLink[] = [
