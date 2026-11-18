@@ -4,7 +4,7 @@ Todo el contenido del portafolio vive en la carpeta `data/`. No hace falta tocar
 
 Busca `TODO(Juano)` en el proyecto para ver lo que falta.
 
-> El sitio está en **inglés**, así que escribe los textos en inglés (o pásamelos en español y los traduzco).
+> El sitio es **bilingüe (inglés y español)**: cada texto va en inglés en su campo normal y en español dentro de `es: { … }` en el mismo elemento (si falta, se muestra el inglés). Si me lo pasas solo en español, yo lo traduzco.
 
 ---
 

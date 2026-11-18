@@ -22,7 +22,7 @@ Read this file first. It is the single source of truth for any AI agent (Claude 
 
 ## Hard rules
 
-1. **Language:** all site copy, code, comments and commits in **English**. Chat with the owner in **Spanish**. Planning docs in `docs/` are in Spanish.
+1. **Language:** the site is **bilingual (English + Spanish)**, chosen by the visitor (see "Languages" below); English is the default and the source copy. Code, comments and commits in **English**. Chat with the owner in **Spanish**. Planning docs in `docs/` are in Spanish.
 2. **Commits:** [Conventional Commits](https://www.conventionalcommits.org/) — `feat:`, `fix:`, `style:`, `refactor:`, `perf:`, `docs:`, `chore:`, `test:`. One commit per logical change, imperative mood, English.
 3. **Required stack (course):** Next.js (App Router) + TypeScript + Tailwind CSS, hosted on GitHub + Vercel. Extra libraries are allowed.
 4. **Required sections, in this order:** Navbar → Hero (with **Download CV** button) → About → Projects (each with **GitHub** + **live demo** links) → Testimonials (**≥ 3**) → Experience (**education + work**) → Contact (form with validation + confirmation) → Footer (name + © year, socials, quick links, back to top, credits). Plus **≥ 1 extra section** before the footer. Full checklist: [`docs/requisitos-profesor.md`](docs/requisitos-profesor.md).
@@ -100,6 +100,7 @@ Gotchas found so far:
 - **`hasFastWebGL()`** (`lib/gpu.ts`) — use before any WebGL effect; false for software renderers.
 - **`<Avatar>`** / **`<SocialIcon name>`** (`components/ui/`) — profile avatar (photo or monogram) and inline SVG icons (github, linkedin, email).
 - **SEO** — `app/opengraph-image.tsx`, `app/icon.jpg` + `app/apple-icon.jpg` (JR logo), `app/robots.ts`, `app/sitemap.ts`, `app/not-found.tsx`; base URL in `lib/site.ts`.
+- **Languages** (`lib/i18n.ts`, owner's request 2026-11-17) — same pattern as the theme: `<html lang>` + localStorage (`juano-lang`); `LANG_INIT_SCRIPT` (`lib/lang-script.ts`, kept free of React so the layout can import it) picks the saved language, else the browser's. The server renders English; `useLang()` switches on hydration, behind the LOADING screen. **UI strings** live in `lib/messages.ts` (`useT()`, one `en` object and an `es: Messages` that must have the same keys). **Content** keeps English in the main fields and Spanish in an optional `es: { … }` with the same keys on each item of `data/*.ts` (`localize(item, lang)`; missing keys fall back to English). Text that GSAP splits or scrambles is remounted with `key={lang}` (`SplitReveal`, the hero `h1`, `ScrambleWords` in About) and its `useGSAP` re-runs with `dependencies: [lang], revertOnUpdate: true`; never key GSAP-animated cards by a translated string (Skills uses the index). Line masks get `paddingTop/marginTop: ±0.16em` so capital accents (Á, Ñ) aren't clipped at line-height 0.92. Switch: `<LangToggle>` (EN/ES pill) in the navbar and footer. Not translated (on purpose for now): `/lab`, page metadata/OG image, the LOADING word. About's Spanish manifesto must keep **11 words** (one per `WORD_POSITIONS` slot).
 - **Content guide for the owner** — `docs/contenido.md` (Spanish): where every piece of real content goes.
 - **3D fonts** — `npm run typeface` converts a font to `public/fonts/*.typeface.json` (script: `scripts/build-typeface.mjs`). Current: Pacifico (OFL).
 
@@ -209,14 +210,14 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 - Navbar/lab keep the "Juano." wordmark; the JR logo is used in About, the hero avatar and the favicon.
 - Butterfly must never follow the visitor through the page, and must never drop/vanish mid-route in Skills.
 - Scramble words keep the measured Elissa rhythm (not a fast flicker). Project videos are hover/hold-to-play, not autoplaying loops.
-- Site copy, code, comments, commits in **English**; chat with the owner in **Spanish**; `docs/` in Spanish.
+- Site copy in **English + Spanish** (visitor's choice); code, comments, commits in **English**; chat with the owner in **Spanish**; `docs/` in Spanish.
 - Commits: Conventional Commits, one logical change each; push to `main` only when the owner wants it live (every push redeploys).
 - Claude Motion (Team/Enterprise only, no real footage) was rejected for videos in favour of real recordings + Remotion.
 
 ## Open decisions (ask the owner when reached)
 
 - Whether to publish the Remotion polished clips for **all** projects or keep plain screen recordings for the apps that can't be recorded cleanly (Wear OS, Godot).
-- Language of the CV (English only vs. English + Spanish download) and whether to add a Spanish toggle to the site (not planned; site is English-only).
+- Language of the CV (English only vs. English + Spanish download). The site itself is now bilingual.
 - Whether to add the optional WhatsApp contact (course lists it as optional).
 - Whether to keep `/lab` apps as they are or add one more (course doesn't require them; the owner added them as personal extras).
 
