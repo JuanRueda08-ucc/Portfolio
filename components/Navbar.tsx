@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { navLinks, profile } from "@/data/profile";
 import { ThemeToggle } from "@/components/ui/ThemeControls";
 import LangToggle from "@/components/ui/LangToggle";
-import { useT } from "@/lib/i18n";
+import { localize, useLang, useT } from "@/lib/i18n";
 import { onReady } from "@/lib/ready";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -38,6 +38,8 @@ export default function Navbar() {
   const active = useActiveSection();
   const lenis = useLenis();
   const t = useT();
+  const lang = useLang();
+  const me = localize(profile, lang);
 
   // Slide in once the loader is gone.
   useEffect(() => onReady(() => setShown(true)), []);
@@ -108,7 +110,7 @@ export default function Navbar() {
           <LangToggle />
           <ThemeToggle />
           <a
-            href={profile.cv}
+            href={me.cv}
             data-cursor={t.cursor.download}
             download
             className="btn-text rounded-full bg-violet px-4 py-2 text-on-accent transition-transform hover:scale-105"

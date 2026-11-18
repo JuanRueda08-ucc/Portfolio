@@ -203,7 +203,7 @@ export default function Hero() {
         <div data-depth="-10" className="shrink-0">
           <div data-fade className="pointer-events-auto flex gap-3">
             <a
-              href={profile.cv}
+              href={me.cv}
               data-cursor={t.cursor.download}
               download
               className="btn-text rounded-full bg-violet px-6 py-3 whitespace-nowrap text-on-accent transition-transform hover:scale-105"

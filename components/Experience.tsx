@@ -67,16 +67,18 @@ export default function Experience() {
                     className="absolute top-0 bottom-0 left-0 w-px origin-top bg-gradient-to-b from-violet to-ink-3"
                   />
                   {items.map((it) => (
-                    <li key={`${it.start}-${it.end}-${col.type}`} data-item className="relative pb-12 pl-8 last:pb-0">
+                    <li key={it.place} data-item className="relative pb-12 pl-8 last:pb-0">
                       <span
                         data-dot
                         aria-hidden
                         className="absolute top-1.5 -left-[5px] size-2.5 rounded-full bg-violet ring-4 ring-ink"
                       />
                       <div data-body>
-                        <p className="label text-stone">
-                          {it.start} — {it.end === "Present" ? t.experience.present : it.end}
-                        </p>
+                        {(it.start || it.end) && (
+                          <p className="label text-stone">
+                            {it.start} — {it.end === "Present" ? t.experience.present : it.end}
+                          </p>
+                        )}
                         <h4 className="mt-1 font-display text-2xl font-bold tracking-tight">{it.title}</h4>
                         <p className="text-violet-soft">{it.place}</p>
                         {it.description && <p className="mt-2 max-w-md text-sm text-stone">{it.description}</p>}
