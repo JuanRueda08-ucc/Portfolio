@@ -154,6 +154,8 @@ Vigía has a full demo (1:50, 4.4 MB) and a 40-second hover preview (2.1 MB), ma
 
 Vinyl Player has a full local demo (2:15, 1.11 MB). The recording checks insertion at the start, end and second slot, playback, shuffle, repeat and node removal. Both contact sheets were reviewed through the final pause and outro.
 
+**Domain (2026-11-18):** the public address is **https://juano.pages.dev**: a Cloudflare Pages project (`juano`, Direct Upload) whose `deploy/cloudflare-pages/_worker.js` forwards every request to the Vercel site. Hosting stays on Vercel (course requirement). Re-upload that folder only if the Vercel URL changes. **Next:** point the CV links (`scripts/cv/build_cv.py` `PORTFOLIO`) and `lib/site.ts`/metadata at juano.pages.dev; the owner should delete the failed Cloudflare *Worker* also named "juano" (its Git build fails on every push).
+
 **Content state (`data/`):**
 
 | File | State |
