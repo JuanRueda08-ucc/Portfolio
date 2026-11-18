@@ -79,7 +79,7 @@ CONTENT = {
                 "org": "FinanzIA", "place": "Next.js, Java, LangGraph",
                 "title": "Team member · AI finance assistant", "date": "2026",
                 "bullets": [
-                    "Co-built a conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent that records expenses, income, budgets and savings goals.",
+                    "Co-built a conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph agent on the OpenAI API that records expenses, income, budgets and savings goals.",
                 ],
             },
             {
@@ -94,14 +94,14 @@ CONTENT = {
                 "org": "Ecos de la Tierra · Vinyl Player · TickGo", "place": "Godot, JavaScript, Kotlin",
                 "title": "Developer", "date": "2026",
                 "bullets": [
-                    "Ecos de la Tierra (team): 2D pixel-art RPG with action and turn-based combat built in Godot.",
+                    "Ecos de la Tierra (team): 2D pixel-art RPG in Godot whose boss learns with reinforcement learning (Q-learning).",
                     "Vinyl Player: music player whose playlist is a doubly linked list, with an LRU cache and a Web Audio visualizer.",
                     "TickGo: Wear OS app that plans preparation backwards from an event and learns how long the user really takes.",
                 ],
             },
         ],
         "skills": [
-            ("AI: ", "LLM agents (LangGraph), Gemini API, on-device computer vision (MediaPipe), speech recognition (Vosk)."),
+            ("AI: ", "LLM agents with LangGraph and LangChain on the OpenAI API (sub-agents, tool calling, LangSmith), Gemini API, reinforcement learning (Q-learning), on-device computer vision (MediaPipe), speech recognition (Vosk)."),
             ("Programming: ", "Java, Python, JavaScript, TypeScript, Dart, Kotlin, SQL, HTML/CSS."),
             ("Frameworks & tools: ", "React, Next.js, Svelte, Tailwind, Flutter, Electron, Django, Node.js, REST APIs; PostgreSQL, MongoDB, Supabase, Firebase; AWS (Lambda), Git, GitHub."),
             ("Engineering: ", "OOP, data structures, design patterns, software architecture, database design, debugging."),
@@ -161,7 +161,7 @@ CONTENT = {
                 "org": "FinanzIA", "place": "Next.js, Java, LangGraph",
                 "title": "Integrante del equipo · Asistente financiero con IA", "date": "2026",
                 "bullets": [
-                    "Co-desarrollé un asistente de finanzas: chat en Next.js, backend en Java y un agente de IA con LangGraph que registra gastos, ingresos, presupuestos y metas.",
+                    "Co-desarrollé un asistente de finanzas: chat en Next.js, backend en Java y un agente LangGraph sobre OpenAI que registra gastos, ingresos, presupuestos y metas.",
                 ],
             },
             {
@@ -176,14 +176,14 @@ CONTENT = {
                 "org": "Ecos de la Tierra · Vinyl Player · TickGo", "place": "Godot, JavaScript, Kotlin",
                 "title": "Desarrollador", "date": "2026",
                 "bullets": [
-                    "Ecos de la Tierra (en equipo): RPG 2D en pixel art con combate de acción y por turnos, hecho en Godot.",
+                    "Ecos de la Tierra (en equipo): RPG 2D en pixel art en Godot cuyo jefe aprende por refuerzo (Q-learning).",
                     "Vinyl Player: reproductor con lista doblemente enlazada, caché LRU y visualizador Web Audio.",
                     "TickGo: app Wear OS que planea la preparación desde la hora del evento y aprende tus tiempos reales.",
                 ],
             },
         ],
         "skills": [
-            ("IA: ", "agentes con LLM (LangGraph), API de Gemini, visión por computadora (MediaPipe), voz (Vosk)."),
+            ("IA: ", "agentes con LLM en LangGraph y LangChain sobre la API de OpenAI (subagentes, herramientas, LangSmith), API de Gemini, aprendizaje por refuerzo (Q-learning), visión por computadora (MediaPipe), voz (Vosk)."),
             ("Programación: ", "Java, Python, JavaScript, TypeScript, Dart, Kotlin, SQL, HTML/CSS."),
             ("Herramientas: ", "React, Next.js, Svelte, Tailwind, Flutter, Electron, Django, Node.js, APIs REST; PostgreSQL, MongoDB, Supabase, Firebase; AWS (Lambda), Git, GitHub."),
             ("Ingeniería: ", "POO, estructuras de datos, patrones de diseño, arquitectura de software, bases de datos, depuración."),
