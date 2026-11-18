@@ -159,7 +159,7 @@ Vinyl Player has a full local demo (2:15, 1.11 MB). The recording checks inserti
 | `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). Six projects have both a short hover video and a full player video. Vigía is pending the owner's changes. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
 | `profile.ts` | Photo + JR logo done. **Email is a placeholder** (`TODO(Juano)`). |
 | `experience.ts` | **Placeholder** (`TODO(Juano)`) — needs real education + work. |
-| `testimonials.ts` | **Placeholder** (3 fake entries) — need 3 real ones. |
+| `testimonials.ts` | **Real**: 4 testimonials (3 UPB students from the ANCLA project, 1 FinanzIA teammate), English from the owner + Spanish in `es`. |
 | `skills.ts` | Provisional — review with the owner. |
 | `public/cv.pdf` | **Provisional** — owner will provide the current CV; redo in Harvard format. |
 | Contact form | Works in "simulated" mode until `NEXT_PUBLIC_FORMSPREE_ID` is set (in Vercel env vars **and** a local `.env.local`). |
@@ -196,7 +196,7 @@ Agreed with the owner: **record each app for real, then polish with Remotion** (
 Items marked **[owner]** need input only the owner can give — ask in Spanish, don't invent content (especially testimonials and work history: fabricated entries would be dishonest on a graded, public portfolio).
 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
-2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
+2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); confirm `skills.ts` (testimonials done).
 3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
 4. **Full-length demo videos (Codex)** — Chef Digital, FinanzIA, Vinyl Player, Ancla Calma, Ecos de la Tierra and TickGo are complete locally. Vigía is on hold while the owner adjusts the app.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
