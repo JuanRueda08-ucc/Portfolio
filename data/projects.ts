@@ -1,6 +1,7 @@
 import type { Project } from "./types";
 
-// The three main projects first (shown in Featured work, in this order), then the rest.
+// The three main projects first (shown in Featured work, in this order), then the rest by
+// the owner's preference (2026-11-18): Vigía, Ecos de la Tierra, Vinyl Player, TickGo last.
 // Covers live in /public/images/projects/<slug>.webp (1280×800); videos would go in /public/videos/<slug>.mp4.
 // Projects without a live demo link their whole card to the repository.
 export const projects: Project[] = [
@@ -52,20 +53,6 @@ export const projects: Project[] = [
     hue: 18,
   },
   {
-    slug: "tickgo",
-    title: "TickGo",
-    description:
-      "Wear OS app that gets you out the door on time: it plans your prep backwards from the event, walks you through four states with distinct vibrations, learns how long you really take and explains why it nudged you.",
-    es: { description: "App para Wear OS que te ayuda a salir a tiempo: planea tu preparación hacia atrás desde el evento, te guía por cuatro estados con vibraciones distintas, aprende cuánto tardas de verdad y te explica por qué te avisó." },
-    year: 2026,
-    tags: ["Kotlin", "Wear OS", "Voice input"],
-    image: "/images/projects/tickgo.webp",
-    video: "/videos/tickgo.mp4",
-    videoFull: "/videos/tickgo-full.mp4",
-    github: "https://github.com/JuanRueda08-ucc/Smartwatch-project",
-    hue: 200,
-  },
-  {
     slug: "vigia",
     title: "Vigía",
     description:
@@ -76,6 +63,20 @@ export const projects: Project[] = [
     image: "/images/projects/vigia.webp",
     github: "https://github.com/JuanRueda08-ucc/mobile-final-interface",
     hue: 30,
+  },
+  {
+    slug: "ecos-de-la-tierra",
+    title: "Ecos de la Tierra",
+    description:
+      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and only the right ecological skill heals the region.",
+    es: { description: "Proyecto en equipo. Un RPG 2D en pixel art con combate de acción y por turnos: cada monstruo nace de una causa real, como la deforestación, y solo la habilidad ecológica correcta sana la región." },
+    year: 2026,
+    tags: ["Godot 4", "GDScript", "Game design", "Team"],
+    image: "/images/projects/ecos-de-la-tierra.webp",
+    video: "/videos/ecos-de-la-tierra.mp4",
+    videoFull: "/videos/ecos-de-la-tierra-full.mp4",
+    github: "https://github.com/diarpicu2022-commits/ecos-de-la-tierra",
+    hue: 130,
   },
   {
     slug: "vinyl-player",
@@ -93,17 +94,17 @@ export const projects: Project[] = [
     hue: 350,
   },
   {
-    slug: "ecos-de-la-tierra",
-    title: "Ecos de la Tierra",
+    slug: "tickgo",
+    title: "TickGo",
     description:
-      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and only the right ecological skill heals the region.",
-    es: { description: "Proyecto en equipo. Un RPG 2D en pixel art con combate de acción y por turnos: cada monstruo nace de una causa real, como la deforestación, y solo la habilidad ecológica correcta sana la región." },
+      "Wear OS app that gets you out the door on time: it plans your prep backwards from the event, walks you through four states with distinct vibrations, learns how long you really take and explains why it nudged you.",
+    es: { description: "App para Wear OS que te ayuda a salir a tiempo: planea tu preparación hacia atrás desde el evento, te guía por cuatro estados con vibraciones distintas, aprende cuánto tardas de verdad y te explica por qué te avisó." },
     year: 2026,
-    tags: ["Godot 4", "GDScript", "Game design", "Team"],
-    image: "/images/projects/ecos-de-la-tierra.webp",
-    video: "/videos/ecos-de-la-tierra.mp4",
-    videoFull: "/videos/ecos-de-la-tierra-full.mp4",
-    github: "https://github.com/diarpicu2022-commits/ecos-de-la-tierra",
-    hue: 130,
+    tags: ["Kotlin", "Wear OS", "Voice input"],
+    image: "/images/projects/tickgo.webp",
+    video: "/videos/tickgo.mp4",
+    videoFull: "/videos/tickgo-full.mp4",
+    github: "https://github.com/JuanRueda08-ucc/Smartwatch-project",
+    hue: 200,
   },
 ];
