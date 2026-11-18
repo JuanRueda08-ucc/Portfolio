@@ -143,7 +143,7 @@ Keep this section up to date when a phase lands.
 
 **Content state (`data/`):**
 
-Remotion supports two-second chapter cards on segments and an optional six-second closing card with the repository and live demo URLs. The full compositions still need their recordings and chapter timings.
+FinanzIA also has a full local demo (2:52, 1.54 MB) from the owner's recording. Its four chapters cover the workspace, spending, income and savings goals. The login, greeting, sidebar and browser password prompt were masked before rendering; the three contact sheets and outro were reviewed.
 
 | File | State |
 |---|---|
@@ -189,7 +189,7 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
 2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
 3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
-4. **Full-length demo videos (Codex)** — Chef Digital is complete locally. Next: Ancla Calma (owner signs into a temporary browser using a demo account), Vinyl Player, FinanzIA through Remotion, Vigía → TickGo → Ecos de la Tierra.
+4. **Full-length demo videos (Codex)** — Chef Digital and FinanzIA are complete locally. Next: Ancla Calma (owner signs into a temporary browser using a demo account), Vinyl Player, Vigía → TickGo → Ecos de la Tierra.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
 6. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
 7. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.

@@ -27,6 +27,7 @@ export const projects: Project[] = [
     tags: ["Next.js", "LangGraph", "Java", "Team"],
     image: "/images/projects/finanzia.webp",
     video: "/videos/finanzia.mp4",
+    videoFull: "/videos/finanzia-full.mp4",
     github: "https://github.com/Proyecto-final-4",
     demo: "https://frontend-sooty-five-52.vercel.app",
     featured: true,

@@ -90,6 +90,22 @@ export const chefDigital: DemoProps = {
   ],
 };
 
+export const finanziaFull: DemoProps = {
+  clip: "clips/finanzia-full.mp4",
+  title: "FinanzIA",
+  tagline: "A personal finance assistant",
+  url: "frontend-sooty-five-52.vercel.app",
+  bg: ["#09110b", "#21402b"],
+  accent: "#bcff70",
+  segments: [
+    { from: 0, to: 31, rate: 1.15, chapter: "Explore the workspace", caption: "Sign in and review transactions, budgets and goals" },
+    { from: 31, to: 100, rate: 1.3, chapter: "Review spending", caption: "Ask the assistant to record an expense and explain the month" },
+    { from: 100, to: 134, rate: 1.15, chapter: "Record income", caption: "Choose the salary category and confirm the deposit" },
+    { from: 134, to: 190.8, rate: 1.2, chapter: "Track savings goals", caption: "Review the conversation and check the updated goals" },
+  ],
+  outro: { github: "https://github.com/Proyecto-final-4", demo: "https://frontend-sooty-five-52.vercel.app" },
+};
+
 export const chefDigitalFull: DemoProps = {
   ...chefDigital,
   clip: "clips/chef-digital-full.mp4",
