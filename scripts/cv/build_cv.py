@@ -47,8 +47,7 @@ CONTENT = {
                 "title": "Software Developer (React, Vite, Tailwind, Supabase)", "date": "2026",
                 "bullets": [
                     "Turned a UPB design team’s concept into a working emotional-support web app for university students.",
-                    "Built guided breathing, grounding and sensory exercises, crisis help lines and a guide for supporting a peer.",
-                    "Added Supabase accounts with a private journal, voice notes and trusted contacts; deployed on Vercel.",
+                    "Built it end to end with their feedback, from the interface to Supabase accounts, and deployed it on Vercel.",
                 ],
             },
             {
@@ -70,6 +69,13 @@ CONTENT = {
                 ],
             },
             {
+                "org": "Ancla Calma", "place": "React, Vite, Tailwind, Supabase",
+                "title": "Developer · Emotional-support web app (ancla-calma.vercel.app)", "date": "2026",
+                "bullets": [
+                    "Guided breathing, grounding and sensory exercises, crisis help lines, a private journal with voice notes and trusted contacts.",
+                ],
+            },
+            {
                 "org": "FinanzIA", "place": "Next.js, Java, LangGraph",
                 "title": "Team member · AI finance assistant", "date": "2026",
                 "bullets": [
@@ -85,11 +91,12 @@ CONTENT = {
                 ],
             },
             {
-                "org": "Vinyl Player · Ecos de la Tierra", "place": "JavaScript, Godot",
+                "org": "Ecos de la Tierra · Vinyl Player · TickGo", "place": "Godot, JavaScript, Kotlin",
                 "title": "Developer", "date": "2026",
                 "bullets": [
-                    "Vinyl Player: music player whose playlist is a doubly linked list, with an LRU cache and a Web Audio visualizer.",
                     "Ecos de la Tierra (team): 2D pixel-art RPG with action and turn-based combat built in Godot.",
+                    "Vinyl Player: music player whose playlist is a doubly linked list, with an LRU cache and a Web Audio visualizer.",
+                    "TickGo: Wear OS app that plans preparation backwards from an event and learns how long the user really takes.",
                 ],
             },
         ],
@@ -122,8 +129,7 @@ CONTENT = {
                 "title": "Desarrollador de software (React, Vite, Tailwind, Supabase)", "date": "2026",
                 "bullets": [
                     "Convertí el concepto de un equipo de diseño de la UPB en una app web de apoyo emocional.",
-                    "Desarrollé ejercicios guiados de calma, líneas de ayuda en crisis y una guía para acompañar a otros.",
-                    "Agregué cuentas con Supabase, bitácora, notas de voz y contactos de confianza; publicada en Vercel.",
+                    "La construí de punta a punta con sus comentarios, de la interfaz a las cuentas en Supabase, y la publiqué en Vercel.",
                 ],
             },
             {
@@ -145,6 +151,13 @@ CONTENT = {
                 ],
             },
             {
+                "org": "Ancla Calma", "place": "React, Vite, Tailwind, Supabase",
+                "title": "Desarrollador · App web de apoyo emocional (ancla-calma.vercel.app)", "date": "2026",
+                "bullets": [
+                    "Ejercicios guiados de respiración y grounding, líneas de ayuda en crisis, bitácora con notas de voz y contactos de confianza.",
+                ],
+            },
+            {
                 "org": "FinanzIA", "place": "Next.js, Java, LangGraph",
                 "title": "Integrante del equipo · Asistente financiero con IA", "date": "2026",
                 "bullets": [
@@ -160,11 +173,12 @@ CONTENT = {
                 ],
             },
             {
-                "org": "Vinyl Player · Ecos de la Tierra", "place": "JavaScript, Godot",
+                "org": "Ecos de la Tierra · Vinyl Player · TickGo", "place": "Godot, JavaScript, Kotlin",
                 "title": "Desarrollador", "date": "2026",
                 "bullets": [
-                    "Vinyl Player: reproductor con lista doblemente enlazada, caché LRU y visualizador Web Audio.",
                     "Ecos de la Tierra (en equipo): RPG 2D en pixel art con combate de acción y por turnos, hecho en Godot.",
+                    "Vinyl Player: reproductor con lista doblemente enlazada, caché LRU y visualizador Web Audio.",
+                    "TickGo: app Wear OS que planea la preparación desde la hora del evento y aprende tus tiempos reales.",
                 ],
             },
         ],
@@ -259,7 +273,14 @@ def build_body(lang, rels):
     out.append(heading(s["exp"]))
     entries(c["experience"])
     out.append(heading(s["projects"]))
-    entries(c["projects"])
+    # Projects: one header line (name · stack, year); the bullets say what each one is.
+    for j, e in enumerate(c["projects"]):
+        if j:
+            out.append(spacer())
+        out.append(para([run(e["org"], bold=True), run("  ·  " + e["place"], italic=True), tab(), run(e["date"])],
+                        f"<w:keepNext/>{RIGHT_TAB}<w:spacing w:before=\"0\" w:after=\"0\"/><w:ind w:left=\"119\"/>"))
+        for b in e.get("bullets", []):
+            out.append(bullet(b))
     out.append(heading(s["skills"]))
     for label, text in c["skills"]:
         out.append(body([run(label, bold=True), run(text)]))
