@@ -4,6 +4,8 @@ export type Segment = {
   to: number;
   /** Playback speed of this stretch (navigation goes faster, the good parts at 1×). */
   rate: number;
+  /** Show this title card immediately before the segment. */
+  chapter?: string;
   caption?: string;
   /** Put the caption at the top when the action is at the bottom of the screen. */
   captionTop?: boolean;
@@ -20,10 +22,13 @@ export type DemoProps = {
   bg: [string, string];
   accent: string;
   segments: Segment[];
+  outro?: { github: string; demo?: string };
 };
 
 export const FPS = 30;
 export const INTRO = 36; // frames of title card before the clip slides in
+export const CHAPTER = FPS * 2;
+export const OUTRO = FPS * 6;
 
 export const anclaCalma: DemoProps = {
   clip: "clips/ancla-calma.mp4",
@@ -86,4 +91,16 @@ export const chefDigital: DemoProps = {
 
 /** Frames a list of segments takes once each runs at its own speed. */
 export const segmentFrames = (s: Segment) => Math.round(((s.to - s.from) * FPS) / s.rate);
-export const totalFrames = (p: DemoProps) => INTRO + p.segments.reduce((n, s) => n + segmentFrames(s), 0);
+export function timeline(p: DemoProps) {
+  let at = INTRO;
+  const parts = p.segments.map((s) => {
+    const cardStart = at;
+    if (s.chapter) at += CHAPTER;
+    const start = at;
+    at += segmentFrames(s);
+    return { s, cardStart, start };
+  });
+  return { parts, outroStart: at, duration: at + (p.outro ? OUTRO : 0) };
+}
+
+export const totalFrames = (p: DemoProps) => timeline(p).duration;

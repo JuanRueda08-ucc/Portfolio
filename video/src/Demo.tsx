@@ -9,7 +9,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { FPS, INTRO, segmentFrames, type DemoProps, type Segment } from "./apps";
+import { CHAPTER, FPS, INTRO, OUTRO, segmentFrames, timeline, type DemoProps, type Segment } from "./apps";
 
 // The recording is 1440×900; on the 1280×800 canvas it sits in a browser window.
 const SRC = { w: 1440, h: 900 };
@@ -26,12 +26,7 @@ export const Demo: React.FC<DemoProps> = (p) => {
   const winTop = (height - CLIP.h - BAR) / 2;
   const titleOut = interpolate(frame, [INTRO - 12, INTRO + 4], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  let at = INTRO;
-  const parts = p.segments.map((s) => {
-    const start = at;
-    at += segmentFrames(s);
-    return { s, start };
-  });
+  const { parts, outroStart } = timeline(p);
 
   return (
     <AbsoluteFill style={{ background: `radial-gradient(120% 90% at 20% 110%, ${p.bg[1]}, ${p.bg[0]} 70%)`, fontFamily: FONT }}>
@@ -104,9 +99,34 @@ export const Demo: React.FC<DemoProps> = (p) => {
           </Sequence>
         ) : null,
       )}
+      {parts.map(({ s, cardStart }) => s.chapter && (
+        <Sequence key={cardStart} from={cardStart} durationInFrames={CHAPTER}>
+          <TitleCard title={s.chapter} background={p.bg[0]} accent={p.accent} />
+        </Sequence>
+      ))}
+      {p.outro && (
+        <Sequence from={outroStart} durationInFrames={OUTRO}>
+          <TitleCard title={p.title} background={p.bg[0]} accent={p.accent}>
+            <div>{p.outro.github.replace(/^https?:\/\//, "")}</div>
+            {p.outro.demo && <div>{p.outro.demo.replace(/^https?:\/\//, "")}</div>}
+          </TitleCard>
+        </Sequence>
+      )}
     </AbsoluteFill>
   );
 };
+
+function TitleCard({ title, background, accent, children }: {
+  title: string; background: string; accent: string; children?: React.ReactNode;
+}) {
+  return (
+    <AbsoluteFill style={{ background, color: "white", alignItems: "center", justifyContent: "center", gap: 24 }}>
+      <div style={{ width: 64, height: 4, background: accent }} />
+      <div style={{ fontSize: 62, fontWeight: 700, letterSpacing: -2 }}>{title}</div>
+      {children && <div style={{ fontSize: 27, textAlign: "center", lineHeight: 1.6 }}>{children}</div>}
+    </AbsoluteFill>
+  );
+}
 
 /** One stretch of the recording, at its speed, with an optional eased zoom. */
 const Clip: React.FC<{ clip: string; s: Segment }> = ({ clip, s }) => {

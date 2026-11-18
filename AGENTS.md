@@ -142,6 +142,9 @@ Keep this section up to date when a phase lands.
 **Git:** branch `main`. Pushing to `main` redeploys on Vercel. Watch demo now loads `videoFull ?? video` on open. The four existing previews still serve the cards. The first full recording is Chef Digital, pending owner approval of the chapter script.
 
 **Content state (`data/`):**
+
+Remotion supports two-second chapter cards on segments and an optional six-second closing card with the repository and live demo URLs. The full compositions still need their recordings and chapter timings.
+
 | File | State |
 |---|---|
 | `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). **FinanzIA, Ancla Calma and Vinyl Player have videos** (`/videos/<slug>.mp4`); the rest don't yet. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
