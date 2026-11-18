@@ -15,7 +15,8 @@ export default function VideoButton({ project, className = "" }: { project: Proj
   const [origin, setOrigin] = useState<{ x: number; y: number } | null>(null);
   const button = useRef<HTMLButtonElement>(null);
 
-  if (!project.video) return null;
+  const src = project.videoFull ?? project.video;
+  if (!src) return null;
 
   const open = () => {
     const b = button.current!.getBoundingClientRect();
@@ -43,6 +44,7 @@ export default function VideoButton({ project, className = "" }: { project: Proj
             {origin && (
               <Player
                 project={project}
+                src={src}
                 origin={origin}
                 onClose={() => {
                   setOrigin(null);
@@ -57,7 +59,7 @@ export default function VideoButton({ project, className = "" }: { project: Proj
   );
 }
 
-function Player({ project, origin, onClose }: { project: Project; origin: { x: number; y: number }; onClose: () => void }) {
+function Player({ project, src, origin, onClose }: { project: Project; src: string; origin: { x: number; y: number }; onClose: () => void }) {
   const lenis = useLenis();
   const reduce = useReducedMotion();
   const close = useRef<HTMLButtonElement>(null);
@@ -114,7 +116,8 @@ function Player({ project, origin, onClose }: { project: Project; origin: { x: n
           </button>
         </div>
         <video
-          src={project.video}
+          src={src}
+          preload="none"
           poster={project.image}
           controls
           autoPlay

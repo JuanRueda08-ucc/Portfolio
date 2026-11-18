@@ -8,6 +8,8 @@ export type Project = {
   image?: string;
   /** Short video (MP4/WebM) in /public/videos */
   video?: string;
+  /** Full walkthrough for the Watch demo player. */
+  videoFull?: string;
   github: string;
   /** Live demo; projects without one link to the repository instead. */
   demo?: string;
