@@ -42,6 +42,7 @@ const en = {
     logoLabel: (name: string) => `${name}'s JR monogram, drawn with lines`,
   },
   projects: {
+    project: "Project",
     featured: "Featured work",
     all: "All work",
     index: "Project index",
@@ -132,6 +133,7 @@ const es: Messages = {
     logoLabel: (name: string) => `Monograma JR de ${name}, dibujado con líneas`,
   },
   projects: {
+    project: "Proyecto",
     featured: "Proyectos destacados",
     all: "Todos los proyectos",
     index: "Índice de proyectos",

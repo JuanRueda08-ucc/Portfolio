@@ -122,22 +122,24 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
         {/* Details of the centered project */}
         <div
           key={current.slug}
-          className="absolute inset-x-0 mx-auto max-w-md animate-fade-up px-4 text-center"
+          // Spans from under the cards to the bottom of the screen; the description
+          // shrinks (clamped) so the buttons always stay visible.
+          className="absolute inset-x-0 bottom-4 mx-auto flex max-w-md animate-fade-up flex-col items-center px-4 text-center lg:bottom-6"
           style={{ top: `calc(${TOP} + ${details}px)` }}
         >
           <p className="label text-stone">
-            (Project {pad(active + 1)}) · {current.year}
+            ({t.projects.project} {pad(active + 1)}) · {current.year}
           </p>
           <h3 className="mt-2 font-display text-3xl font-bold tracking-tight lg:text-4xl">{current.title}</h3>
-          <p className="mt-3 text-sm text-cream/85">{current.description}</p>
-          <ul className="mt-4 flex flex-wrap justify-center gap-2">
+          <p className="mt-2 line-clamp-3 min-h-0 shrink overflow-hidden text-sm text-cream/85">{current.description}</p>
+          <ul className="mt-3 flex shrink-0 flex-wrap justify-center gap-2">
             {current.tags.map((t) => (
               <li key={t} className="rounded-full bg-violet/15 px-2.5 py-0.5 font-mono text-[11px] text-violet-soft">
                 {t}
               </li>
             ))}
           </ul>
-          <div className="mt-6 flex flex-wrap justify-center gap-2 [&>*]:whitespace-nowrap">
+          <div className="mt-4 flex shrink-0 flex-wrap justify-center gap-2 [&>*]:whitespace-nowrap">
             <a
               href={current.github}
               target="_blank"
