@@ -25,8 +25,8 @@ export const projects: Project[] = [
     slug: "finanzia",
     title: "FinanzIA",
     description:
-      "Team project. Conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent.",
-    es: { description: "Proyecto en equipo. Asistente conversacional de finanzas personales: un chat en Next.js con un backend-for-frontend seguro, un backend en Java y un agente de IA con LangGraph." },
+      "Team project. Conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent on the OpenAI API.",
+    es: { description: "Proyecto en equipo. Asistente conversacional de finanzas personales: un chat en Next.js con un backend-for-frontend seguro, un backend en Java y un agente de IA con LangGraph sobre la API de OpenAI." },
     year: 2026,
     tags: ["Next.js", "LangGraph", "Java", "Team"],
     image: "/images/projects/finanzia.webp",
@@ -68,8 +68,8 @@ export const projects: Project[] = [
     slug: "ecos-de-la-tierra",
     title: "Ecos de la Tierra",
     description:
-      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and only the right ecological skill heals the region.",
-    es: { description: "Proyecto en equipo. Un RPG 2D en pixel art con combate de acción y por turnos: cada monstruo nace de una causa real, como la deforestación, y solo la habilidad ecológica correcta sana la región." },
+      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and the boss learns how you fight through reinforcement learning (Q-learning).",
+    es: { description: "Proyecto en equipo. Un RPG 2D en pixel art con combate de acción y por turnos: cada monstruo nace de una causa real, como la deforestación, y el jefe aprende cómo peleas mediante aprendizaje por refuerzo (Q-learning)." },
     year: 2026,
     tags: ["Godot 4", "GDScript", "Game design", "Team"],
     image: "/images/projects/ecos-de-la-tierra.webp",
