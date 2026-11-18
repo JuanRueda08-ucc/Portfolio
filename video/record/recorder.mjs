@@ -109,13 +109,14 @@ function makeApi(page, start) {
   let pos = { ...start };
   const wait = (ms) => page.waitForTimeout(ms);
   const moveTo = async (x, y, ms = 650) => {
-    const steps = Math.max(8, Math.round(ms / 16));
+    const began = performance.now();
     const from = { ...pos };
-    for (let i = 1; i <= steps; i++) {
-      const k = i / steps;
+    while (true) {
+      const k = Math.min(1, (performance.now() - began) / ms);
       const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; // easeInOutCubic
       await page.mouse.move(from.x + (x - from.x) * e, from.y + (y - from.y) * e);
-      await wait(ms / steps);
+      if (k === 1) break;
+      await wait(16);
     }
     pos = { x, y };
   };

@@ -34,3 +34,9 @@ ffmpeg -i out/<slug>.mp4 -an -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p 
 
 Then add `video: "/videos/<slug>.mp4"` to the project in `../data/projects.ts` (the cover image stays the thumbnail).
 `raw/`, `out/` and `public/clips/` are git-ignored.
+
+### Full walkthroughs
+
+Run `node record/chef-digital-full.mjs` from this directory in PowerShell. Copy the resulting MP4 from `raw/` to `public/clips/` and use the chapter times printed by the script to update the cut in `src/apps.ts`.
+
+For compositions with a static window, `node render-full.mjs chef-digital-full "--browser-executable=C:/Program Files/Google/Chrome/Application/chrome.exe"` renders the title, window, captions, chapter cards and outro with Remotion. ffmpeg composites the recording at each segment's specified speed and writes the web-ready H.264 file to `out/`. Review the contact sheets before copying it to the site's `public/videos/` and setting `videoFull`.

@@ -41,6 +41,7 @@ export const projects: Project[] = [
     tags: ["Electron", "Svelte", "TypeScript", "Supabase"],
     image: "/images/projects/chef-digital.webp",
     video: "/videos/chef-digital.mp4",
+    videoFull: "/videos/chef-digital-full.mp4",
     github: "https://github.com/JuanRueda08-ucc/assistant-chef-desktop",
     featured: true,
     hue: 18,

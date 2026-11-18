@@ -139,7 +139,7 @@ Keep this section up to date when a phase lands.
 
 **Everything required by the course is built and deployed** (all sections, responsive, a11y, SEO). What remains is mostly **real content** from the owner, **project videos**, and optional polish. The site works end to end with placeholders where content is missing.
 
-**Git:** branch `main`. Pushing to `main` redeploys on Vercel. Watch demo now loads `videoFull ?? video` on open. The four existing previews still serve the cards. The first full recording is Chef Digital, pending owner approval of the chapter script.
+**Git:** branch `main`. Pushing to `main` redeploys on Vercel. Watch demo loads `videoFull ?? video` on open. Chef Digital has a full local demo (3:52, 3.41 MB); the four existing previews still serve the cards. Its four contact sheets were reviewed, including the in-step technique question, timer controls, all nine steps, saved recipe, dark mode and GitHub outro.
 
 **Content state (`data/`):**
 
@@ -189,7 +189,7 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
 2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); 3 real testimonials with name/relation/quote; confirm `skills.ts`.
 3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
-4. **Full-length demo videos (Codex)** — player support is ready. Record Chef Digital after script approval, then Ancla Calma, Vinyl Player, FinanzIA through Remotion, Vigía → TickGo → Ecos de la Tierra. **[owner]** demo accounts for login-only flows.
+4. **Full-length demo videos (Codex)** — Chef Digital is complete locally. Next: Ancla Calma (owner signs into a temporary browser using a demo account), Vinyl Player, FinanzIA through Remotion, Vigía → TickGo → Ecos de la Tierra.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
 6. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
 7. **Final QA pass** before delivery: Lighthouse on `portfolio-prod`, 375/768/1280/1920 px with no horizontal scroll, `prefers-reduced-motion`, keyboard focus, every link (GitHub + demo) opens, favicon/OG image, `docs/requisitos-profesor.md` checklist re-ticked. Update the Lighthouse table there.

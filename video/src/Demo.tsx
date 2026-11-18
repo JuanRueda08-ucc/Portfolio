@@ -9,11 +9,11 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { CHAPTER, FPS, INTRO, OUTRO, segmentFrames, timeline, type DemoProps, type Segment } from "./apps";
+import { CHAPTER, FPS, INTRO, OUTRO, WINDOW, segmentFrames, timeline, type DemoProps, type Segment } from "./apps";
 
 // The recording is 1440×900; on the 1280×800 canvas it sits in a browser window.
 const SRC = { w: 1440, h: 900 };
-const CLIP = { w: 1088, h: 680 };
+const CLIP = { w: WINDOW.width, h: WINDOW.height };
 const BAR = 30;
 const FONT = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
@@ -85,7 +85,7 @@ export const Demo: React.FC<DemoProps> = (p) => {
         <div style={{ position: "relative", width: CLIP.w, height: CLIP.h, overflow: "hidden" }}>
           {parts.map(({ s, start }) => (
             <Sequence key={s.from} from={start} durationInFrames={segmentFrames(s)} layout="none">
-              <Clip clip={p.clip} s={s} />
+              {p.clip && <Clip clip={p.clip} s={s} />}
             </Sequence>
           ))}
         </div>
@@ -95,7 +95,7 @@ export const Demo: React.FC<DemoProps> = (p) => {
       {parts.map(({ s, start }) =>
         s.caption ? (
           <Sequence key={"c" + s.from} from={start} durationInFrames={segmentFrames(s)} layout="none">
-            <Caption text={s.caption} accent={p.accent} pos={s.captionTop ? { top: winTop + BAR + 22 } : { bottom: height - (winTop + BAR + CLIP.h) + 22 }} />
+            <Caption text={s.caption} accent={p.accent} pos={p.outro ? { bottom: 0 } : s.captionTop ? { top: winTop + BAR + 22 } : { bottom: height - (winTop + BAR + CLIP.h) + 22 }} />
           </Sequence>
         ) : null,
       )}
@@ -150,7 +150,7 @@ const Clip: React.FC<{ clip: string; s: Segment }> = ({ clip, s }) => {
         trimBefore={Math.round(s.from * FPS)}
         playbackRate={s.rate}
         muted
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ width: "100%", height: "100%", objectFit: "contain" }}
       />
     </div>
   );

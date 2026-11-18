@@ -26,6 +26,7 @@ export type DemoProps = {
 };
 
 export const FPS = 30;
+export const WINDOW = { x: 96, y: 75, width: 1088, height: 680 };
 export const INTRO = 36; // frames of title card before the clip slides in
 export const CHAPTER = FPS * 2;
 export const OUTRO = FPS * 6;
@@ -86,6 +87,25 @@ export const chefDigital: DemoProps = {
     { from: 62, to: 72, rate: 1.5, caption: "What you have, and what is missing" },
     { from: 72, to: 82, rate: 1.1, caption: "Cook step by step with the chef's tips" },
     { from: 82, to: 89.4, rate: 1, caption: "Built-in timers for every step", zoom: { x: 1425, y: 200, scale: 1.45 } },
+  ],
+};
+
+export const chefDigitalFull: DemoProps = {
+  ...chefDigital,
+  clip: "clips/chef-digital-full.mp4",
+  outro: { github: "https://github.com/JuanRueda08-ucc/assistant-chef-desktop" },
+  segments: [
+    { from: 0, to: 4, rate: 1, chapter: "Welcome", caption: "Plan a meal from what you already have" },
+    { from: 13, to: 17, rate: 1 },
+    { from: 24, to: 27, rate: 1 },
+    { from: 114, to: 120, rate: 1 },
+    { from: 210, to: 242.96, rate: 1.1, chapter: "Build your pantry", caption: "Tell the chef what you have, then add vegetables and adjust servings" },
+    { from: 242.96, to: 263.2, rate: 1.1, chapter: "Ask the chef", caption: "Compare pantry matches with ideas from the chef" },
+    { from: 263.2, to: 292.5, rate: 1.05, chapter: "Cook all nine steps", caption: "Ask about a technique without leaving the current step", captionTop: true },
+    { from: 292.5, to: 317.15, rate: 1, captionTop: true },
+    { from: 317.15, to: 352.2, rate: 1.1 },
+    { from: 352.2, to: 407.6, rate: 1.25, chapter: "Save a chef idea", caption: "Finish the suggested dish and reopen it from your collection", captionTop: true },
+    { from: 407.6, to: 429, rate: 1.12, chapter: "Make it yours", caption: "Visit the local profile and return home in dark mode" },
   ],
 };
 
