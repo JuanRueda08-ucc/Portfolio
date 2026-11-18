@@ -164,7 +164,7 @@ Vinyl Player has a full local demo (2:15, 1.11 MB). The recording checks inserti
 | `testimonials.ts` | **Real**: 4 testimonials (3 UPB students from the ANCLA project, 1 FinanzIA teammate), English from the owner + Spanish in `es`. |
 | `skills.ts` | From the owner's LinkedIn skills + project stacks (4 groups; keep 4, the Skills timeline is tuned for it). |
 | `public/cv.pdf`, `public/cv-es.pdf` | **Harvard format**, one page each, built by `python scripts/cv/build_cv.py` from Harvard's 2025 bullet template (`scripts/cv/harvard-template.docx`; content lives in the script) → editable `docs/cv/CV-Juan-Rueda-{en,es}.docx`, PDF via Microsoft Word COM. The download button serves the one for the current language (`profile.es.cv`). Keep each PDF to **one page** (check with PyMuPDF). Owner's choices (2026-11-18): headline **Software Engineer & AI Engineer** (site role "Software & AI Engineer"); Ancla Calma under Experience **and** Projects; CV projects = Vigía, Ancla Calma, FinanzIA, Chef Digital, then Ecos · Vinyl Player · TickGo (TickGo always last: owner sees it as the most basic). Project headers are one line (name · stack, year) to keep one page; Bayswater in the language line. |
-| Contact form | Works in "simulated" mode until `NEXT_PUBLIC_FORMSPREE_ID` is set (in Vercel env vars **and** a local `.env.local`). |
+| Contact form | **Live** through Formspree (`NEXT_PUBLIC_FORMSPREE_ID=xgakkqzl` in Vercel and `.env.local`); without the variable it falls back to simulated sending. |
 
 ## Project video pipeline (`video/`)
 
@@ -199,7 +199,7 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
 2. **[owner] Confirm** the Bayswater College course dates (CV and Experience show none) and whether the CV should include a phone number (left out on purpose: the PDF is public). CV, email, experience, skills and testimonials are done.
-3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
+3. ~~Formspree~~ — **done 2026-11-18**: form `xgakkqzl` (public by design, saved as a *Config* variable in Vercel for all environments, and in the git-ignored `.env.local`); live bundle verified, a test message was accepted. The form sends `_subject` and has a `_gotcha` honeypot.
 4. **Full-length demo videos** — all seven done. Vigía shipped 2026-11-18 in Claude's Remotion style (owner's favourite). Optional: redo the six Codex full videos in that style (real Remotion render with zooms and tap/click marks instead of `render-full.mjs` plates) — ask the owner first.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
 6. **Live demos** — when TickGo / Chef Digital / Vigía / Ecos get a public link, add `demo` to their entry.
