@@ -1,7 +1,10 @@
+"use client";
+
 import SectionHeading from "@/components/ui/SectionHeading";
 import TestimonialSlider from "@/components/ui/TestimonialSlider";
 import { testimonials } from "@/data/testimonials";
 import type { Testimonial } from "@/data/types";
+import { localize, useLang, useT } from "@/lib/i18n";
 
 const initials = (name: string) =>
   name
@@ -40,15 +43,18 @@ function Card({ t }: { t: Testimonial }) {
  * can be paused, or a dot jumps to one testimonial.
  */
 export default function Testimonials() {
+  const lang = useLang();
+  const t = useT();
+  const list = testimonials.map((x) => localize(x, lang));
   return (
     <section id="testimonials" className="overflow-hidden py-32">
       <div className="mx-auto max-w-6xl px-4 md:px-10">
-        <SectionHeading title="Kind words" kicker="(04)" meta={`(${String(testimonials.length).padStart(2, "0")})`} />
+        <SectionHeading title={t.testimonials.title} kicker="(04)" meta={`(${String(list.length).padStart(2, "0")})`} />
       </div>
 
       <TestimonialSlider>
-        {testimonials.map((t, i) => (
-          <Card key={i} t={t} />
+        {list.map((x, i) => (
+          <Card key={i} t={x} />
         ))}
       </TestimonialSlider>
     </section>

@@ -6,6 +6,7 @@
    apply; the code is kept as published apart from the props marked "portfolio" below. */
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n";
 
 /* ══ Step player ══════════════════════════════════════════
    A row of dots and a play button. The dot for the current
@@ -327,6 +328,7 @@ export function StepPlayer({
   label?: string;
   hold?: boolean;
 } = {}) {
+  const t = useT(); // portfolio: translated play/pause label
   const n = clamp(Math.round(steps), MIN_STEPS, MAX_STEPS);
   const still = stillness();
   const wk = wakeOf(clamp(wake, 0, 100) / 100);
@@ -553,7 +555,7 @@ export function StepPlayer({
             type="button"
             className="spl-go"
             onClick={toggle}
-            aria-label={playing ? "Pause" : "Play"}
+            aria-label={playing ? t.player.pause : t.player.play}
           >
             <Mark playing={playing} size={14} still={still} />
           </button>

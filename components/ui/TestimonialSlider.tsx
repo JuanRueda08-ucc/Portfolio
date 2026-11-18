@@ -2,6 +2,7 @@
 
 import { Children, useCallback, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { StepPlayer } from "@/components/ui/StepPlayer";
+import { useT } from "@/lib/i18n";
 
 /**
  * The testimonials as a slow slideshow driven by <StepPlayer>: it glides on its own
@@ -10,6 +11,7 @@ import { StepPlayer } from "@/components/ui/StepPlayer";
  */
 export default function TestimonialSlider({ children, pace = 6 }: { children: ReactNode; pace?: number }) {
   const items = Children.toArray(children);
+  const t = useT();
   const viewport = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLUListElement>(null);
   const [at, setAt] = useState(0);
@@ -63,7 +65,7 @@ export default function TestimonialSlider({ children, pace = 6 }: { children: Re
       </div>
 
       <div className="mt-10 flex justify-center">
-        <StepPlayer steps={items.length} pace={pace} autoPlay loop onStep={onStep} hold={!inView} label="Testimonial" />
+        <StepPlayer steps={items.length} pace={pace} autoPlay loop onStep={onStep} hold={!inView} label={t.testimonials.step} />
       </div>
     </div>
   );

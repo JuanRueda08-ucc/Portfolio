@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import SocialIcon from "@/components/ui/SocialIcon";
 import SplitReveal from "@/components/ui/SplitReveal";
 import { profile, socials } from "@/data/profile";
+import { useT } from "@/lib/i18n";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -12,6 +13,7 @@ const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID;
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
+  const t = useT();
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,9 +46,9 @@ export default function Contact() {
         <div>
           <p className="label mb-3 text-violet-soft">(07)</p>
           <SplitReveal className="font-display text-6xl font-bold tracking-tight md:text-8xl">
-            Let&apos;s talk<span className="text-violet">.</span>
+            {t.contact.title}<span className="text-violet">.</span>
           </SplitReveal>
-          <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
+          <a href={`mailto:${profile.email}`} data-cursor={t.cursor.sayHi} className="mt-8 inline-block text-xl underline decoration-violet underline-offset-4">
             {profile.email}
           </a>
           <ul className="mt-6 flex flex-wrap gap-3">
@@ -68,28 +70,28 @@ export default function Contact() {
 
         <form onSubmit={onSubmit} className="grid gap-4">
           <label className="grid gap-2 text-sm">
-            Name
-            <input name="name" required minLength={2} placeholder="Your name" className={field} />
+            {t.contact.name}
+            <input name="name" required minLength={2} placeholder={t.contact.namePh} className={field} />
           </label>
           <label className="grid gap-2 text-sm">
-            Email
-            <input name="email" type="email" required placeholder="you@email.com" className={field} />
+            {t.contact.email}
+            <input name="email" type="email" required placeholder={t.contact.emailPh} className={field} />
           </label>
           <label className="grid gap-2 text-sm">
-            Message
-            <textarea name="message" required minLength={10} rows={5} placeholder="Hi! I'd love to…" className={field} />
+            {t.contact.message}
+            <textarea name="message" required minLength={10} rows={5} placeholder={t.contact.messagePh} className={field} />
           </label>
           <button
             type="submit"
             disabled={status === "sending"}
             className="rounded-full bg-violet py-3.5 btn-text text-on-accent transition-opacity disabled:opacity-60"
           >
-            {status === "sending" ? "Sending…" : "Send message"}
+            {status === "sending" ? t.contact.sending : t.contact.send}
           </button>
           <p role="status" aria-live="polite" className="min-h-6 text-sm">
-            {status === "sent" && <span className="text-violet-soft">Message sent! I&apos;ll get back to you soon.</span>}
+            {status === "sent" && <span className="text-violet-soft">{t.contact.sent}</span>}
             {status === "error" && (
-              <span className="text-red-400">Something went wrong. Try again or email me directly.</span>
+              <span className="text-red-400">{t.contact.error}</span>
             )}
           </p>
         </form>

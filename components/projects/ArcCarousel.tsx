@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useState, useSyncExternalStore } from "react";
 import type { Project } from "@/data/types";
+import { useT } from "@/lib/i18n";
 import ProjectMedia from "./ProjectMedia";
 import VideoButton from "./VideoButton";
 
@@ -30,6 +31,7 @@ const getSize = () => (window.matchMedia(SM_QUERY).matches ? "sm" : "lg");
  * and its details appear underneath.
  */
 export default function ArcCarousel({ projects }: { projects: Project[] }) {
+  const t = useT();
   const root = useRef<HTMLElement>(null);
   const wheel = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -59,13 +61,13 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
   return (
     <section
       ref={root}
-      aria-label="All work"
+      aria-label={t.projects.all}
       className="relative"
       style={{ height: `${n * 55 + 60}svh` }}
     >
       <div className="sticky top-0 h-svh overflow-hidden px-4 pt-24 lg:px-10 lg:pt-28">
         <div className="flex items-start justify-between">
-          <h2 className="font-display text-4xl font-bold tracking-tight lg:text-6xl">All work</h2>
+          <h2 className="font-display text-4xl font-bold tracking-tight lg:text-6xl">{t.projects.all}</h2>
           <span className="label text-stone">
             ({pad(active + 1)} / {pad(n)})
           </span>
@@ -90,7 +92,7 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
               href={p.demo ?? p.github}
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="View project"
+              data-cursor={t.cursor.view}
               tabIndex={i === active ? 0 : -1}
               aria-hidden={i !== active}
               className="absolute block"
@@ -140,10 +142,10 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
               href={current.github}
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="Code"
+              data-cursor={t.cursor.code}
               className="btn-text rounded-full border border-ink-3 px-4 py-2 hover:border-violet"
             >
-              GitHub ↗
+              {t.projects.github}
             </a>
             <VideoButton project={current} />
             {current.demo && (
@@ -151,10 +153,10 @@ export default function ArcCarousel({ projects }: { projects: Project[] }) {
               href={current.demo}
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="Live"
+              data-cursor={t.cursor.live}
               className="btn-text rounded-full bg-violet-bright px-4 py-2 text-on-accent"
             >
-              Visit project ↗
+              {t.projects.visit}
             </a>
             )}
           </div>

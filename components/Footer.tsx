@@ -7,6 +7,8 @@ import PixelField from "@/components/ui/PixelField";
 import SocialIcon from "@/components/ui/SocialIcon";
 import { AccentSwatches, ThemeToggle } from "@/components/ui/ThemeControls";
 import { navLinks, profile, socials } from "@/data/profile";
+import { useT } from "@/lib/i18n";
+import LangToggle from "@/components/ui/LangToggle";
 
 // Live clock: null on the server, ticks every second in the browser.
 const subscribe = (cb: () => void) => {
@@ -16,20 +18,21 @@ const subscribe = (cb: () => void) => {
 const getSnapshot = () => Math.floor(Date.now() / 1000);
 const getServerSnapshot = () => null;
 
-function useClock(timeZone: string) {
+function useClock(timeZone: string, locale: string) {
   const seconds = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   if (seconds === null) return { time: "--:--:--", date: "", year: "" };
   const now = new Date(seconds * 1000);
   return {
-    time: now.toLocaleTimeString("en-US", { timeZone, hour: "2-digit", minute: "2-digit", second: "2-digit" }),
-    date: now.toLocaleDateString("en-US", { timeZone, weekday: "long", day: "numeric", month: "short", year: "numeric" }),
+    time: now.toLocaleTimeString(locale, { timeZone, hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+    date: now.toLocaleDateString(locale, { timeZone, weekday: "long", day: "numeric", month: "short", year: "numeric" }),
     year: String(now.getFullYear()),
   };
 }
 
 export default function Footer() {
   const lenis = useLenis();
-  const { time, date, year } = useClock(profile.timezone);
+  const t = useT();
+  const { time, date, year } = useClock(profile.timezone, t.footer.locale);
 
   return (
     <footer className="border-t border-ink-3 px-4 pt-20 md:px-10">
@@ -39,7 +42,7 @@ export default function Footer() {
             {navLinks.map((l) => (
               <li key={l.id}>
                 <a href={`#${l.id}`} className="font-display text-4xl font-bold tracking-tight hover:text-violet md:text-5xl">
-                  {l.label}
+                  {t.nav[l.id]}
                 </a>
               </li>
             ))}
@@ -47,7 +50,7 @@ export default function Footer() {
               <Link
                 href="/lab"
                 transitionTypes={["page-card"]}
-                data-cursor="Play"
+                data-cursor={t.cursor.play}
                 className="font-display text-4xl font-bold tracking-tight text-violet-soft hover:text-violet-bright md:text-5xl"
               >
                 Lab ✦
@@ -57,14 +60,15 @@ export default function Footer() {
           <div className="space-y-4 md:text-right">
             {/* Quick theme: accent presets + light/dark (full picker in /lab → Shader playground) */}
             <div className="flex items-center gap-3 md:justify-end">
-              <span className="label text-stone">Make it yours</span>
+              <span className="label text-stone">{t.footer.yours}</span>
               <AccentSwatches />
               <ThemeToggle />
+              <LangToggle />
             </div>
-            <a href={`mailto:${profile.email}`} data-cursor="Say hi" className="block underline decoration-violet underline-offset-4">
+            <a href={`mailto:${profile.email}`} data-cursor={t.cursor.sayHi} className="block underline decoration-violet underline-offset-4">
               {profile.email}
             </a>
-            <ul className="flex gap-3 md:justify-end" aria-label="Social links">
+            <ul className="flex gap-3 md:justify-end" aria-label={t.footer.socials}>
               {socials.map((s) => (
                 <li key={s.label}>
                   <a
@@ -81,7 +85,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`mailto:${profile.email}`}
-                  aria-label="Email"
+                  aria-label={t.footer.email}
                   className="flex size-11 items-center justify-center rounded-full border border-ink-3 text-stone transition-colors hover:border-violet hover:text-cream"
                 >
                   <SocialIcon name="email" />
@@ -102,10 +106,10 @@ export default function Footer() {
             onClick={() => (lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" }))}
             className="self-start text-cream hover:text-violet md:self-auto"
           >
-            Back to top ↑
+            {t.footer.top}
           </button>
           <p>
-            © {year} {profile.displayName} · Built with Next.js + Tailwind
+            © {year} {profile.displayName} · {t.footer.built}
           </p>
         </div>
       </div>

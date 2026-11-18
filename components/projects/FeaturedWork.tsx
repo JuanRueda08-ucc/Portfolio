@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
 import { useRef, useState } from "react";
 import type { Project } from "@/data/types";
+import { useT } from "@/lib/i18n";
 import ProjectMedia from "./ProjectMedia";
 import VideoButton from "./VideoButton";
 
@@ -19,6 +20,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
  * spins around it and the list of names on the left highlights the current one.
  */
 export default function FeaturedWork({ projects }: { projects: Project[] }) {
+  const t = useT();
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const lenis = useLenis();
@@ -56,13 +58,13 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
   return (
     <section
       ref={root}
-      aria-label="Featured work"
+      aria-label={t.projects.featured}
       className="relative"
       style={{ height: `${n * 100 + 50}svh` }}
     >
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-4 pt-24 pb-8 lg:px-10 lg:pt-28 lg:pb-10">
         <div className="flex items-start justify-between">
-          <h2 className="font-display text-4xl leading-none font-bold tracking-tight lg:text-6xl">Featured work</h2>
+          <h2 className="font-display text-4xl leading-none font-bold tracking-tight lg:text-6xl">{t.projects.featured}</h2>
           <span className="label text-stone">
             ({pad(active + 1)} / {pad(n)})
           </span>
@@ -79,7 +81,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
             href={current.demo ?? current.github}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor="View project"
+            data-cursor={t.cursor.view}
             className="pointer-events-auto relative w-[min(64vw,22rem)] rounded-2xl lg:w-[min(38vw,34rem)] border border-ink-3 bg-ink-2 p-2 shadow-[0_30px_120px_-20px] shadow-violet/40"
           >
             {/* Window chrome */}
@@ -142,10 +144,10 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
                 href={current.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor="Code"
+                data-cursor={t.cursor.code}
                 className="btn-text rounded-full border border-ink-3 px-4 py-2 hover:border-violet"
               >
-                GitHub ↗
+                {t.projects.github}
               </a>
               <VideoButton project={current} />
               {current.demo && (
@@ -153,10 +155,10 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
                 href={current.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor="Live"
+                data-cursor={t.cursor.live}
                 className="btn-text rounded-full bg-violet-bright px-4 py-2 text-on-accent"
               >
-                Visit project ↗
+                {t.projects.visit}
               </a>
               )}
             </div>

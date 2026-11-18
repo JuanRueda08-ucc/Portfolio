@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 import SplitReveal from "@/components/ui/SplitReveal";
 import { skills } from "@/data/skills";
+import { localize, useLang, useT } from "@/lib/i18n";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -108,6 +109,8 @@ function CardCurve({ index, w, h }: { index: number; w: number; h: number }) {
  */
 export default function Skills() {
   const root = useRef<HTMLElement>(null);
+  const lang = useLang();
+  const t = useT();
   const list = useRef<HTMLUListElement>(null);
   const [curve, setCurve] = useState({ w: 0, h: 0 });
 
@@ -189,8 +192,8 @@ export default function Skills() {
       <div className="flex flex-col px-4 pt-32 pb-16 md:px-10 motion-safe:max-lg:sticky motion-safe:max-lg:top-0 motion-safe:max-lg:h-svh motion-safe:max-lg:overflow-hidden motion-safe:max-lg:pt-24 motion-safe:max-lg:pb-8 lg:sticky lg:top-0 lg:h-svh lg:overflow-hidden lg:pt-28 lg:pb-8">
         <div className="mb-12 ml-auto max-w-xs text-right motion-safe:max-lg:mb-4 lg:mb-0">
           <p className="label mb-3 text-violet-soft">(06)</p>
-          <SplitReveal className="font-display text-4xl font-bold tracking-tight md:text-5xl">Skills &amp; tools</SplitReveal>
-          <p className="mt-4 text-sm text-stone">Always excited to take on new challenges and keep learning new tools.</p>
+          <SplitReveal className="font-display text-4xl font-bold tracking-tight md:text-5xl">{t.skills.title}</SplitReveal>
+          <p className="mt-4 text-sm text-stone">{t.skills.lead}</p>
         </div>
 
         <ul
@@ -198,9 +201,10 @@ export default function Skills() {
           data-cards
           className="mx-auto mt-auto grid w-full max-w-7xl gap-4 sm:grid-cols-2 motion-safe:max-lg:flex lg:grid-cols-4"
         >
-          {skills.map((s, i) => (
+          {skills.map((group, i) => localize(group, lang)).map((s, i) => (
             <li
-              key={s.title}
+              // Stable key: GSAP animates these cards, a new language must not remount them.
+              key={i}
               data-card
               className="relative flex min-h-[26rem] flex-col overflow-hidden rounded-2xl bg-violet p-6 text-on-accent motion-safe:max-lg:h-[min(60svh,34rem)] motion-safe:max-lg:min-h-0 motion-safe:max-lg:w-[min(80vw,26rem)] motion-safe:max-lg:shrink-0 motion-safe:max-lg:p-5 lg:h-[62svh]"
             >

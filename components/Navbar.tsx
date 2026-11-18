@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { navLinks, profile } from "@/data/profile";
 import { ThemeToggle } from "@/components/ui/ThemeControls";
+import LangToggle from "@/components/ui/LangToggle";
+import { useT } from "@/lib/i18n";
 import { onReady } from "@/lib/ready";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -35,6 +37,7 @@ export default function Navbar() {
   const [shown, setShown] = useState(false);
   const active = useActiveSection();
   const lenis = useLenis();
+  const t = useT();
 
   // Slide in once the loader is gone.
   useEffect(() => onReady(() => setShown(true)), []);
@@ -62,7 +65,7 @@ export default function Navbar() {
         aria-label="Main"
         className="relative z-10 mx-auto flex max-w-6xl items-center justify-between rounded-full border border-ink-3 bg-ink/70 py-2 pr-2 pl-5 backdrop-blur-md"
       >
-        <a href="#home" data-cursor="Home" className="font-display text-lg font-bold tracking-tight">
+        <a href="#home" data-cursor={t.cursor.home} className="font-display text-lg font-bold tracking-tight">
           {profile.displayName.split(" ")[0]}
           <span className="text-violet">.</span>
         </a>
@@ -81,11 +84,11 @@ export default function Navbar() {
               <a
                 href={`#${l.id}`}
                 aria-current={active === l.id ? "location" : undefined}
-                className={`relative block rounded-full px-3 py-1.5 text-sm transition-colors ${
+                className={`relative block rounded-full px-2 py-1.5 text-sm whitespace-nowrap lg:px-3 transition-colors ${
                   active === l.id ? "text-cream" : "text-stone hover:text-cream"
                 }`}
               >
-                {l.label}
+                {t.nav[l.id]}
               </a>
             </li>
           ))}
@@ -93,8 +96,8 @@ export default function Navbar() {
             <Link
               href="/lab"
               transitionTypes={["page-card"]}
-              data-cursor="Play"
-              className="block rounded-full px-3 py-1.5 text-sm text-violet-soft transition-colors hover:text-violet-bright"
+              data-cursor={t.cursor.play}
+              className="block rounded-full px-2 py-1.5 text-sm whitespace-nowrap text-violet-soft lg:px-3 transition-colors hover:text-violet-bright"
             >
               Lab ✦
             </Link>
@@ -102,10 +105,11 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <LangToggle />
           <ThemeToggle />
           <a
             href={profile.cv}
-            data-cursor="Download"
+            data-cursor={t.cursor.download}
             download
             className="btn-text rounded-full bg-violet px-4 py-2 text-on-accent transition-transform hover:scale-105"
           >
@@ -118,7 +122,7 @@ export default function Navbar() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t.menuClose : t.menuOpen}
             className="flex size-9 flex-col items-center justify-center gap-1.5 rounded-full bg-ink-2 md:hidden"
           >
             <span
@@ -156,7 +160,7 @@ export default function Navbar() {
                     exit={{ y: "110%" }}
                     transition={{ duration: 0.6, ease: EASE, delay: 0.15 + i * 0.05 }}
                   >
-                    {l.label}
+                    {t.nav[l.id]}
                   </motion.a>
                 </li>
               ))}

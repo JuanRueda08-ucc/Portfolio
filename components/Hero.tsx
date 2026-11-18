@@ -10,6 +10,7 @@ import type { HeroState } from "@/components/hero/HeroScene";
 import Avatar from "@/components/ui/Avatar";
 import { profile } from "@/data/profile";
 import { hasFastWebGL } from "@/lib/gpu";
+import { localize, useLang, useT } from "@/lib/i18n";
 import { onReady } from "@/lib/ready";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
@@ -31,6 +32,9 @@ export default function Hero() {
   const enable3D = useSyncExternalStore(subscribe, can3D, () => false);
   const [inView, setInView] = useState(true);
   const [mount3D, setMount3D] = useState(false);
+  const lang = useLang();
+  const t = useT();
+  const me = localize(profile, lang);
 
   // Mount the (heavy) 3D scene only after the loader leaves and the browser is idle,
   // so shader compilation doesn't block the intro. The word grows in when it appears.
@@ -86,6 +90,8 @@ export default function Hero() {
 
       // ── Intro, after the loader leaves.
       const split = SplitText.create("[data-split]", { type: "lines", mask: "lines", aria: "none" });
+      // Room above each masked line so Spanish capitals keep their accents (Á, Ñ).
+      gsap.set(split.masks, { paddingTop: "0.16em", marginTop: "-0.16em" });
       gsap.set(split.lines, { yPercent: 110 });
       gsap.set("[data-fade]", { autoAlpha: 0, y: 16 });
       const stopReady = onReady(() => {
@@ -120,7 +126,8 @@ export default function Hero() {
         document.documentElement.removeEventListener("pointerleave", onLeave);
       };
     },
-    { scope: root },
+    // A new language remounts the split title; redo the intro on it.
+    { scope: root, dependencies: [lang], revertOnUpdate: true },
   );
 
   return (
@@ -130,7 +137,7 @@ export default function Hero() {
       className="relative flex min-h-svh flex-col justify-between overflow-hidden px-4 pt-28 pb-10 md:px-10"
     >
       {/* Background: WebGL scene, or a static glow + serif word as fallback */}
-      <div className="absolute inset-0" data-cursor="Hi!">
+      <div className="absolute inset-0" data-cursor={t.cursor.hi}>
         {enable3D ? (
           <>
             {/* Glow placeholder until the WebGL scene mounts */}
@@ -168,12 +175,12 @@ export default function Hero() {
             <Avatar size={56} />
           </div>
           <p data-fade className="font-display text-2xl leading-8 font-bold tracking-[-0.03em]">
-            Hi, I&apos;m {profile.displayName}
+            {t.hero.hi} {me.displayName}
             <br />
-            {profile.role}.
+            {me.role}.
           </p>
           <p data-fade className="mt-3 text-sm text-stone">
-            {profile.tagline}
+            {me.tagline}
           </p>
         </div>
       </div>
@@ -184,29 +191,30 @@ export default function Hero() {
       >
         <div data-depth="24">
           <h1
+            key={lang}
             data-split
             className="font-display text-[clamp(2.5rem,5.2vw,5.75rem)] leading-[0.92] font-bold tracking-[-0.03em] uppercase"
           >
-            Building software
+            {t.hero.titleTop}
             <br />
-            with a designer&apos;s soul
+            {t.hero.titleBottom}
           </h1>
         </div>
         <div data-depth="-10" className="shrink-0">
           <div data-fade className="pointer-events-auto flex gap-3">
             <a
               href={profile.cv}
-              data-cursor="Download"
+              data-cursor={t.cursor.download}
               download
               className="btn-text rounded-full bg-violet px-6 py-3 whitespace-nowrap text-on-accent transition-transform hover:scale-105"
             >
-              Download CV
+              {t.hero.cv}
             </a>
             <a
               href="#projects"
               className="btn-text rounded-full border border-ink-3 bg-ink/40 px-6 py-3 whitespace-nowrap backdrop-blur-sm transition-colors hover:border-violet"
             >
-              View work
+              {t.hero.work}
             </a>
           </div>
         </div>

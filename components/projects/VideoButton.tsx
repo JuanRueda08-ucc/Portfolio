@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/data/types";
+import { useT } from "@/lib/i18n";
 
 /**
  * "Watch demo" button for projects with a video. The video opens in a floating window
@@ -13,6 +14,7 @@ import type { Project } from "@/data/types";
  */
 export default function VideoButton({ project, className = "" }: { project: Project; className?: string }) {
   const [origin, setOrigin] = useState<{ x: number; y: number } | null>(null);
+  const t = useT();
   const button = useRef<HTMLButtonElement>(null);
 
   const src = project.videoFull ?? project.video;
@@ -30,13 +32,13 @@ export default function VideoButton({ project, className = "" }: { project: Proj
         ref={button}
         type="button"
         onClick={open}
-        data-cursor="Watch"
+        data-cursor={t.cursor.watch}
         className={`btn-text flex items-center gap-2 rounded-full border border-ink-3 px-4 py-2 hover:border-violet ${className}`}
       >
         <svg viewBox="0 0 10 10" className="size-2.5 fill-current" aria-hidden>
           <path d="M2 1l7 4-7 4z" />
         </svg>
-        Watch demo
+        {t.projects.watch}
       </button>
       {typeof document !== "undefined" &&
         createPortal(
@@ -61,6 +63,7 @@ export default function VideoButton({ project, className = "" }: { project: Proj
 
 function Player({ project, src, origin, onClose }: { project: Project; src: string; origin: { x: number; y: number }; onClose: () => void }) {
   const lenis = useLenis();
+  const t = useT();
   const reduce = useReducedMotion();
   const close = useRef<HTMLButtonElement>(null);
 
@@ -89,7 +92,7 @@ function Player({ project, src, origin, onClose }: { project: Project; src: stri
       <motion.div
         role="dialog"
         aria-modal="true"
-        aria-label={`${project.title} demo video`}
+        aria-label={t.projects.videoLabel(project.title)}
         // Width also capped by the height, so a 16:10 video never overflows short screens.
         className="w-full max-w-[min(64rem,calc((100svh-6rem)*1.6))] rounded-2xl border border-ink-3 bg-ink-2 p-2 shadow-[0_40px_140px_-20px] shadow-violet/50"
         initial={from}
@@ -108,8 +111,8 @@ function Player({ project, src, origin, onClose }: { project: Project; src: stri
             ref={close}
             type="button"
             onClick={onClose}
-            aria-label="Close video"
-            data-cursor="Close"
+            aria-label={t.projects.closeVideo}
+            data-cursor={t.cursor.close}
             className="ml-auto flex size-7 items-center justify-center rounded-full text-stone hover:bg-ink-3 hover:text-cream"
           >
             ✕

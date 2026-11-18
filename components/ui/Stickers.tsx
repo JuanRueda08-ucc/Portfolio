@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useRef } from "react";
+import { useT } from "@/lib/i18n";
 
 type Props = { items: string[]; className?: string };
 
@@ -17,6 +18,7 @@ const rand = (i: number, salt: number) => {
  */
 export default function Stickers({ items, className = "" }: Props) {
   const bounds = useRef<HTMLDivElement>(null);
+  const m = useT();
 
   return (
     <div ref={bounds} className={`relative ${className}`}>
@@ -32,7 +34,7 @@ export default function Stickers({ items, className = "" }: Props) {
             whileDrag={{ scale: 1.12, rotate: 0, zIndex: 10 }}
             // Rounded so the server and client serialize the same transform string.
             initial={{ rotate: Math.round((rand(i, 1) - 0.5) * 140) / 10 }}
-            data-cursor="Drag"
+            data-cursor={m.cursor.drag}
             className={`cursor-grab touch-none rounded-full px-4 py-2 font-mono text-sm shadow-lg shadow-black/30 select-none active:cursor-grabbing ${
               rand(i, 2) > 0.7
                 ? "bg-violet-bright text-on-accent"

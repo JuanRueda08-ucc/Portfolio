@@ -2,6 +2,7 @@
 
 import { useCallback, useState, useSyncExternalStore } from "react";
 import LineDrawing from "@/components/ui/LineDrawing";
+import { useT } from "@/lib/i18n";
 
 const MOTION = "(prefers-reduced-motion: reduce)";
 const subscribe = (cb: () => void) => {
@@ -30,6 +31,7 @@ export default function LogoReveal({
   label,
   className = "",
 }: Props) {
+  const t = useT();
   const reduce = useSyncExternalStore(
     subscribe,
     () => window.matchMedia(MOTION).matches,
@@ -60,7 +62,7 @@ export default function LogoReveal({
             className="gen-go"
             onClick={() => setSignal((s) => s + 1)}
           >
-            <span>Generate</span>
+            <span>{t.about.generate}</span>
           </button>
         )}
         {state !== "done" && (
@@ -71,7 +73,7 @@ export default function LogoReveal({
       </div>
       {/* The hint goes with the button; kept as an empty line so nothing below jumps. */}
       <p className="label min-h-[1lh] text-stone">
-        {state === "idle" ? "( Tap Generate to draw my logo )" : ""}
+        {state === "idle" ? t.about.tapHint : ""}
       </p>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { Project } from "@/data/types";
+import { useT } from "@/lib/i18n";
 
 type Props = {
   project: Project;
@@ -25,12 +26,13 @@ export default function ProjectMedia({ project, className = "", eager = false }:
 }
 
 function Cover({ project, className, eager }: Required<Props>) {
+  const t = useT();
   if (project.image) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={project.image}
-        alt={`${project.title} screenshot`}
+        alt={t.projects.screenshot(project.title)}
         loading={eager ? "eager" : "lazy"}
         draggable={false}
         className={`size-full object-cover ${className}`}
@@ -42,7 +44,7 @@ function Cover({ project, className, eager }: Required<Props>) {
   return (
     <div
       role="img"
-      aria-label={`${project.title} cover`}
+      aria-label={t.projects.cover(project.title)}
       className={`relative flex size-full items-end overflow-hidden p-5 ${className}`}
       style={{
         background: `radial-gradient(120% 90% at 20% 110%, hsl(${h} 85% 62%), transparent 60%),
@@ -68,6 +70,7 @@ function Cover({ project, className, eager }: Required<Props>) {
 }
 
 function HoverVideo({ project, className, eager }: Required<Props>) {
+  const t = useT();
   const video = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   // Touch hold: the pending timer, and whether this press turned into a hold
@@ -141,8 +144,8 @@ function HoverVideo({ project, className, eager }: Required<Props>) {
         <svg viewBox="0 0 10 10" className="size-2 fill-current" aria-hidden>
           <path d="M2 1l7 4-7 4z" />
         </svg>
-        <span className="pointer-coarse:hidden">Hover to play</span>
-        <span className="hidden pointer-coarse:inline">Hold to play</span>
+        <span className="pointer-coarse:hidden">{t.projects.hover}</span>
+        <span className="hidden pointer-coarse:inline">{t.projects.hold}</span>
       </span>
     </span>
   );

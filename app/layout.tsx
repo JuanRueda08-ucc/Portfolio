@@ -5,7 +5,9 @@ import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { profile } from "@/data/profile";
 import { siteUrl } from "@/lib/site";
+import { LANG_INIT_SCRIPT } from "@/lib/lang-script";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
+import SkipLink from "@/components/ui/SkipLink";
 import "./globals.css";
 
 // Main text uses the system "Helvetica Neue" → Arial stack (see globals.css).
@@ -57,15 +59,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         {/* Applies the visitor's saved mode + accent before first paint (no flash). */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        {/* Applies the visitor's language (saved, else the browser's) to <html lang>. */}
+        <script dangerouslySetInnerHTML={{ __html: LANG_INIT_SCRIPT }} />
       </head>
       <body className="min-h-screen">
         {/* Keyboard users can jump straight past the navbar */}
-        <a
-          href="#main-content"
-          className="btn-text fixed top-3 left-3 z-[110] -translate-y-20 rounded-full bg-violet-bright px-4 py-2 text-on-accent transition-transform focus:translate-y-0"
-        >
-          Skip to content
-        </a>
+        <SkipLink />
         <SmoothScroll>
           <Loader />
           <Cursor />

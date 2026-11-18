@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useT } from "@/lib/i18n";
 import { ACCENT_PRESETS, applyTheme, currentTheme, DEFAULT_THEME, subscribeTheme } from "@/lib/theme";
 
 const getMode = () => currentTheme().mode;
@@ -10,13 +11,15 @@ const getHue = () => currentTheme().hue;
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const mode = useSyncExternalStore(subscribeTheme, getMode, () => DEFAULT_THEME.mode);
   const next = mode === "dark" ? "light" : "dark";
+  const t = useT();
+  const label = t.theme.switchMode(t.theme[next]);
   return (
     <button
       type="button"
       onClick={() => applyTheme({ mode: next })}
-      aria-label={`Switch to ${next} mode`}
-      title={`Switch to ${next} mode`}
-      data-cursor={next === "light" ? "Light" : "Dark"}
+      aria-label={label}
+      title={label}
+      data-cursor={t.cursor[next]}
       className={`flex size-9 items-center justify-center rounded-full bg-ink-2 text-cream transition-transform hover:scale-110 ${className}`}
     >
       {mode === "dark" ? (
@@ -38,8 +41,9 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
 /** Row of accent presets (the full picker lives in the Lab's Shader Playground). */
 export function AccentSwatches({ className = "" }: { className?: string }) {
   const hue = useSyncExternalStore(subscribeTheme, getHue, () => DEFAULT_THEME.hue);
+  const t = useT();
   return (
-    <div role="radiogroup" aria-label="Accent color" className={`flex gap-2 ${className}`}>
+    <div role="radiogroup" aria-label={t.theme.accent} className={`flex gap-2 ${className}`}>
       {ACCENT_PRESETS.map((p) => (
         <button
           key={p.name}

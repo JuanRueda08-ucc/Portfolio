@@ -1,9 +1,12 @@
+"use client";
+
 import ArcCarousel from "@/components/projects/ArcCarousel";
 import FeaturedWork from "@/components/projects/FeaturedWork";
 import ProjectMedia from "@/components/projects/ProjectMedia";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { projects } from "@/data/projects";
 import VideoButton from "@/components/projects/VideoButton";
+import { localize, useLang, useT } from "@/lib/i18n";
 
 /**
  * Projects:
@@ -12,22 +15,25 @@ import VideoButton from "@/components/projects/VideoButton";
  *   each card with GitHub + live demo links opening in a new tab.
  */
 export default function Projects() {
-  const featured = projects.filter((p) => p.featured);
+  const lang = useLang();
+  const t = useT();
+  const list = projects.map((p) => localize(p, lang));
+  const featured = list.filter((p) => p.featured);
 
   return (
     <section id="projects">
       {featured.length > 0 && <FeaturedWork projects={featured} />}
-      {projects.length > 2 && <ArcCarousel projects={projects} />}
+      {list.length > 2 && <ArcCarousel projects={list} />}
 
       <div className="px-4 py-32 md:px-10">
         <div className="mx-auto max-w-6xl">
           <SectionHeading
-            title="Project index"
+            title={t.projects.index}
             kicker="(03)"
-            meta={`(${String(projects.length).padStart(2, "0")})`}
+            meta={`(${String(list.length).padStart(2, "0")})`}
           />
           <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p) => (
+            {list.map((p) => (
               <li
                 key={p.slug}
                 className="group flex flex-col overflow-hidden rounded-3xl border border-ink-3 bg-ink-2 transition-colors hover:border-violet/60"
@@ -36,7 +42,7 @@ export default function Projects() {
                   href={p.demo ?? p.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-cursor="View project"
+                  data-cursor={t.cursor.view}
                   tabIndex={-1}
                   className="block aspect-video overflow-hidden"
                 >
@@ -58,12 +64,12 @@ export default function Projects() {
                   <div className="mt-6 flex flex-wrap gap-2 [&>*]:whitespace-nowrap">
                     <a
                       href={p.github}
-                      data-cursor="Code"
+                      data-cursor={t.cursor.code}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-text rounded-full border border-ink-3 px-4 py-2 hover:border-violet"
                     >
-                      GitHub ↗
+                      {t.projects.github}
                     </a>
                     <VideoButton project={p} />
                     {p.demo && (

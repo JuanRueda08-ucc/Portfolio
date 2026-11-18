@@ -7,17 +7,20 @@ import { useRef } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { experience } from "@/data/experience";
 import type { ExperienceItem } from "@/data/types";
+import { localize, useLang, useT } from "@/lib/i18n";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const columns: { type: ExperienceItem["type"]; label: string; icon: string }[] = [
-  { type: "education", label: "Education", icon: "🎓" },
-  { type: "work", label: "Work", icon: "💼" },
+const columns: { type: ExperienceItem["type"]; icon: string }[] = [
+  { type: "education", icon: "🎓" },
+  { type: "work", icon: "💼" },
 ];
 
 /** Both education and work are always visible (course requirement), side by side on desktop. */
 export default function Experience() {
   const root = useRef<HTMLElement>(null);
+  const lang = useLang();
+  const t = useT();
 
   useGSAP(
     () => {
@@ -47,15 +50,15 @@ export default function Experience() {
   return (
     <section id="experience" ref={root} className="px-4 py-32 md:px-10">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading title="Experience" kicker="(05)" />
+        <SectionHeading title={t.experience.title} kicker="(05)" />
 
         <div className="grid gap-16 md:grid-cols-2 md:gap-12">
           {columns.map((col) => {
-            const items = experience.filter((e) => e.type === col.type);
+            const items = experience.filter((e) => e.type === col.type).map((e) => localize(e, lang));
             return (
               <div key={col.type}>
                 <h3 className="label mb-8 flex items-center gap-2 text-violet-soft">
-                  <span aria-hidden>{col.icon}</span> {col.label}
+                  <span aria-hidden>{col.icon}</span> {t.experience[col.type]}
                 </h3>
                 <ol data-timeline className="relative">
                   <span
@@ -64,7 +67,7 @@ export default function Experience() {
                     className="absolute top-0 bottom-0 left-0 w-px origin-top bg-gradient-to-b from-violet to-ink-3"
                   />
                   {items.map((it) => (
-                    <li key={it.title} data-item className="relative pb-12 pl-8 last:pb-0">
+                    <li key={`${it.start}-${it.end}-${col.type}`} data-item className="relative pb-12 pl-8 last:pb-0">
                       <span
                         data-dot
                         aria-hidden
@@ -72,7 +75,7 @@ export default function Experience() {
                       />
                       <div data-body>
                         <p className="label text-stone">
-                          {it.start} — {it.end}
+                          {it.start} — {it.end === "Present" ? t.experience.present : it.end}
                         </p>
                         <h4 className="mt-1 font-display text-2xl font-bold tracking-tight">{it.title}</h4>
                         <p className="text-violet-soft">{it.place}</p>
