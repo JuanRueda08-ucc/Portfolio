@@ -157,11 +157,11 @@ Vinyl Player has a full local demo (2:15, 1.11 MB). The recording checks inserti
 | File | State |
 |---|---|
 | `projects.ts` | Real: 7 projects (Ancla Calma, FinanzIA, Chef Digital featured; then TickGo, Vigía, Vinyl Player, Ecos de la Tierra). Six projects have both a short hover video and a full player video. Vigía is pending the owner's changes. `demo` is optional: TickGo, Chef Digital, Vigía, Ecos have none → card links to the repo. |
-| `profile.ts` | Photo + JR logo done. **Email is a placeholder** (`TODO(Juano)`). |
-| `experience.ts` | **Placeholder** (`TODO(Juano)`) — needs real education + work. |
+| `profile.ts` | Photo, JR logo, real email and an About text drafted from the owner's CV/LinkedIn (owner may still rewrite it). |
+| `experience.ts` | **Real** (CV + LinkedIn): UCC Software Engineering, Bayswater College C1 (dates unknown → no date line), high school, Coldulces La 21. |
 | `testimonials.ts` | **Real**: 4 testimonials (3 UPB students from the ANCLA project, 1 FinanzIA teammate), English from the owner + Spanish in `es`. |
-| `skills.ts` | Provisional — review with the owner. |
-| `public/cv.pdf` | **Provisional** — owner will provide the current CV; redo in Harvard format. |
+| `skills.ts` | From the owner's LinkedIn skills + project stacks (4 groups; keep 4, the Skills timeline is tuned for it). |
+| `public/cv.pdf`, `public/cv-es.pdf` | **Harvard format**, one page each, built by `python scripts/cv/build_cv.py` from Harvard's 2025 bullet template (`scripts/cv/harvard-template.docx`; content lives in the script) → editable `docs/cv/CV-Juan-Rueda-{en,es}.docx`, PDF via Microsoft Word COM. The download button serves the one for the current language (`profile.es.cv`). Keep each PDF to **one page** (check with PyMuPDF). |
 | Contact form | Works in "simulated" mode until `NEXT_PUBLIC_FORMSPREE_ID` is set (in Vercel env vars **and** a local `.env.local`). |
 
 ## Project video pipeline (`video/`)
@@ -196,7 +196,7 @@ Agreed with the owner: **record each app for real, then polish with Remotion** (
 Items marked **[owner]** need input only the owner can give — ask in Spanish, don't invent content (especially testimonials and work history: fabricated entries would be dishonest on a graded, public portfolio).
 
 1. **Check touch-hold** on the project videos on a real phone (only tested with simulated touch events) and the video file sizes on the deployed site. (`video/` workspace + Ancla Calma/Vinyl Player videos: done; `npm run lint` and `npm run build` pass.)
-2. **[owner] Real content** — current CV → rebuild `public/cv.pdf` in Harvard format (one page, English); real email; real experience (education + work, newest first); confirm `skills.ts` (testimonials done).
+2. **[owner] Confirm** the Bayswater College course dates (CV and Experience show none) and whether the CV should include a phone number (left out on purpose: the PDF is public). CV, email, experience, skills and testimonials are done.
 3. **[owner] Formspree** — create the form, set `NEXT_PUBLIC_FORMSPREE_ID` in Vercel (+ `.env.local`), test a real submission, confirm the validation + confirmation message.
 4. **Full-length demo videos (Codex)** — Chef Digital, FinanzIA, Vinyl Player, Ancla Calma, Ecos de la Tierra and TickGo are complete locally. Vigía is on hold while the owner adjusts the app.
 5. **[owner] Covers/logos** for TickGo and Vinyl Player (owner is making them) → `public/images/projects/<slug>.webp` (1280×800).
@@ -217,7 +217,6 @@ Items marked **[owner]** need input only the owner can give — ask in Spanish, 
 ## Open decisions (ask the owner when reached)
 
 - Whether to publish the Remotion polished clips for **all** projects or keep plain screen recordings for the apps that can't be recorded cleanly (Wear OS, Godot).
-- Language of the CV (English only vs. English + Spanish download). The site itself is now bilingual.
 - Whether to add the optional WhatsApp contact (course lists it as optional).
 - Whether to keep `/lab` apps as they are or add one more (course doesn't require them; the owner added them as personal extras).
 
