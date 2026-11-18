@@ -27,7 +27,8 @@ PORTFOLIO = ("portfolio-five-pi-tko6sn9i9q.vercel.app", "https://portfolio-five-
 
 CONTENT = {
     "en": {
-        "sections": {"edu": "Education", "projects": "Projects", "exp": "Experience", "skills": "Skills & Interests"},
+        "headline": "Software Engineer & AI Engineer",
+        "sections": {"edu": "Education", "exp": "Experience", "projects": "Projects", "skills": "Skills"},
         "portfolio": "Portfolio: ",
         "education": [
             {
@@ -36,70 +37,73 @@ CONTENT = {
                 "note": "Relevant Coursework: Data Structures, Interface Design.",
             },
             {
-                "org": "Bayswater College", "place": "Calgary, Canada",
-                "title": "General English Standard Course (C1)", "date": "",
-            },
-            {
                 "org": "Colegio Filipense “Nuestra Señora de la Esperanza”", "place": "Pasto, Colombia",
                 "title": "High School Diploma (Bachiller Académico)", "date": "Dec 2022",
             },
         ],
-        "projects": [
+        "experience": [
             {
-                "org": "Ancla Calma", "place": "React, Vite, Tailwind, Supabase",
-                "title": "Developer, with UPB design students", "date": "2026",
+                "org": "Ancla Calma · Universidad Pontificia Bolivariana (UPB) project", "place": "Remote",
+                "title": "Software Developer (React, Vite, Tailwind, Supabase)", "date": "2026",
                 "bullets": [
                     "Turned a UPB design team’s concept into a working emotional-support web app for university students.",
                     "Built guided breathing, grounding and sensory exercises, crisis help lines and a guide for supporting a peer.",
-                    "Added Supabase accounts with a private journal, voice notes and trusted contacts.",
+                    "Added Supabase accounts with a private journal, voice notes and trusted contacts; deployed on Vercel.",
+                ],
+            },
+            {
+                "org": "Coldulces La 21", "place": "Pasto, Colombia",
+                "title": "Customer Service Representative", "date": "Mar 2023 – May 2026",
+                "bullets": [
+                    "Advised in-person and remote customers; managed billing, cash handling and inventory control.",
+                    "Supported logistics and order distribution, coordinating deliveries to shorten delivery times.",
+                ],
+            },
+        ],
+        "projects": [
+            {
+                "org": "Vigía", "place": "Flutter, Kotlin, MediaPipe, Firebase",
+                "title": "Developer · Android drowsiness monitor", "date": "2026",
+                "bullets": [
+                    "Built an Android app that detects sustained eye closure with MediaPipe Face Landmarker running on the device (CameraX, native Kotlin engine), with per-driver calibration and voice guidance.",
+                    "Added alerts with sound and vibration patterns, a local session history and Firebase accounts.",
                 ],
             },
             {
                 "org": "FinanzIA", "place": "Next.js, Java, LangGraph",
-                "title": "Team member", "date": "2026",
+                "title": "Team member · AI finance assistant", "date": "2026",
                 "bullets": [
                     "Co-built a conversational personal-finance assistant: a Next.js chat with a secure backend-for-frontend, a Java backend and a LangGraph AI agent that records expenses, income, budgets and savings goals.",
                 ],
             },
             {
                 "org": "Chef Digital", "place": "Electron, Svelte, TypeScript, Supabase",
-                "title": "Developer", "date": "2026",
+                "title": "Developer · Desktop cooking assistant", "date": "2026",
                 "bullets": [
-                    "Built a desktop cooking assistant for Windows, macOS and Linux that suggests recipes from the user’s pantry and guides each step with timers, voice narration and hands-free voice commands (Gemini, Vosk).",
-                    "Added Supabase accounts with cloud-synced chats and recipes and a backend on Supabase Edge Functions, covered by 550+ automated tests (Vitest).",
+                    "Built a desktop assistant for Windows, macOS and Linux that suggests recipes from the user’s pantry and guides each step with timers, voice narration and hands-free voice commands (Gemini, Vosk).",
+                    "Added Supabase accounts and a backend on Edge Functions, covered by 550+ automated tests (Vitest).",
                 ],
             },
             {
-                "org": "TickGo · Vinyl Player · Ecos de la Tierra", "place": "Kotlin, JavaScript, Godot",
+                "org": "Vinyl Player · Ecos de la Tierra", "place": "JavaScript, Godot",
                 "title": "Developer", "date": "2026",
                 "bullets": [
-                    "TickGo: Wear OS app that plans preparation backwards from an event and learns how long the user really takes.",
                     "Vinyl Player: music player whose playlist is a doubly linked list, with an LRU cache and a Web Audio visualizer.",
                     "Ecos de la Tierra (team): 2D pixel-art RPG with action and turn-based combat built in Godot.",
                 ],
             },
         ],
-        "experience": [
-            {
-                "org": "Coldulces La 21", "place": "Pasto, Colombia",
-                "title": "Customer Service Representative", "date": "Mar 2023 – May 2026",
-                "bullets": [
-                    "Advised in-person and remote customers on products, promotions and services.",
-                    "Managed billing, cash handling (cash and electronic payments) and inventory control.",
-                    "Supported logistics and order distribution, coordinating deliveries to shorten delivery times.",
-                ],
-            },
-        ],
         "skills": [
-            ("Programming: ", "Java, Python, JavaScript, TypeScript, SQL, Kotlin, HTML/CSS."),
-            ("Frameworks & tools: ", "React, Next.js, Svelte, Tailwind, Django, Flutter, Electron, Node.js, REST APIs; PostgreSQL, MongoDB, Supabase; AWS (Lambda), Git, GitHub."),
-            ("Engineering: ", "Object-oriented programming, data structures, design patterns, software architecture, database design, debugging; AI agents (LangGraph, Gemini API)."),
-            ("Language: ", "Spanish (native), English (C1, full professional proficiency)."),
-            ("Interests: ", "Web development, UI/UX, motion design, video games."),
+            ("AI: ", "LLM agents (LangGraph), Gemini API, on-device computer vision (MediaPipe), speech recognition (Vosk)."),
+            ("Programming: ", "Java, Python, JavaScript, TypeScript, Dart, Kotlin, SQL, HTML/CSS."),
+            ("Frameworks & tools: ", "React, Next.js, Svelte, Tailwind, Flutter, Electron, Django, Node.js, REST APIs; PostgreSQL, MongoDB, Supabase, Firebase; AWS (Lambda), Git, GitHub."),
+            ("Engineering: ", "OOP, data structures, design patterns, software architecture, database design, debugging."),
+            ("Language: ", "Spanish (native), English (C1; General English course, Bayswater College, Calgary, Canada)."),
         ],
     },
     "es": {
-        "sections": {"edu": "Educación", "projects": "Proyectos", "exp": "Experiencia", "skills": "Habilidades e intereses"},
+        "headline": "Ingeniero de Software e Ingeniero de IA",
+        "sections": {"edu": "Educación", "exp": "Experiencia", "projects": "Proyectos", "skills": "Habilidades"},
         "portfolio": "Portafolio: ",
         "education": [
             {
@@ -108,66 +112,68 @@ CONTENT = {
                 "note": "Cursos relevantes: Estructuras de Datos, Diseño de Interfaces.",
             },
             {
-                "org": "Bayswater College", "place": "Calgary, Canadá",
-                "title": "General English Standard Course (C1)", "date": "",
-            },
-            {
                 "org": "Colegio Filipense “Nuestra Señora de la Esperanza”", "place": "Pasto, Colombia",
                 "title": "Bachiller Académico", "date": "Dic 2022",
             },
         ],
-        "projects": [
+        "experience": [
             {
-                "org": "Ancla Calma", "place": "React, Vite, Tailwind, Supabase",
-                "title": "Desarrollador, con estudiantes de diseño de la UPB", "date": "2026",
+                "org": "Ancla Calma · Proyecto de la Universidad Pontificia Bolivariana (UPB)", "place": "Remoto",
+                "title": "Desarrollador de software (React, Vite, Tailwind, Supabase)", "date": "2026",
                 "bullets": [
                     "Convertí el concepto de un equipo de diseño de la UPB en una app web de apoyo emocional.",
                     "Desarrollé ejercicios guiados de calma, líneas de ayuda en crisis y una guía para acompañar a otros.",
-                    "Agregué cuentas con Supabase, bitácora privada, notas de voz y contactos de confianza.",
+                    "Agregué cuentas con Supabase, bitácora, notas de voz y contactos de confianza; publicada en Vercel.",
+                ],
+            },
+            {
+                "org": "Coldulces La 21", "place": "Pasto, Colombia",
+                "title": "Representante de Atención al Cliente", "date": "Mar 2023 – May 2026",
+                "bullets": [
+                    "Asesoré a clientes presenciales y remotos; gestioné facturación, caja e inventario.",
+                    "Apoyé la logística y distribución de pedidos, coordinando entregas para reducir los tiempos.",
+                ],
+            },
+        ],
+        "projects": [
+            {
+                "org": "Vigía", "place": "Flutter, Kotlin, MediaPipe, Firebase",
+                "title": "Desarrollador · Monitor de somnolencia para Android", "date": "2026",
+                "bullets": [
+                    "App Android que detecta el cierre ocular sostenido con MediaPipe Face Landmarker en el dispositivo (CameraX, motor nativo en Kotlin), con calibración y guía por voz.",
+                    "Alertas con sonido y patrones de vibración, historial local de sesiones y cuentas con Firebase.",
                 ],
             },
             {
                 "org": "FinanzIA", "place": "Next.js, Java, LangGraph",
-                "title": "Integrante del equipo", "date": "2026",
+                "title": "Integrante del equipo · Asistente financiero con IA", "date": "2026",
                 "bullets": [
-                    "Co-desarrollé un asistente conversacional de finanzas personales: chat en Next.js con backend-for-frontend seguro, backend en Java y un agente de IA con LangGraph que registra gastos, ingresos, presupuestos y metas de ahorro.",
+                    "Co-desarrollé un asistente de finanzas: chat en Next.js, backend en Java y un agente de IA con LangGraph que registra gastos, ingresos, presupuestos y metas.",
                 ],
             },
             {
                 "org": "Chef Digital", "place": "Electron, Svelte, TypeScript, Supabase",
-                "title": "Desarrollador", "date": "2026",
+                "title": "Desarrollador · Asistente de cocina de escritorio", "date": "2026",
                 "bullets": [
-                    "Desarrollé un asistente de cocina de escritorio (Windows, macOS, Linux) que sugiere recetas según la despensa y guía cada paso con temporizadores, narración y comandos de voz (Gemini, Vosk).",
-                    "Agregué cuentas y nube con Supabase (Edge Functions), cubierto por más de 550 pruebas en Vitest.",
+                    "Asistente para Windows, macOS y Linux que sugiere recetas según la despensa y guía cada paso con temporizadores, narración y comandos de voz (Gemini, Vosk).",
+                    "Cuentas con Supabase y backend en Edge Functions, cubierto por más de 550 pruebas en Vitest.",
                 ],
             },
             {
-                "org": "TickGo · Vinyl Player · Ecos de la Tierra", "place": "Kotlin, JavaScript, Godot",
+                "org": "Vinyl Player · Ecos de la Tierra", "place": "JavaScript, Godot",
                 "title": "Desarrollador", "date": "2026",
                 "bullets": [
-                    "TickGo: app Wear OS que planea la preparación desde la hora del evento y aprende tus tiempos reales.",
                     "Vinyl Player: reproductor con lista doblemente enlazada, caché LRU y visualizador Web Audio.",
                     "Ecos de la Tierra (en equipo): RPG 2D en pixel art con combate de acción y por turnos, hecho en Godot.",
                 ],
             },
         ],
-        "experience": [
-            {
-                "org": "Coldulces La 21", "place": "Pasto, Colombia",
-                "title": "Representante de Atención al Cliente", "date": "Mar 2023 – May 2026",
-                "bullets": [
-                    "Asesoré a clientes presenciales y remotos sobre productos, promociones y servicios.",
-                    "Gestioné facturación, manejo de caja (efectivo y medios electrónicos) y control de inventario.",
-                    "Apoyé la logística y distribución de pedidos, coordinando entregas para reducir los tiempos.",
-                ],
-            },
-        ],
         "skills": [
-            ("Programación: ", "Java, Python, JavaScript, TypeScript, SQL, Kotlin, HTML/CSS."),
-            ("Frameworks y herramientas: ", "React, Next.js, Svelte, Tailwind, Django, Flutter, Electron, Node.js, APIs REST; PostgreSQL, MongoDB, Supabase; AWS (Lambda), Git, GitHub."),
-            ("Ingeniería: ", "POO, estructuras de datos, patrones de diseño, arquitectura de software, diseño de bases de datos, depuración; agentes de IA (LangGraph, Gemini)."),
-            ("Idiomas: ", "Español (nativo), inglés (C1)."),
-            ("Intereses: ", "Desarrollo web, UI/UX, animación, videojuegos."),
+            ("IA: ", "agentes con LLM (LangGraph), API de Gemini, visión por computadora (MediaPipe), voz (Vosk)."),
+            ("Programación: ", "Java, Python, JavaScript, TypeScript, Dart, Kotlin, SQL, HTML/CSS."),
+            ("Herramientas: ", "React, Next.js, Svelte, Tailwind, Flutter, Electron, Django, Node.js, APIs REST; PostgreSQL, MongoDB, Supabase, Firebase; AWS (Lambda), Git, GitHub."),
+            ("Ingeniería: ", "POO, estructuras de datos, patrones de diseño, arquitectura de software, bases de datos, depuración."),
+            ("Idiomas: ", "Español (nativo), inglés (C1; curso de inglés general en Bayswater College, Calgary, Canadá)."),
         ],
     },
 }
@@ -226,7 +232,8 @@ def link(text, url, rid):
 
 def build_body(lang, rels):
     c = CONTENT[lang]
-    out = [para([run(NAME, bold=True, size=32)], '<w:spacing w:before="0" w:after="40"/><w:jc w:val="center"/>')]
+    out = [para([run(NAME, bold=True, size=32)], '<w:spacing w:before="0" w:after="0"/><w:jc w:val="center"/>')]
+    out.append(para([run(c["headline"], italic=True)], '<w:spacing w:before="0" w:after="30"/><w:jc w:val="center"/>'))
 
     contact = []
     for i, (text, url) in enumerate(CONTACT + [(c["portfolio"] + PORTFOLIO[0], PORTFOLIO[1])]):
@@ -249,10 +256,10 @@ def build_body(lang, rels):
     s = c["sections"]
     out.append(heading(s["edu"]))
     entries(c["education"])
-    out.append(heading(s["projects"]))
-    entries(c["projects"])
     out.append(heading(s["exp"]))
     entries(c["experience"])
+    out.append(heading(s["projects"]))
+    entries(c["projects"])
     out.append(heading(s["skills"]))
     for label, text in c["skills"]:
         out.append(body([run(label, bold=True), run(text)]))
