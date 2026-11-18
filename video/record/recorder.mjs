@@ -38,18 +38,8 @@ const CURSOR = `
   window.__cursor = true;
 })();`;
 
-/**
- * @param {object} o
- * @param {string} o.url        first page
- * @param {string} o.out        output .mp4
- * @param {(api: ReturnType<typeof makeApi>) => Promise<void>} o.script
- * @param {{width:number,height:number}} [o.viewport]
- */
+/** Opens a Chrome tab at `url` and records it (see recordPage). */
 export async function record({ url, out, script, viewport = { width: 1440, height: 900 }, colorScheme = "dark" }) {
-  const frames = resolve(out + ".frames");
-  rmSync(frames, { recursive: true, force: true });
-  mkdirSync(frames, { recursive: true });
-
   const browser = await chromium.launch({
     channel: "chrome",
     args: ["--enable-gpu-rasterization", "--ignore-gpu-blocklist", "--autoplay-policy=no-user-gesture-required"],
@@ -59,10 +49,27 @@ export async function record({ url, out, script, viewport = { width: 1440, heigh
   const page = await context.newPage();
   await page.goto(url, { waitUntil: "networkidle" });
   await page.waitForTimeout(800);
+  await recordPage({ page, out, script, viewport });
+  await browser.close();
+}
 
-  const cdp = await context.newCDPSession(page);
+/** The cursor overlay, for pages opened elsewhere (e.g. an Electron window). */
+export const installCursor = (page) => page.evaluate(CURSOR);
+
+/**
+ * Records an already open page (browser tab or Electron window) while `script` runs.
+ * @param {{ page: import("playwright-core").Page, out: string, script: Function, viewport: {width:number,height:number} }} o
+ */
+export async function recordPage({ page, out, script, viewport }) {
+  const frames = resolve(out + ".frames");
+  rmSync(frames, { recursive: true, force: true });
+  mkdirSync(frames, { recursive: true });
+
+  const cdp = await page.context().newCDPSession(page);
   const shots = [];
+  let recording = true;
   cdp.on("Page.screencastFrame", async ({ data, metadata, sessionId }) => {
+    if (!recording) return; // a late frame after stop
     const file = join(frames, `${String(shots.length).padStart(5, "0")}.jpg`);
     writeFileSync(file, Buffer.from(data, "base64"));
     shots.push({ file, t: metadata.timestamp });
@@ -76,8 +83,8 @@ export async function record({ url, out, script, viewport = { width: 1440, heigh
   await script(makeApi(page, start));
 
   await page.waitForTimeout(300);
+  recording = false;
   await cdp.send("Page.stopScreencast");
-  await browser.close();
 
   // Frames only arrive when something changes: give each one the time until the next.
   const lines = [];

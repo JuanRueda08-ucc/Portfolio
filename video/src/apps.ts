@@ -65,6 +65,25 @@ export const vinylPlayer: DemoProps = {
   ],
 };
 
+export const chefDigital: DemoProps = {
+  clip: "clips/chef-digital.mp4",
+  title: "Chef Digital",
+  tagline: "A desktop kitchen assistant that cooks with you, step by step",
+  url: "Chef Digital · Windows · macOS · Linux",
+  bg: ["#170f02", "#6b4a00"],
+  accent: "#ffc83d",
+  segments: [
+    { from: 0.3, to: 12, rate: 1.6, caption: "Tell it what you have, it plans the meal" },
+    { from: 12, to: 25.5, rate: 2.2, caption: "Ideas for today" },
+    { from: 25.5, to: 38.5, rate: 1.25, caption: "Just tell the chef what you have", zoom: { x: 1430, y: 250, scale: 1.3 } },
+    { from: 38.5, to: 54, rate: 1.7, caption: "Or add it by hand, and choose servings" },
+    { from: 54, to: 62, rate: 1.15, caption: "Recipes from what is in your kitchen" },
+    { from: 62, to: 72, rate: 1.5, caption: "What you have, and what is missing" },
+    { from: 72, to: 82, rate: 1.1, caption: "Cook step by step with the chef's tips" },
+    { from: 82, to: 89.4, rate: 1, caption: "Built-in timers for every step", zoom: { x: 1425, y: 200, scale: 1.45 } },
+  ],
+};
+
 /** Frames a list of segments takes once each runs at its own speed. */
 export const segmentFrames = (s: Segment) => Math.round(((s.to - s.from) * FPS) / s.rate);
 export const totalFrames = (p: DemoProps) => INTRO + p.segments.reduce((n, s) => n + segmentFrames(s), 0);
