@@ -23,7 +23,7 @@ CONTACT = [
     ("linkedin.com/in/juan-josé-rueda-viveros-75b8972a6", "https://www.linkedin.com/in/juan-jos%C3%A9-rueda-viveros-75b8972a6"),
     ("github.com/JuanRueda08-ucc", "https://github.com/JuanRueda08-ucc"),
 ]
-PORTFOLIO = ("portfolio-five-pi-tko6sn9i9q.vercel.app", "https://portfolio-five-pi-tko6sn9i9q.vercel.app")
+PORTFOLIO = ("juano.pages.dev", "https://juano.pages.dev")
 
 CONTENT = {
     "en": {
