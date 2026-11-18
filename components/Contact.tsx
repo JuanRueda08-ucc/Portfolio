@@ -69,6 +69,9 @@ export default function Contact() {
         </div>
 
         <form onSubmit={onSubmit} className="grid gap-4">
+          {/* Formspree: email subject, and a honeypot field bots fill in (people never see it). */}
+          <input type="hidden" name="_subject" value="New message from the portfolio" />
+          <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
           <label className="grid gap-2 text-sm">
             {t.contact.name}
             <input name="name" required minLength={2} placeholder={t.contact.namePh} className={field} />
