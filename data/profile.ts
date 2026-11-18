@@ -4,7 +4,7 @@ import type { SocialLink } from "./types";
 export const profile = {
   displayName: "Juano Rueda",
   initials: "JR",
-  role: "Software Engineering Student",
+  role: "Software & AI Engineer",
   tagline: "I build software that feels a little bit magical.",
   career: "Software Engineering",
   semester: "5th semester",
@@ -20,18 +20,18 @@ export const profile = {
   /** Phrase scattered across the About section; letters scramble randomly. */
   manifesto: "Why not build software that feels just a little bit magical?",
   about:
-    "I'm a Software Engineering student from Pasto, Colombia, with a C1 level of English. I build web, desktop and wearable apps, and I love interfaces that feel alive: clean code on the inside, carefully crafted details on the outside. Years of customer service taught me to listen first, which is how I turn other people's ideas into products.",
+    "I'm a Software Engineering student from Pasto, Colombia, with a C1 level of English. I build web, desktop and mobile apps, from AI agents to on-device computer vision, and I love interfaces that feel alive: clean code on the inside, carefully crafted details on the outside. Years of customer service taught me to listen first, which is how I turn other people's ideas into products.",
   interests: ["Web development", "UI/UX", "Motion", "Video games"],
   /** Spanish copy (same keys). The manifesto keeps 11 words to match About's word positions. */
   es: {
-    role: "Estudiante de Ingeniería de Software",
+    role: "Ingeniero de Software e IA",
     cv: "/cv-es.pdf",
     tagline: "Construyo software que se siente un poquito mágico.",
     career: "Ingeniería de Software",
     semester: "5.º semestre",
     manifesto: "¿Por qué no construir software que se sienta un poquito mágico?",
     about:
-      "Soy estudiante de Ingeniería de Software de Pasto, Colombia, con nivel C1 de inglés. Construyo apps web, de escritorio y para relojes, y me encantan las interfaces que se sienten vivas: código limpio por dentro y detalles cuidados por fuera. Años de atención al cliente me enseñaron a escuchar primero, y así convierto las ideas de otros en productos.",
+      "Soy estudiante de Ingeniería de Software de Pasto, Colombia, con nivel C1 de inglés. Construyo apps web, de escritorio y móviles, desde agentes de IA hasta visión por computadora en el dispositivo, y me encantan las interfaces que se sienten vivas: código limpio por dentro y detalles cuidados por fuera. Años de atención al cliente me enseñaron a escuchar primero, y así convierto las ideas de otros en productos.",
     interests: ["Desarrollo web", "UI/UX", "Animación", "Videojuegos"],
   },
 };

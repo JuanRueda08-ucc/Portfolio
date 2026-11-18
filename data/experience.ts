@@ -42,6 +42,21 @@ export const experience: ExperienceItem[] = [
   },
   {
     type: "work",
+    title: "Software Developer",
+    place: "Ancla Calma · Universidad Pontificia Bolivariana (UPB) project",
+    start: "2026",
+    end: "2026",
+    description:
+      "Turned a UPB design team's concept into a working emotional-support web app for university students: guided calming exercises, crisis help, a private journal with voice notes and trusted contacts (React, Supabase).",
+    es: {
+      title: "Desarrollador de software",
+      place: "Ancla Calma · Proyecto de la Universidad Pontificia Bolivariana (UPB)",
+      description:
+        "Convertí el concepto de un equipo de diseño de la UPB en una app web de apoyo emocional para universitarios: ejercicios de calma guiados, ayuda en crisis, bitácora privada con notas de voz y contactos de confianza (React, Supabase).",
+    },
+  },
+  {
+    type: "work",
     title: "Customer Service Representative",
     place: "Coldulces La 21 · Pasto",
     start: "2023",

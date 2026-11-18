@@ -14,14 +14,14 @@ export const skills: SkillGroup[] = [
     },
   },
   {
-    title: "Backend",
-    subtitle: "Logic & APIs",
-    description: "REST APIs and services with clear architecture, plus AI agents that do real work.",
-    items: ["Java", "Python", "Node.js", "Django", "REST APIs", "AWS Lambda", "LangGraph"],
+    title: "Backend & AI",
+    subtitle: "Logic, APIs & agents",
+    description: "REST APIs and services with clear architecture, AI agents that do real work and computer vision on the device.",
+    items: ["Java", "Python", "Node.js", "Django", "REST APIs", "AWS Lambda", "LangGraph", "Gemini", "MediaPipe"],
     es: {
-      title: "Backend",
-      subtitle: "Lógica y APIs",
-      description: "APIs REST y servicios con una arquitectura clara, más agentes de IA que hacen trabajo real.",
+      title: "Backend e IA",
+      subtitle: "Lógica, APIs y agentes",
+      description: "APIs REST y servicios con una arquitectura clara, agentes de IA que hacen trabajo real y visión por computadora en el dispositivo.",
     },
   },
   {
@@ -39,7 +39,7 @@ export const skills: SkillGroup[] = [
     title: "Apps & tooling",
     subtitle: "Beyond the browser",
     description: "Desktop, mobile and wearable apps, with version control and deployment.",
-    items: ["Electron", "Flutter", "Kotlin", "Git", "GitHub", "Vercel"],
+    items: ["Flutter", "Dart", "Kotlin", "Electron", "Firebase", "Git", "GitHub", "Vercel"],
     es: {
       title: "Apps y herramientas",
       subtitle: "Más allá del navegador",
