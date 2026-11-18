@@ -68,8 +68,8 @@ export const projects: Project[] = [
     slug: "ecos-de-la-tierra",
     title: "Ecos de la Tierra",
     description:
-      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and the boss learns how you fight through reinforcement learning (Q-learning).",
-    es: { description: "Proyecto en equipo. Un RPG 2D en pixel art con combate de acción y por turnos: cada monstruo nace de una causa real, como la deforestación, y el jefe aprende cómo peleas mediante aprendizaje por refuerzo (Q-learning)." },
+      "Team project. A 2D pixel-art RPG with action and turn-based combat: every monster grows from a real cause, like deforestation, and the final boss adapts to how you fight during the battle itself, through reinforcement learning (a Q-table pre-trained on simulated fights).",
+    es: { description: "Proyecto en equipo. Un RPG 2D en pixel art con combate de acción y por turnos: cada monstruo nace de una causa real, como la deforestación, y el jefe final se adapta a tu forma de pelear en plena batalla, con aprendizaje por refuerzo (una tabla Q preentrenada con batallas simuladas)." },
     year: 2026,
     tags: ["Godot 4", "GDScript", "Game design", "Team"],
     image: "/images/projects/ecos-de-la-tierra.webp",

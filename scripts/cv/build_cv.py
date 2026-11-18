@@ -94,7 +94,7 @@ CONTENT = {
                 "org": "Ecos de la Tierra · Vinyl Player · TickGo", "place": "Godot, JavaScript, Kotlin",
                 "title": "Developer", "date": "2026",
                 "bullets": [
-                    "Ecos de la Tierra (team): 2D pixel-art RPG in Godot whose boss learns with reinforcement learning (Q-learning).",
+                    "Ecos de la Tierra (team): Godot RPG whose boss adapts mid-battle via pre-trained Q-learning.",
                     "Vinyl Player: music player whose playlist is a doubly linked list, with an LRU cache and a Web Audio visualizer.",
                     "TickGo: Wear OS app that plans preparation backwards from an event and learns how long the user really takes.",
                 ],
@@ -176,7 +176,7 @@ CONTENT = {
                 "org": "Ecos de la Tierra · Vinyl Player · TickGo", "place": "Godot, JavaScript, Kotlin",
                 "title": "Desarrollador", "date": "2026",
                 "bullets": [
-                    "Ecos de la Tierra (en equipo): RPG 2D en pixel art en Godot cuyo jefe aprende por refuerzo (Q-learning).",
+                    "Ecos de la Tierra (en equipo): RPG en Godot cuyo jefe se adapta en plena batalla (Q-learning).",
                     "Vinyl Player: reproductor con lista doblemente enlazada, caché LRU y visualizador Web Audio.",
                     "TickGo: app Wear OS que planea la preparación desde la hora del evento y aprende tus tiempos reales.",
                 ],
